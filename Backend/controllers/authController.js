@@ -1,0 +1,71 @@
+import uploadOnCloudinary from "../config/cloudinary.js";
+import genToken from "../config/genToken.js";
+import users from "../model/userModel.js";
+import validator from "validator";
+
+export const register = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    let photoUrl;
+    if (req.file) {
+      photoUrl = await uploadOnCloudinary(req.file.path);
+    }
+    let existUser = users.findOne({ email });
+    if (existUser) {
+      return res.status(400).json({ message: "User is already Exist" });
+    }
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ message: "invalid Email" });
+    }
+    if (password.length < 8) {
+      return res.status(400).json({ message: "enter strong password" });
+    }
+    const hashpassword = await bcrypt.hash(password, 10);
+    const user = users.create({
+      username,
+      email,
+      password: hashpassword,
+      photoUrl,
+    });
+    const token = await genToken(user._id);
+    res.cookie(
+      "token",
+      token
+      //      {
+      //     httpOnly : true,
+      //     secure : false,
+      // }
+    );
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    let existing = await users.findOne({ email });
+    if (!existing) {
+      return res
+        .status(400)
+        .json({ message: "User not found, please register !" });
+    }
+    let matchPass = await bcrypt.compare(password, existing.password);
+    if (!matchPass) {
+      return res.status(404).send("password is incorrect !");
+    }
+    let token = await genToken(existing._id);
+    res.cookie("token", token);
+  } catch (error) {
+    return res.status(400).json({ message: `signup error ${error}` });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    await res.clearCookie("token");
+  } catch (error) {
+    console.log(error);
+  }
+};
