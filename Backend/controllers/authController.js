@@ -2,15 +2,17 @@ import uploadOnCloudinary from "../config/cloudinary.js";
 import genToken from "../config/genToken.js";
 import users from "../model/userModel.js";
 import validator from "validator";
-
+import bcrypt from 'bcryptjs'
 export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     let photoUrl;
+    console.log(req.file)
+    return 
     if (req.file) {
       photoUrl = await uploadOnCloudinary(req.file.path);
     }
-    let existUser = users.findOne({ email });
+    let existUser = await users.findOne({ email });
     if (existUser) {
       return res.status(400).json({ message: "User is already Exist" });
     }
@@ -21,7 +23,7 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "enter strong password" });
     }
     const hashpassword = await bcrypt.hash(password, 10);
-    const user = users.create({
+    const user = await users.create({
       username,
       email,
       password: hashpassword,
@@ -31,10 +33,10 @@ export const register = async (req, res) => {
     res.cookie(
       "token",
       token
-      //      {
-      //     httpOnly : true,
-      //     secure : false,
-      // }
+          , {
+          httpOnly : true,
+          secure : false,
+      }
     );
     return res.status(200).json(user);
   } catch (error) {

@@ -4,6 +4,8 @@ import Home from "./Pages/home";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 
+export const serverUrl = "http://localhost:8080";
+
 const App = () => {
   return (
     <Routes>
