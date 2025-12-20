@@ -7,6 +7,7 @@ import { FaRegEye } from "react-icons/fa";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { MdOutlineCloudUpload } from "react-icons/md";
+import { alertHandler } from "../components/customAlert";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Register = () => {
   const [frontendImage, setFrontendImage] = useState("");
   const [backendImage, setBackendImage] = useState("");
   const [passwordToggle, setpasswordToggle] = useState(false);
+  const [load, setload] = useState(false);
 
   const handleImage = (e) => {
     const file = e.target.files[0];
@@ -31,8 +33,14 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+        setload(true);
+
+    if (backendImage == "") {
+      alertHandler("please upload your image !");
+      return;
+    }
     if (password !== confirmPasword) {
-      alert("passord doen't match !");
+      alertHandler("passord doen't match !");
       return;
     }
     const formData = new FormData();
@@ -40,18 +48,18 @@ const Register = () => {
     formData.append("email", email);
     formData.append("password", password);
     formData.append("image", backendImage);
-    console.log(backendImage);
-  
     try {
       let result = await axios.post(
         serverUrl + "/api/auth/register",
         formData,
         { withCredentials: true }
       );
-      console.log(result.data);
       navigate("/");
+              setload(false);
+
     } catch (error) {
-      console.log(error);
+      alertHandler(error.response.data.message);
+      setload(false);
     }
   };
   return (
@@ -220,7 +228,7 @@ const Register = () => {
           </div>
           <div className=" mt-1 ">
             <button className="btn w-full p-2 rounded-sm py-2 text-xs">
-              Next
+             {load ? "loading...." : "Create Account"}
             </button>
           </div>
           <div className="sec mb-1">

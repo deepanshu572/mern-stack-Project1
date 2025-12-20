@@ -1,17 +1,39 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
-import { FaUserTie } from "react-icons/fa";
+import { Link, useNavigate } from "react-router";
+import { MdAlternateEmail } from "react-icons/md";
+
 import { FaRegEye } from "react-icons/fa";
 import { RiLockPasswordLine } from "react-icons/ri";
+import axios from "axios";
+import { serverUrl } from "../App";
+import { alertHandler } from "../components/customAlert";
 
 const Login = () => {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const navigate = useNavigate();
 
-  const handleLogin =  async (e) =>{
-     e.preventDefault();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+    const [load, setload] = useState(false);
 
-  }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+     setload(true);
+    try {
+      let result = await axios.post(
+        serverUrl + "/api/auth/login",
+        { email, password },
+        {
+          withCredentials: true,
+        }
+      );
+      navigate("/");
+       setload(false);
+    } catch (error) {
+       alertHandler(error.response.data);
+  
+       setload(false);
+    }
+  };
   return (
     <div className="flex w-full font1   h-screen items-center justify-center">
       <div className="register w-[20rem] border border-[#292E3A] rounded-md bg-[#020211]  p-5 py-2">
@@ -22,21 +44,22 @@ const Login = () => {
         </p>
         <form onSubmit={handleLogin} className="form flex flex-col gap-2">
           <div className="inp">
-            <label className="text-[14px] text-[#e4e2e2de]" htmlFor="username">
+            <label className="text-[13px] text-[#e4e2e2de] " htmlFor="Email">
               {" "}
-              Username
+              Email
             </label>
             <div className="flex mt-1 overflow-hidden  items-center rounded-md bg-[#070A17]  border border-gray-800">
               <div className="bg-[#010103] p-2 py-2 h-full w-8 flex items-center justify-center">
                 {" "}
-                <FaUserTie className="w-3 h-3  " />
+                <MdAlternateEmail className="w-3 h-3  " />
               </div>{" "}
               <input
+                required
                 type="text"
                 className="  w-full  p-2 py-2  text-xs outline-none"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
@@ -53,6 +76,7 @@ const Login = () => {
                 <RiLockPasswordLine className="w-3 h-3  " />
               </div>{" "}
               <input
+                required
                 type="text"
                 className="  w-full  p-2 py-2  text-xs outline-none"
                 placeholder="Enter Password"
@@ -67,7 +91,7 @@ const Login = () => {
 
           <div className=" mt-1 ">
             <button className="btn w-full p-2 rounded-sm py-2 text-xs">
-              Login
+              {load ? "loading...." : "Login"}
             </button>
           </div>
           <div className="sec mb-1">
