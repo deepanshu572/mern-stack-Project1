@@ -1,0 +1,82 @@
+@import "tailwindcss";
+body{
+    width: 100%;
+    height: 100%;
+    /* background-color: #13314D; */
+    color: #fff;
+    background: #000000;
+}
+.font1{
+    
+    font-family: Poppins, sans-serif;
+}
+.line{
+    
+    background: linear-gradient(90deg, #fff0, #ffffff80);
+    width: 100px;
+    height: 2px;
+}
+.btn{
+  background: #850000;
+background: radial-gradient(circle, rgba(133, 0, 0, 1) 0%, rgba(199, 97, 97, 1) 100%);
+}
+.back_bg{
+    background: url("https://images.unsplash.com/photo-1611162616475-46b635cb6868?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat;
+    object-fit: contain;
+    object-position: center; 
+}
+.icon svg{
+        width: 20px;
+    height: 20px;
+}
+
+@media screen and (max-width : 600px) {
+    .side_nav_btn {
+  display:none !important;
+  color :#c2c2c2;
+  gap: 6px !important;
+}
+.big_svg svg{
+     width: 24px !important;
+    height: 24px !important;
+}
+.mob{
+    display: flex !important;
+    flex-direction: column;
+}
+.side_nav_btn svg{
+    width: 20px;
+    height: 20px;
+    
+}
+.side_nav_btn p{
+    color: #757373;
+}
+.somecss p{
+    display: none;
+           
+}
+.somecss{
+    background-color: #343434;
+    border-radius: 50% !important;
+    width: 38px;
+    height: 38px;
+     margin: 0 11px !important;
+     margin-left: 20px !important;
+     padding-top: 7px !important;
+}
+
+.subs{
+    display: none;
+}
+  .web{
+    display: flex !important;
+    flex-direction: column;
+}
+
+}
+@media screen and (min-width : 600px) {
+  .web{
+    display: none !important;
+}
+}
