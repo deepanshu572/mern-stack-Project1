@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "channel",
     },
+    history: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "history",
+    },
   },
   { timestamps: true }
 );

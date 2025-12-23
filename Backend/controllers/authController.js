@@ -67,10 +67,52 @@ export const login = async (req, res) => {
     return res.status(400).json({ message: `login error ${error}` });
   }
 };
+export const googleAuth = async (req, res) => {
+  try {
+    const { username, email, image } = req.body;
+    console.log(username, email, image , req.body)
+    let googlephotoUrl = image;
+    if (googlephotoUrl) {
+      try {
+        googlephotoUrl = await uploadOnCloudinary(image);
+      } catch (error) {
+        console.log("Cloudinary upload error: ", error);
+      }
+    }
+    let existUser = await users.findOne({ email });
+    let user = existUser;
+    if (!existUser) {
+       user = await users.create({
+        username,
+        email,
+        image: googlephotoUrl,
+      });
+    } else {
+      if (!existUser.image && googlephotoUrl) {
+        
+        existUser.image = googlephotoUrl;
+        await existUser.save();
+      }
+    }
+    const token = await genToken(user._id);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+    });
+    return res.status(200).json(existUser);
+  } catch (error) {
+    return res.status(400).json({ message: ` errorr ${error}` });
+  }
+};
 
 export const logout = async (req, res) => {
   try {
-    await res.clearCookie("token");
+    console.log(req.cookies);
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: false,
+    });
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.log(error);
   }

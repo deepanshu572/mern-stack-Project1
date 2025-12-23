@@ -7,9 +7,12 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { alertHandler } from "../components/customAlert";
+import { useDispatch } from "react-redux";
+import { getUserData } from "../redux/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,10 +29,12 @@ const Login = () => {
           withCredentials: true,
         }
       );
+      console.log(result.data)
+      dispatch(getUserData(result?.data));
       navigate("/");
        setload(false);
     } catch (error) {
-       alertHandler(error.response.data);
+       console.log(error);
   
        setload(false);
     }

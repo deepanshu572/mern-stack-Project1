@@ -8,9 +8,12 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { alertHandler } from "../components/customAlert";
+import { useDispatch } from "react-redux";
+import { getUserData } from "../redux/userSlice";
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,6 +57,8 @@ const Register = () => {
         formData,
         { withCredentials: true }
       );
+      
+      dispatch(getUserData(result?.data));
       navigate("/");
               setload(false);
 
