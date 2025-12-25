@@ -103,7 +103,7 @@ const Header = () => {
         ""
       )}
       <div
-        className={`top_nav z-999 flex items-center justify-between border-b border-b-[#1a1a1abd] ${
+        className={`top_nav top-0 z-999 flex items-center justify-between border-b border-b-[#1a1a1abd] ${
           toggle ? "bg-black text-[#fff]" : "text-black bg-[#fff]"
         } gap-4 sm:justify-between px-[8px] py-[10px] sm:px-5 sm:py-[1rem] fixed w-full `}
       >
@@ -145,10 +145,10 @@ const Header = () => {
           </div>
         </div>
         <div className="top_nav_right hidden items-center justify-center gap-6 sm:flex">
-          <button className="video p-2 rounded-3xl  flex gap-1 items-center hover:bg-[#6f6f6f8a] bg-[#6f6f6f33] ">
+          <Link to={'/create'} className="video p-2 rounded-3xl  flex gap-1 items-center hover:bg-[#6f6f6f8a] bg-[#6f6f6f33] ">
             <FaPlus className="w-3 h-3" />
             <p className="text-xs">Create</p>
-          </button>
+          </Link>
           {/* <div className="hidden sm:inline"> </div> */}
           <div className="profile w-10 h-10" onClick={handleProfile}>
             {user == null ? (

@@ -70,7 +70,7 @@ export const login = async (req, res) => {
 export const googleAuth = async (req, res) => {
   try {
     const { username, email, image } = req.body;
-    console.log(username, email, image , req.body)
+    // console.log(username, email, image , req.body)
     let googlephotoUrl = image;
     if (googlephotoUrl) {
       try {

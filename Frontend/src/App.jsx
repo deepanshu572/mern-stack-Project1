@@ -9,12 +9,17 @@ import "./app.css";
 import SideNav from "./components/SideNav";
 import VideoDetail from "./Pages/VideoDetail";
 import { getUser } from "./Hooks/getCurrentUser";
+import CreatePage from "./Pages/CreatePage";
+import UploadVideo from "./Pages/uploadVideo";
+import UploadShorts from "./Pages/UploadShorts";
+import UploadCommunityPost from "./Pages/UploadCommunityPost";
+import UploadPlaylistVideos from "./Pages/UploadPlaylistVideos";
 
 export const serverUrl = "http://localhost:8080";
 
 const App = () => {
   const location = useLocation();
-  const hideLayout1 = location.pathname === "/";
+  const hideLayout1 = location.pathname === "/video/:id";
   const hideLayout2 =
     location.pathname === "/register" || location.pathname === "/login";
 
@@ -24,7 +29,8 @@ const App = () => {
   return (
     <>
       {!hideLayout2 && <Header />}
-      {hideLayout1 && <SideNav />}
+      {!hideLayout2 && <SideNav />}
+      {/* {!hideLayout1 && <SideNav />} */}
 
       <CustomAlert />
       <Routes>
@@ -32,6 +38,11 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/video/:id" element={<VideoDetail />} />
+        <Route path="/create" element={<CreatePage />} />
+        <Route path="/create/video" element={<UploadVideo />} />
+        <Route path="/create/shorts" element={<UploadShorts />} />
+        <Route path="/create/community-post" element={<UploadCommunityPost />} />
+        <Route path="/create/playlist" element={<UploadPlaylistVideos />} />
       </Routes>
     </>
   );
