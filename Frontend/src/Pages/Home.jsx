@@ -1,12 +1,11 @@
-import axios from "axios";
-import React from "react";
-import { serverUrl } from "../App";
 import VideosData from "../components/VideosData";
+import SideNav from "../components/SideNav";
 
 const Home = () => {
   
   return (
-    <div className="home">
+    <div className="home flex gap-3">
+      <SideNav/>
       <VideosData />
     </div>
   );

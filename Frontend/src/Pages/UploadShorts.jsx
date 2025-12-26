@@ -1,8 +1,11 @@
 import React from "react";
 import { MdCloudUpload } from "react-icons/md";
+import SideNav from "../components/SideNav";
 const UploadShorts = () => {
   return (
-    <div className="create p-4 md:mt-[5rem] md:ml-auto md:w-[80%]">
+      <div className="flex gap-3">
+    <SideNav/>
+    <div className="create w-full p-4 md:mt-[5rem] ">
       <h3 className="text-3xl font-bold">Upload Short</h3>
       <p className="text-xs pt-1 border-b border-[#393939e4] pb-2 text-[#5e5e5e]">
         Choose a video to upload from your device
@@ -86,6 +89,7 @@ const UploadShorts = () => {
           </div>
         </div>
       </form>
+    </div>
     </div>
   );
 };

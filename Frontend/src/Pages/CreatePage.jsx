@@ -4,6 +4,7 @@ import { FaPlay } from "react-icons/fa6";
 import { FaPencilAlt } from "react-icons/fa";
 import { RiPlayList2Fill } from "react-icons/ri";
 import { useNavigate } from "react-router";
+import SideNav from "../components/SideNav";
 
 const CreatePage = () => {
   const uploads = [
@@ -44,19 +45,21 @@ const CreatePage = () => {
     navigate(path);
   };
   return (
-    <div className="create p-4  h-screen md:mt-[5rem] md:ml-auto md:w-[80%]">
+    <div className="flex gap-3">
+    <SideNav/>
+    <div className="create p-4   h-screen md:mt-[5rem]">
       <h3 className="text-3xl font-bold">Create</h3>
       <p className="text-xs pt-1 border-b border-[#393939e4] pb-2 text-[#5e5e5e]">
         Choose what type of content you want to create for your audience
       </p>
-      <div className="box_selector flex flex-wrap  gap-4 mt-4 ">
+      <div className="box_selector flex flex-wrap justify-center  gap-4 mt-4 ">
         {uploads.map((val, index) => {
           return (
             <div
               key={index}
               onClick={() => handlePath(val.path)}
               className={
-                `upload w-[30rem] bg-[#0b0b0b61] shrink-0 border border-[#5e5e5e4d] rounded-lg p-4  cursor-pointer transition-all duration-300 ease-in-out flex justify-center text-center flex-col gap-4 items-center` +
+                `upload w-[45%] bg-[#0b0b0b61] shrink-0 border border-[#5e5e5e4d] rounded-lg p-4  cursor-pointer transition-all duration-300 ease-in-out flex justify-center text-center flex-col gap-4 items-center` +
                 (path === val.path ? " border-[#9f9f9fb0]" : "")
               }
             >
@@ -105,7 +108,8 @@ const CreatePage = () => {
         )}
       </div>
     </div>
-  );
+
+</div>  );
 };
 
 export default CreatePage;

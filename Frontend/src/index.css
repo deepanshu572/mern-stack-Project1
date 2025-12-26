@@ -30,7 +30,7 @@ background: radial-gradient(circle, rgba(133, 0, 0, 1) 0%, rgba(199, 97, 97, 1) 
     height: 20px;
 }
 
-@media screen and (max-width : 600px) {
+@media screen and (max-width : 640px) {
     .side_nav_btn {
   display:none !important;
   color :#c2c2c2;
@@ -69,13 +69,16 @@ background: radial-gradient(circle, rgba(133, 0, 0, 1) 0%, rgba(199, 97, 97, 1) 
 .subs{
     display: none;
 }
+.nav_side{
+    position: fixed !important;
+}
   .web{
     display: flex !important;
     flex-direction: column;
 }
 
 }
-@media screen and (min-width : 600px) {
+@media screen and (min-width : 640px) {
   .web{
     display: none !important;
 }

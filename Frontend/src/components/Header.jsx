@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 import { IoSearchOutline } from "react-icons/io5";
 import { RiVideoAddFill } from "react-icons/ri";
@@ -18,16 +19,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../redux/userSlice";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../config/firebase";
+import { toggleSidebar } from "../redux/toggleSlice";
 
 const Header = () => {
   const user = useSelector((state) => state.usersData.userData);
+  const toggleFnc = useSelector((state) => state.toggle.toggle);
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(true);
   const [mobileToggle, setMobileToggle] = useState(true);
   const [visible, setvisible] = useState(false);
   const navigate = useNavigate();
+
   const handleMobileToggle = () => {
+    dispatch(toggleSidebar(!mobileToggle));
     setMobileToggle(!mobileToggle);
+    console.log(toggleFnc, "toggle state");
   };
   const logoutHandler = async () => {
     try {
@@ -78,13 +84,17 @@ const Header = () => {
       const res = await signInWithPopup(auth, provider);
       const { displayName, email, photoURL } = res.user;
       let username = displayName;
-      let data = await axios.post(serverUrl + "/api/auth/googleauth", {
-        username,
-        email,
-        image: photoURL
-      }, {
-        withCredentials: true,
-      });
+      let data = await axios.post(
+        serverUrl + "/api/auth/googleauth",
+        {
+          username,
+          email,
+          image: photoURL,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       dispatch(getUserData(data.data));
       console.log(data, res, "google signin response");
     } catch (error) {
@@ -108,7 +118,10 @@ const Header = () => {
         } gap-4 sm:justify-between px-[8px] py-[10px] sm:px-5 sm:py-[1rem] fixed w-full `}
       >
         <div className="top_nav_left sm:mr-[10vw] flex lg:gap-5">
-          {/* <SlMenu className="hidden sm:block" onClick={handleMobileToggle} /> */}
+          <SlMenu
+            className="hidden sm:block mr-2"
+            onClick={handleMobileToggle}
+          />
 
           <Link to="/">{svg}</Link>
         </div>
@@ -145,7 +158,10 @@ const Header = () => {
           </div>
         </div>
         <div className="top_nav_right hidden items-center justify-center gap-6 sm:flex">
-          <Link to={'/create'} className="video p-2 rounded-3xl  flex gap-1 items-center hover:bg-[#6f6f6f8a] bg-[#6f6f6f33] ">
+          <Link
+            to={"/create"}
+            className="video p-2 rounded-3xl  flex gap-1 items-center hover:bg-[#6f6f6f8a] bg-[#6f6f6f33] "
+          >
             <FaPlus className="w-3 h-3" />
             <p className="text-xs">Create</p>
           </Link>
@@ -177,6 +193,24 @@ const Header = () => {
                   <div className="content">
                     <h3 className="text-sm">{user?.username}</h3>
                     <p className="text-xs text-[#7a7a7a]">{user?.email}</p>
+                    {1===1 ? (
+                      <Link to={"/CreateChannel"}>
+                        {" "}
+                        <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">
+                          Create channel
+                        </p>
+                      </Link>
+                    ) : (
+                      <Link to={"/viewChannel"}>
+                        {" "}
+                        <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">
+                          View channel
+                        </p>
+                      </Link>
+                    )}
+                    {/* <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">
+                      Create channel
+                    </p> */}
                   </div>
                 </div>
               )}

@@ -14,14 +14,16 @@ import UploadVideo from "./Pages/uploadVideo";
 import UploadShorts from "./Pages/UploadShorts";
 import UploadCommunityPost from "./Pages/UploadCommunityPost";
 import UploadPlaylistVideos from "./Pages/UploadPlaylistVideos";
+import ViewChannelPage from "./Pages/ViewChannelPage";
+import CreateChannel from "./Pages/CreateChannel";
 
 export const serverUrl = "http://localhost:8080";
 
 const App = () => {
-  const location = useLocation();
-  const hideLayout1 = location.pathname === "/video/:id";
+  // const location = useLocation();
+  // const hideLayout1 = location.pathname === "/video/:id";
   const hideLayout2 =
-    location.pathname === "/register" || location.pathname === "/login";
+    location.pathname === "/register" || location.pathname === "/login"|| location.pathname === "/CreateChannel";
 
   getUser();
  
@@ -29,7 +31,6 @@ const App = () => {
   return (
     <>
       {!hideLayout2 && <Header />}
-      {!hideLayout2 && <SideNav />}
       {/* {!hideLayout1 && <SideNav />} */}
 
       <CustomAlert />
@@ -38,6 +39,8 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/video/:id" element={<VideoDetail />} />
+        <Route path="/CreateChannel" element={<CreateChannel />} />
+        <Route path="/viewChannel" element={<ViewChannelPage />} />
         <Route path="/create" element={<CreatePage />} />
         <Route path="/create/video" element={<UploadVideo />} />
         <Route path="/create/shorts" element={<UploadShorts />} />

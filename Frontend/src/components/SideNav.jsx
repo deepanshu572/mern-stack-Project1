@@ -1,46 +1,42 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import SideNavItem from "../childComponent/SideNavItem";
 import { categories } from "../Utils/constant";
 
 const SideNav = () => {
+  const toggleFnc = useSelector((state) => state.toggle.toggle);
+  const [MobileMenu, SetMobileMenu] = useState();
+
   const [toggle, SetToggle] = useState(true);
-  const [MobileMenu, SetMobileMenu] = useState(true);
-  const MobileToggle = () => {};
+  useEffect(() => {
+    SetMobileMenu(toggleFnc);
+    console.log("toggle value in sidenav:", MobileMenu);
+  }, [toggleFnc]);
 
   return (
-    <>
+    <div className={`nav_side w-full  transition-all duration-700 ease-in-out ${MobileMenu ? " lg:w-[4rem] sm:w-[4rem]" : " lg:w-[15rem] sm:w-[14rem]"}    md:relative  shrink-0   `}>
       <div
-        className={`overflow-hidden sm:side_nav z-10 fixed ${
+        className={`overflow-hidden  sm:side_nav fixed  z-10 sm:pt-[80px] lg:pt-[79px]  ${
           toggle ? "bg-black " : " bg-[#fff]"
-        } lg:translate-x-0 ${
-          MobileMenu ? "translate-x-0" : "-translate-x-full"
-        }  sm:w-[14rem] sm:h-[100vh] sm:top-[54px] 
-         transition duration-700 ease-in-out 
-         sm:ease-linear sm:duration-0 lg:h-[100vh] 
-         sm:pt-5 sm:pb-5 py-1 w-full    lg:w-[15rem] 
-          lg:top-[9%] lg:left-0 z-1 bottom-0`}
+        }    
+         transition-all duration-500 ease-in-out
+         sm:ease-linear sm:duration-0  ${MobileMenu ? " lg:w-[4rem] sm:w-[4rem]" : "lg:w-[15rem] sm:w-[14rem]"}
+         py-1 w-full     
+           sm:top-0 lg:left-0 z-1 bottom-0`}
       >
-        {/* <div
-          onClick={MobileToggle}
-          className={` sm:hidden ${
-            MobileMenu ? "translate-x-0" : "-translate-x-full"
-          } w-screen h-full ${
-            toggle ? "bg-[#00000094] " : " bg-[#ffffff94]"
-          }  z-[-1] absolute left-0 top-0 `}
-        >
-          {" "}
-        </div> */}
-        <div className=" overflow-hidden flex items-center justify-center gap-[13px] sm:block sm:h-[92vh] sm:px-2 sm:pt-2  sm:pb-7 sm:scrollControll border-r border-r-[#1a1a1abd]">
+        
+        <div className=" overflow-hidden  cursor-pointer transition-all duration-300 ease-in-out flex items-center justify-center gap-[13px] sm:block sm:h-[92vh] sm:px-2 sm:pt-2  sm:pb-7 sm:scrollControll border-r border-r-[#1a1a1abd]">
           {categories.map((val, index) => {
             return (
               <>
                 {val.title && (
                   <div
-                    className={`hidden sm:block  ${
+                    className={`hidden sm:block   ${
                       toggle ? "border-t-[#1a1a1abd]" : "border-t-[#e6e6e6]"
                     } border-t  p-2`}
                   >
-                    <h3 className=" text-[15px] ">You</h3>
+                    <h3 className={` text-[15px] ${MobileMenu ? "hidden" : "block"}`}>You</h3>
                   </div>
                 )}
                 <SideNavItem
@@ -48,6 +44,7 @@ const SideNav = () => {
                   key={index}
                   icon={val.icon}
                   name={val.class || ""}
+                  MobileMenu={MobileMenu}
                   DataId={val.DataId}
                   action={() => {
                     clickHandler(val.DataId, val.name);
@@ -61,9 +58,9 @@ const SideNav = () => {
                   ></p>
                 )}
                 {val.addData && (
-                  <div className="subs">
+                  <div className="subs border-t-[1px] border-t-[#1a1a1abd]">
                     <div className="p-2">
-                      <h3 className="text-[15px]">Subscriptions</h3>
+                      <h3 className={`text-[15px]  ${MobileMenu ? "hidden" : "block"}`}>Subscriptions</h3>
                     </div>
                     <div
                       className={`subscribe_data_box ${
@@ -71,7 +68,7 @@ const SideNav = () => {
                       } border-b-[1px] pb-4`}
                     >
                       <div
-                        className="subscribe_box hover:bg-[#dedede38] cursor-pointer flex items-center  gap-2 py-[5px] px-[8px]  "
+                        className={` ${MobileMenu ? "justify-center" : ""} subscribe_box hover:bg-[#dedede38] cursor-pointer flex items-center  gap-2 py-[5px] px-[8px] `}
                         onClick={() => FetchSubscribedChannel(item)}
                       >
                         <div className="subscribe_box_img w-[25px] h-[25px] ">
@@ -81,7 +78,7 @@ const SideNav = () => {
                             alt=""
                           />
                         </div>
-                        <p className="text-[14px] lg:text-[13px] ">T series</p>
+                        <p className={`text-[14px] lg:text-[13px] ${MobileMenu ? "hidden" : "block"} `}>T series</p>
                       </div>
                     </div>
                   </div>
@@ -95,7 +92,7 @@ const SideNav = () => {
           </div> */}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

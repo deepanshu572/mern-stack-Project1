@@ -1,9 +1,12 @@
 import React from "react";
 import { IoImages } from "react-icons/io5";
+import SideNav from "../components/SideNav";
 
 const UploadCommunityPost = () => {
   return (
-    <div className="create p-4 md:mt-[5rem] md:ml-auto md:w-[80%]">
+      <div className="flex gap-3">
+    <SideNav/>
+    <div className="create w-full p-4 md:mt-[5rem] ">
       <h3 className="text-3xl font-bold">Upload Community Post</h3>
       <p className="text-xs pt-1 border-b border-[#393939e4] pb-2 text-[#5e5e5e]">
         Share text, images, polls, and more with your audience
@@ -50,6 +53,7 @@ const UploadCommunityPost = () => {
           </button>
         </div>
       </form>
+    </div>
     </div>
   );
 };
