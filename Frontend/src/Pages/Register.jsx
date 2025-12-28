@@ -64,6 +64,7 @@ const Register = () => {
 
     } catch (error) {
       alertHandler(error.response.data.message);
+      console.log(error.response.data.message);
       setload(false);
     }
   };

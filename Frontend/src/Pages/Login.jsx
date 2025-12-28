@@ -16,11 +16,11 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-    const [load, setload] = useState(false);
+  const [load, setload] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-     setload(true);
+    setload(true);
     try {
       let result = await axios.post(
         serverUrl + "/api/auth/login",
@@ -29,24 +29,27 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      console.log(result.data)
+      console.log(result.data);
       dispatch(getUserData(result?.data));
       navigate("/");
-       setload(false);
+      setload(false);
     } catch (error) {
-       console.log(error);
-  
-       setload(false);
+        alertHandler(error.response.data);
+      console.log(error);
+
+      setload(false);
     }
   };
   return (
     <div className="flex w-full font1   h-screen items-center justify-center">
-        <div className="left rounded-bl-2xl rounded-tl-2xl  overflow-hidden relative  w-[20rem] h-[31.8rem] border border-[#292E3A]  ">
-
+      <div className="left rounded-bl-2xl rounded-tl-2xl  overflow-hidden relative  w-[20rem] h-[31.8rem] border border-[#292E3A]  ">
         <div className="img w-full h-full">
-          <img className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8eW91dHViZXxlbnwwfHwwfHx8MA%3D%3D" alt="" />
+          <img
+            className="w-full h-full object-cover"
+            src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8eW91dHViZXxlbnwwfHwwfHx8MA%3D%3D"
+            alt=""
+          />
         </div>
-       
       </div>
       <div className="register rounded-br-2xl rounded-tr-2xl w-[20rem] flex flex-col justify-center h-[31.8rem]  border border-[#292E3A] bg-[#020211]  p-5 py-2">
         {/* <FaArrowLeft className="w-4 h-4" /> */}
@@ -100,6 +103,14 @@ const Login = () => {
                        </div> */}
             </div>
           </div>
+          <div className="sec flex justify-end">
+            <Link
+              to={"/forgotpassword"}
+              className=" hover:underline cursor-pointer text-center text-[11px]"
+            >
+              Forgot Password?
+            </Link>
+          </div>
 
           <div className=" mt-1 ">
             <button className="btn w-full p-2 rounded-sm py-2 text-xs">
@@ -116,7 +127,6 @@ const Login = () => {
           </div>
         </form>
       </div>
-      
     </div>
   );
 };

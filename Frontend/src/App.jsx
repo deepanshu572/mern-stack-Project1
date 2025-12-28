@@ -16,6 +16,7 @@ import UploadCommunityPost from "./Pages/UploadCommunityPost";
 import UploadPlaylistVideos from "./Pages/UploadPlaylistVideos";
 import ViewChannelPage from "./Pages/ViewChannelPage";
 import CreateChannel from "./Pages/CreateChannel";
+import ForgotPassword from "./Pages/ForgotPassword";
 
 export const serverUrl = "http://localhost:8080";
 
@@ -23,10 +24,12 @@ const App = () => {
   // const location = useLocation();
   // const hideLayout1 = location.pathname === "/video/:id";
   const hideLayout2 =
-    location.pathname === "/register" || location.pathname === "/login"|| location.pathname === "/CreateChannel";
+    location.pathname === "/register" ||
+    location.pathname === "/login" ||
+    location.pathname === "/forgotpassword" ||
+    location.pathname === "/CreateChannel";
 
   getUser();
- 
 
   return (
     <>
@@ -38,13 +41,17 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/video/:id" element={<VideoDetail />} />
         <Route path="/CreateChannel" element={<CreateChannel />} />
         <Route path="/viewChannel" element={<ViewChannelPage />} />
         <Route path="/create" element={<CreatePage />} />
         <Route path="/create/video" element={<UploadVideo />} />
         <Route path="/create/shorts" element={<UploadShorts />} />
-        <Route path="/create/community-post" element={<UploadCommunityPost />} />
+        <Route
+          path="/create/community-post"
+          element={<UploadCommunityPost />}
+        />
         <Route path="/create/playlist" element={<UploadPlaylistVideos />} />
       </Routes>
     </>
