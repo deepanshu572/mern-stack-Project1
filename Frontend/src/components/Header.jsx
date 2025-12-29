@@ -193,7 +193,7 @@ const Header = () => {
                   <div className="content">
                     <h3 className="text-sm">{user?.username}</h3>
                     <p className="text-xs text-[#7a7a7a]">{user?.email}</p>
-                    {1===1 ? (
+                    {!user?.channel > 0 ? (
                       <Link to={"/CreateChannel"}>
                         {" "}
                         <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">

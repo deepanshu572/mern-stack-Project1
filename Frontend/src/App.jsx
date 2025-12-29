@@ -33,6 +33,7 @@ const App = () => {
 
   return (
     <>
+    
       {!hideLayout2 && <Header />}
       {/* {!hideLayout1 && <SideNav />} */}
 

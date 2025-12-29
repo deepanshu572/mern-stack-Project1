@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: "",
+      default: "https://i.pinimg.com/1200x/66/ff/cb/66ffcb56482c64bdf6b6010687938835.jpg",
     },
     channel: {
       type: mongoose.Schema.Types.ObjectId,

@@ -9,6 +9,7 @@ import { serverUrl } from "../App";
 import { alertHandler } from "../components/customAlert";
 import { useDispatch } from "react-redux";
 import { getUserData } from "../redux/userSlice";
+import Loader from "../childComponent/Loader";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const Login = () => {
         }
       );
       console.log(result.data);
+      alertHandler("Login Successfully")
       dispatch(getUserData(result?.data));
       navigate("/");
       setload(false);
@@ -113,8 +115,8 @@ const Login = () => {
           </div>
 
           <div className=" mt-1 ">
-            <button className="btn w-full p-2 rounded-sm py-2 text-xs">
-              {load ? "loading...." : "Login"}
+            <button className="btn w-full p-2  rounded-sm py-2 text-xs flex items-center justify-center">
+              {load ? <Loader/> : "Login"}
             </button>
           </div>
           <div className="sec mb-1">

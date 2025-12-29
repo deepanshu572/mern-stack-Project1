@@ -1,25 +1,31 @@
 import React from "react";
 import SideNav from "../components/SideNav";
 import { Link } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 
 const ViewChannelPage = () => {
+     const user = useSelector((state) => state.usersData.userData);
+     console.log(user)
+
   return (
     <div className="flex">
       <SideNav />
       <div className="view w-full p-4 md:mt-[5rem] ">
         <div className="banner h-45 w-full rounded-md overflow-hidden">
-          <img className="w-full h-full object-cover " src="" alt="" />
+          <img className="w-full h-full object-cover object-top " src={user?.channel?.bannerImage} alt="" />
         </div>
         <div className="detail_channel flex flex-col justify-center items-center mt-4">
           <div className="channel_img w-15 h-15 rounded-full overflow-hidden">
-            <img className="w-full h-full object-cover " src="" alt="" />
+            <img className="w-full h-full object-cover  object-top " src={user?.channel?.avatar} alt="" />
           </div>
-          <h3>Deepanshu</h3>
-          <p>@dk_Zeenat_aara</p>
+          <h3>{user?.channel?.name}</h3>
+          <p>{user?.channel?.category}</p>
           <small className="flex items-center gap-1">
             more about this channel...{" "}
             <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">
-              Study
+              {user?.channel?.
+description
+}
             </p>
           </small>
           <div className="btn_box flex gap-4 mt-4">

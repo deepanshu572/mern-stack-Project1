@@ -14,6 +14,8 @@ const channelSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
+    default:
+      "https://i.pinimg.com/1200x/66/ff/cb/66ffcb56482c64bdf6b6010687938835.jpg",
   },
   bannerImage: {
     type: String,
@@ -43,3 +45,7 @@ const channelSchema = new mongoose.Schema({
     ref: "video",
   },
 });
+
+const channels = mongoose.model("channel", channelSchema);
+
+export default channels;

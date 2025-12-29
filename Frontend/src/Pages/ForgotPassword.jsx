@@ -74,11 +74,12 @@ const ForgotPassword = () => {
         }
       );
         alertHandler(result.data.message);
-        navigate("/")
+        navigate("/login")
     } catch (error) {
       alertHandler(error);
     }
   };
+  
 
   return (
     <div className="flex w-full font1   h-screen items-center justify-center">
