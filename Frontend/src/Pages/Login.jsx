@@ -36,7 +36,7 @@ const Login = () => {
       navigate("/");
       setload(false);
     } catch (error) {
-        alertHandler(error.response.data);
+        // alertHandler(error.response.data);
       console.log(error);
 
       setload(false);

@@ -2,24 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 
-const VideoCard = () => {
+const VideoCard = ({id ,image ,video , title , description}) => {
 
   return (
     <>
-      <Link to={`/video/1`} className="card p-1 w-[25rem]   sm:w-[31vw] lg:w-[15rem]  ">
+      <Link to={`/video/${id}`} className="card p-1 w-[25rem]   sm:w-[31vw] lg:w-[15rem]  ">
         <div className="card_video w-full h-[14rem] sm:w-full sm:h-[8rem] bg-white overflow-hidden self-center rounded-[10px]">
-          {/* {video?.thumbnails?.high?.url ? (
-            <img
-              src={video.thumbnails.high.url}
-              alt="Thumbnail"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            ''
-            // <img src="https://avatar.iran.liara.run/public/girl" alt="" />
-
-          )} */}
-       <img className="w-full h-full object-cover" src="https://i.ytimg.com/vi/YyepU5ztLf4/hqdefault.jpg" alt="" />
+          
+       <img className="w-full h-full object-cover" src={image} alt="" />
 
         </div>
         <div className="flex gap-3 w-full sm:pt-[14px] h-[85px] sm:h-auto px-[12px] py-[13px] sm:p-2 ">
@@ -31,9 +21,9 @@ const VideoCard = () => {
             
           </div>
           <div className="right sm:w-[85%] ">
-            <div className="card_heading text-[13px] sm:text-[11px] font-[500]">title</div>
+            <div className="card_heading text-[13px] sm:text-[11px] font-[500]">{title}</div>
             <div className="card_desc text-[#727272] text-[10px]">
-             Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, recusandae.
+             {description}
             </div>
           
           </div>

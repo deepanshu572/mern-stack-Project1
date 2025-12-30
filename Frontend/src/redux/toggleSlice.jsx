@@ -11,6 +11,7 @@ export const toggleSlice = createSlice({
     toggleSidebar: (state, action) => {
       state.toggle = action.payload;
     },
+    
   },
 });
 
