@@ -19,16 +19,13 @@ uploadRouter.post(
   ]),
   handleUploadVideo
 );
-uploadRouter.post(
-  "/short",
-  isAuth,
-  upload.fields([
-    { name: "videoBanner", maxCount: 1 },
-    { name: "video", maxCount: 1 },
-  ]),
-  handleUploadShort
-);
+uploadRouter.post("/short", isAuth, upload.single("video"), handleUploadShort);
 uploadRouter.post("/playlist", isAuth, handleUploadPlaylist);
-uploadRouter.post("/communityPost", isAuth, handleUploadCommunityPost);
+uploadRouter.post(
+  "/communityPost",
+  isAuth,
+  upload.single("image"),
+  handleUploadCommunityPost
+);
 
 export default uploadRouter;

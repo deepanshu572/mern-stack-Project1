@@ -15,15 +15,11 @@ const ShortScheme = new mongoose.Schema({
   tags: {
     type: String,
   },
-  videoBanner: {
-    type: String,
-    default: "",
-  },
   video: {
     type: String,
     default: "",
   },
 });
-const shorts = mongoose.model("video", ShortScheme);
+const shorts = mongoose.model("short", ShortScheme);
 
 export default shorts;

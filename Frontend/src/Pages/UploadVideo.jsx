@@ -4,14 +4,17 @@ import { IoImages } from "react-icons/io5";
 import SideNav from "../components/SideNav";
 import axios from "axios";
 import { serverUrl } from "../App";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../Hooks/getCurrentUser";
 import { alertHandler } from "../components/customAlert";
+import Loader from "../childComponent/Loader";
+import { useNavigate } from "react-router";
+import { getAllVideos } from "../Hooks/getAllVideos";
 
 const uploadVideo = () => {
   getUser();
   const user = useSelector((state) => state.usersData.userData);
-
+  const navigate = useNavigate();
   const chanelId = user?.channel?._id;
   const [load, setLoad] = useState(false);
   const [title, setTitle] = useState("");
@@ -49,6 +52,7 @@ const uploadVideo = () => {
       );
       console.log(result);
       setLoad(false);
+      getAllVideos();
       alertHandler("Video Uploaded Sucessfullly!");
       navigate("/");
     } catch (error) {
@@ -192,8 +196,8 @@ const uploadVideo = () => {
             </label>
           </div>
           <div className="flex justify-center">
-            <button className=" bg-[green] rounded-sm px-[8px] py-[10px] w-full cursor-pointer  transition-all duration-300 ease-in-out">
-              Publish
+            <button className=" bg-[green] rounded-sm px-[8px] py-[10px] w-full cursor-pointer flex items-center justify-center transition-all duration-300 ease-in-out">
+              {load ? <Loader /> : "Publish"}
             </button>
           </div>
         </form>

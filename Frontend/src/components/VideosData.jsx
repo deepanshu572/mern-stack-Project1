@@ -18,6 +18,7 @@ const VideosData = () => {
                 video={item?.video}
                 title={item?.title}
                 description={item?.description}
+                channel={item?.channel}
               />
             );
           })}

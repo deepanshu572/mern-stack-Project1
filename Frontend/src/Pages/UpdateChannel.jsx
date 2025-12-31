@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../redux/userSlice";
 import { getUser } from "../Hooks/getCurrentUser";
 import Loader from "../childComponent/Loader";
-
+import { getAllVideos } from "../Hooks/getAllVideos";
 const UpdateChannel = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -52,6 +52,7 @@ const UpdateChannel = () => {
       );
             alertHandler("Update Successfully")
       dispatch(getUserData(result?.data?.user));
+      // getAllVideos()
       setload(false);
       navigate("/");
       // setload(false);

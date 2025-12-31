@@ -1,6 +1,9 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import channels from "../model/channelModel.js";
 import videos from "../model/videoModel.js";
+import shorts from "../model/shortModel.js";
+import playlists from "../model/playlistModel.js";
+import comunityPosts from "../model/communityModel.js";
 
 export const handleUploadVideo = async (req, res) => {
   try {
@@ -18,26 +21,118 @@ export const handleUploadVideo = async (req, res) => {
       videoBanner = await uploadOnCloudinary(file.videoBanner[0].path);
     }
     const videoData = await videos.create({
+      channel: chanelId,
       title,
       description,
       tags,
       video,
       videoBanner,
     });
-    console.log("id" + videoData);
-    const VideoPopulatedData = await channels.findByIdAndUpdate(
+    const VideoPopulatedData = await videoData.populate("channel");
+
+    const channelUpdate = await channels.findByIdAndUpdate(
       chanelId,
       {
         videos: videoData._id,
       },
       { new: true }
     );
-    console.log(videoData);
-    return res.status(200).json({ videoData });
+    return res.status(200).json({ VideoPopulatedData });
   } catch (error) {
     console.log("upload video error : " + error);
   }
 };
-export const handleUploadShort = (req, res) => {};
-export const handleUploadPlaylist = (req, res) => {};
-export const handleUploadCommunityPost = (req, res) => {};
+export const handleUploadShort = async (req, res) => {
+  try {
+    const { chanelId, title, description, tags } = req.body;
+    const file = req.file;
+    let video;
+    if (!file) {
+      return res.status(400).json({ message: "Please upload files" });
+    }
+    if (file) {
+      video = await uploadOnCloudinary(file.path);
+    }
+    const shortsData = await shorts.create({
+      channel: chanelId,
+      title,
+      description,
+      tags,
+      video,
+    });
+    const shortsPopulated = await shortsData.populate("channel");
+
+    const channelUpdate = await channels.findByIdAndUpdate(
+      chanelId,
+      {
+        shorts: shortsData._id,
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({ shortsPopulated });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: `uploads shorts error  : ${error}` });
+  }
+};
+export const handleUploadPlaylist = async (req, res) => {
+  try {
+    const { chanelId, title, description, selectedVideos } = req.body;
+    const playlist = await playlists.create({
+      channel: chanelId,
+      title,
+      description,
+      selectedVideos,
+    });
+    const populatedPlaylist = await playlist.populate("channel");
+    const channelUpdate = await channels.findByIdAndUpdate(
+      chanelId,
+      {
+        playlists: playlist._id,
+      },
+      { new: true }
+    );
+    return res.status(200).json({ populatedPlaylist });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: `uploads playlist error  : ${error}` });
+  }
+};
+
+export const handleUploadCommunityPost = async (req, res) => {
+  try {
+    const { chanelId, description, image } = req.body;
+    const file = req.file;
+    let imageData;
+    if (!file) {
+      return res.status(400).json({ message: "Please upload files" });
+    }
+    if (file) {
+      imageData = await uploadOnCloudinary(file.path);
+    }
+
+    const communityData = await comunityPosts.create({
+      channel: chanelId,
+      description,
+      image: imageData,
+    });
+    const communityPopulated = await communityData.populate("channel");
+
+    const channelUpdate = await channels.findByIdAndUpdate(
+      chanelId,
+      {
+        communityPosts: communityData._id,
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({ communityPopulated });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: `uploads community error  : ${error}` });
+  }
+};

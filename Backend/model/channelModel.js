@@ -34,7 +34,7 @@ const channelSchema = new mongoose.Schema({
   },
   shorts: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "shorts",
+    ref: "short",
   },
   subscribers: {
     type: mongoose.Schema.Types.ObjectId,
