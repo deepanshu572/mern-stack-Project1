@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SideNav from "../components/SideNav";
 import { useSelector } from "react-redux";
-import { getAllVideos } from "../Hooks/getAllVideos";
+// import { getAllVideos } from "../Hooks/getAllContentData";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { useNavigate } from "react-router";

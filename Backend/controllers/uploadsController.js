@@ -60,12 +60,12 @@ export const handleUploadShort = async (req, res) => {
     });
     // const shortsPopulated = await shortsData.populate("channel");
 
-    const channelUpdate = await channels.findByIdAndUpdate(
+      await channels.findByIdAndUpdate(
       chanelId,
 
-      { $push: { shorts: shortsData._id } },
+      { $push: { shorts: shortsData?._id } },
 
-      { new: true },
+      { new: true }
     );
 
     return res.status(200).json({ shortsData });
@@ -99,7 +99,6 @@ export const handleUploadPlaylist = async (req, res) => {
       .json({ message: `uploads playlist error  : ${error}` });
   }
 };
-
 export const handleUploadCommunityPost = async (req, res) => {
   try {
     const { chanelId, description, image } = req.body;

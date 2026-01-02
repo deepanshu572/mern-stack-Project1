@@ -12,7 +12,7 @@ export const getchannel = async (req, res) => {
         const result = await axios.get(serverUrl + "/api/users/channel", {
           withCredentials: true,
         });
-        console.log("Current channel Data:", result);
+        // console.log("Current channel Data:", result);
         dispatch(getChannelData(result?.data?.channel));
       } catch (error) {
         console.log("Error fetching channel data:", error);

@@ -8,11 +8,11 @@ import { useSelector } from "react-redux";
 import { alertHandler } from "../components/customAlert";
 import { useNavigate } from "react-router";
 import Loader from "../childComponent/Loader";
-import { getAllVideos } from "../Hooks/getAllVideos";
+// import { getAllVideos } from "../Hooks/getAllContentData";
 const UploadShorts = () => {
   getUser();
-  const user = useSelector((state) => state.usersData.userData);
-  const chanelId = user?.channel?._id;
+  const channel = useSelector((state) => state.usersData.channelData);
+  const chanelId = channel?._id;
   const navigate = useNavigate();
   const [load, setLoad] = useState(false);
   const [title, setTitle] = useState("");
@@ -43,7 +43,7 @@ const UploadShorts = () => {
       );
       console.log(result);
       setLoad(false);
-      getAllVideos();
+      // getAllVideos();
       alertHandler("shorts Uploaded Sucessfullly!");
       navigate("/");
     } catch (error) {

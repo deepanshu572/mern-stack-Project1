@@ -5,6 +5,7 @@ const initialState = {
   shorts: null,
   playlist: null,
   commmunity: null,
+  channelDetail: null,
 };
 
 export const contentSlice = createSlice({
@@ -23,11 +24,19 @@ export const contentSlice = createSlice({
     getCommmunity: (state, action) => {
       state.commmunity = action.payload;
     },
+    getChannelDetail: (state, action) => {
+      state.channelDetail = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { getVideos, getShorts, getPlaylist, getCommmunity } =
-  contentSlice.actions;
+export const {
+  getVideos,
+  getShorts,
+  getPlaylist,
+  getCommmunity,
+  getChannelDetail,
+} = contentSlice.actions;
 
 export default contentSlice.reducer;

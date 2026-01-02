@@ -9,7 +9,7 @@ import "./app.css";
 import SideNav from "./components/SideNav";
 import VideoDetail from "./Pages/VideoDetail";
 import { getUser } from "./Hooks/getCurrentUser";
-import { getAllVideos } from "./Hooks/getAllVideos";
+import { getAllContentData } from "./Hooks/getAllContentData";
 import CreatePage from "./Pages/CreatePage";
 import UploadVideo from "./Pages/uploadVideo";
 import UploadShorts from "./Pages/UploadShorts";
@@ -20,6 +20,7 @@ import CreateChannel from "./Pages/CreateChannel";
 import ForgotPassword from "./Pages/ForgotPassword";
 import UpdateChannel from "./Pages/UpdateChannel";
 import { getchannel } from "./Hooks/getCurrentChannelData";
+import ChannelDetailPage from "./Pages/ChannelDetailPage";
 
 export const serverUrl = "http://localhost:8080";
 
@@ -34,7 +35,7 @@ const App = () => {
 
   getUser();
   getchannel();
-  getAllVideos();
+  getAllContentData();
 
   return (
     <>
@@ -52,6 +53,7 @@ const App = () => {
         <Route path="/CreateChannel" element={<CreateChannel />} />
         <Route path="/UpdateChannel" element={<UpdateChannel />} />
         <Route path="/viewChannel" element={<ViewChannelPage />} />
+        <Route path="/ChannelDetail/:id" element={<ChannelDetailPage />} />
         <Route path="/create" element={<CreatePage />} />
         <Route path="/create/video" element={<UploadVideo />} />
         <Route path="/create/shorts" element={<UploadShorts />} />

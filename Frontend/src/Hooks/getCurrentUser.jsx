@@ -12,7 +12,7 @@ export const getUser = async (req, res) => {
         const result = await axios.get(serverUrl + "/api/users/user", {
           withCredentials: true,
         });
-        console.log("Current User Data:", result);
+        // console.log("Current User Data:", result);
         dispatch(getUserData(result?.data?.user));
       } catch (error) {
         console.log("Error fetching user data:", error);
