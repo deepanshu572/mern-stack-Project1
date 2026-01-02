@@ -12,12 +12,19 @@ const playlistScheme = new mongoose.Schema({
   description: {
     type: String,
   },
-  selectedVideos: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "video",
-    default: [],
-  },
-});
+  selectedVideos: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "video",
+    },
+  ],
+  saveBy: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+  ],
+},{timestamps:true});
 const playlists = mongoose.model("playlist", playlistScheme);
 
 export default playlists;

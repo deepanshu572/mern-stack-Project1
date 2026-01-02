@@ -28,16 +28,14 @@ export const handleUploadVideo = async (req, res) => {
       video,
       videoBanner,
     });
-    const VideoPopulatedData = await videoData.populate("channel");
+    // const VideoPopulatedData = await videoData.populate("channel");
 
     const channelUpdate = await channels.findByIdAndUpdate(
       chanelId,
-      {
-        videos: videoData._id,
-      },
+      { $push: { videos: videoData._id } },
       { new: true }
     );
-    return res.status(200).json({ VideoPopulatedData });
+    return res.status(200).json({ videoData });
   } catch (error) {
     console.log("upload video error : " + error);
   }
@@ -60,17 +58,17 @@ export const handleUploadShort = async (req, res) => {
       tags,
       video,
     });
-    const shortsPopulated = await shortsData.populate("channel");
+    // const shortsPopulated = await shortsData.populate("channel");
 
     const channelUpdate = await channels.findByIdAndUpdate(
       chanelId,
-      {
-        shorts: shortsData._id,
-      },
-      { new: true }
+
+      { $push: { shorts: shortsData._id } },
+
+      { new: true },
     );
 
-    return res.status(200).json({ shortsPopulated });
+    return res.status(200).json({ shortsData });
   } catch (error) {
     return res
       .status(400)
@@ -86,15 +84,15 @@ export const handleUploadPlaylist = async (req, res) => {
       description,
       selectedVideos,
     });
-    const populatedPlaylist = await playlist.populate("channel");
+    // const populatedPlaylist = await playlist.populate("channel");
     const channelUpdate = await channels.findByIdAndUpdate(
       chanelId,
-      {
-        playlists: playlist._id,
-      },
+
+      { $push: { playlists: playlist._id } },
+
       { new: true }
     );
-    return res.status(200).json({ populatedPlaylist });
+    return res.status(200).json({ playlist });
   } catch (error) {
     return res
       .status(400)
@@ -119,7 +117,7 @@ export const handleUploadCommunityPost = async (req, res) => {
       description,
       image: imageData,
     });
-    const communityPopulated = await communityData.populate("channel");
+    // const communityPopulated = await communityData.populate("channel");
 
     const channelUpdate = await channels.findByIdAndUpdate(
       chanelId,
@@ -129,7 +127,7 @@ export const handleUploadCommunityPost = async (req, res) => {
       { new: true }
     );
 
-    return res.status(200).json({ communityPopulated });
+    return res.status(200).json({ communityData });
   } catch (error) {
     return res
       .status(400)

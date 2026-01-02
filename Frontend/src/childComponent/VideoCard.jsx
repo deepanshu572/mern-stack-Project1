@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const VideoCard = ({ id, image, video, title, description, channel }) => {
+const VideoCard = ({ id, image, video, views, title, description , channel}) => {
   return (
     <>
       <Link
@@ -24,7 +24,10 @@ const VideoCard = ({ id, image, video, title, description, channel }) => {
               {title}
             </div>
             <div className="card_desc text-[#727272] text-[10px]">
-              {description}
+              {channel?.name}
+            </div>
+            <div className="card_desc text-[#727272] text-[10px]">
+              {views} Views
             </div>
           </div>
         </div>

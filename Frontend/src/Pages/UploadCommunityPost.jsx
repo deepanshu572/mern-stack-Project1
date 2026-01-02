@@ -8,9 +8,9 @@ import { alertHandler } from "../components/customAlert";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 const UploadCommunityPost = () => {
-    const user = useSelector((state) => state.usersData.userData);
-    const chanelId = user?.channel?._id;
-    const navigate = useNavigate();
+  const channel = useSelector((state) => state.usersData.channelData);
+  const chanelId = channel?._id;
+  const navigate = useNavigate();
   const [desc, setDesc] = useState("");
   const [backendImage, setBackendImage] = useState(null);
   const [frontendImage, setfrontendImage] = useState(null);
@@ -19,6 +19,7 @@ const UploadCommunityPost = () => {
   const handleUploadCommunityPost = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+    formData.append("chanelId", chanelId);
     formData.append("description", desc);
     formData.append("image", backendImage);
     setLoad(true);
@@ -35,8 +36,8 @@ const UploadCommunityPost = () => {
         }
       );
       console.log(result);
-            setLoad(false);
-
+      setLoad(false);
+    //  dispatch(getCommmunity())
       alertHandler("community post Uploaded Sucessfullly!");
       navigate("/");
     } catch (error) {

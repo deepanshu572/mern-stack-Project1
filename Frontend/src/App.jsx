@@ -19,6 +19,7 @@ import ViewChannelPage from "./Pages/ViewChannelPage";
 import CreateChannel from "./Pages/CreateChannel";
 import ForgotPassword from "./Pages/ForgotPassword";
 import UpdateChannel from "./Pages/UpdateChannel";
+import { getchannel } from "./Hooks/getCurrentChannelData";
 
 export const serverUrl = "http://localhost:8080";
 
@@ -32,6 +33,7 @@ const App = () => {
     location.pathname === "/CreateChannel";
 
   getUser();
+  getchannel();
   getAllVideos();
 
   return (

@@ -9,13 +9,9 @@ import { getUser } from "../Hooks/getCurrentUser";
 import { alertHandler } from "../components/customAlert";
 
 const UploadPlaylistVideos = () => {
-  getAllVideos();
-  getUser();
+  const channel = useSelector((state) => state?.usersData?.channelData);
 
-  const AllVideo = useSelector((state) => state.content.videos);
-  const user = useSelector((state) => state.usersData.userData);
-
-  const channelId = user?.channel?._id;
+  const channelId = channel?._id;
   const navigate = useNavigate();
 
   const [video, setvideo] = useState([]);
@@ -30,15 +26,6 @@ const UploadPlaylistVideos = () => {
       setSelectedVideos((prev) => prev.filter((id) => id !== videoId));
     }
   };
-  // const handleArrayData = () => {
-  //   const FilteredVideo = AllVideo?.find((item) => {
-  //     return item?.channel?._id == channelId;
-  //   });
-  //   setvideo((prev) => [...prev, FilteredVideo]);
-  // };
-  // useEffect(()=>{
-  //   handleArrayData();
-  // },[]);
 
   const handlePlaylistVideo = async (e) => {
     e.preventDefault();
@@ -47,7 +34,7 @@ const UploadPlaylistVideos = () => {
       const result = axios.post(
         serverUrl + "/api/upload/playlist",
         {
-          chanelId,
+          channelId,
           title,
           description,
           selectedVideos,
@@ -117,7 +104,7 @@ const UploadPlaylistVideos = () => {
           <div className="select_vid">
             <h3>Select Videos</h3>
             <div className="flex items-center justify-start flex-wrap">
-              {video?.map((item) => {
+              {channel?.videos?.map((item) => {
                 return (
                   <label
                     htmlFor={`videos${item?._id}`}
@@ -132,7 +119,7 @@ const UploadPlaylistVideos = () => {
                     <div className="video w-55 h-40">
                       <img
                         className="w-full h-full object-cover"
-                        src="https://cdn.dribbble.com/userupload/16839295/file/original-daf5244ee598b2ee979daea0cb1620a5.png?resize=400x300"
+                        src={item?.videoBanner}
                         alt=""
                       />
                     </div>

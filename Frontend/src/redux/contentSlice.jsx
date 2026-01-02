@@ -14,10 +14,20 @@ export const contentSlice = createSlice({
     getVideos: (state, action) => {
       state.videos = action.payload;
     },
+    getShorts: (state, action) => {
+      state.shorts = action.payload;
+    },
+    getPlaylist: (state, action) => {
+      state.playlist = action.payload;
+    },
+    getCommmunity: (state, action) => {
+      state.commmunity = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { getVideos } = contentSlice.actions;
+export const { getVideos, getShorts, getPlaylist, getCommmunity } =
+  contentSlice.actions;
 
 export default contentSlice.reducer;

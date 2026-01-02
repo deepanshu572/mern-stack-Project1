@@ -5,17 +5,15 @@ import SideNav from "../components/SideNav";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../Hooks/getCurrentUser";
 import { alertHandler } from "../components/customAlert";
 import Loader from "../childComponent/Loader";
 import { useNavigate } from "react-router";
 import { getAllVideos } from "../Hooks/getAllVideos";
 
 const uploadVideo = () => {
-  getUser();
-  const user = useSelector((state) => state.usersData.userData);
+  const channel = useSelector((state) => state.usersData.channelData);
   const navigate = useNavigate();
-  const chanelId = user?.channel?._id;
+  const chanelId = channel?._id;
   const [load, setLoad] = useState(false);
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
@@ -52,7 +50,6 @@ const uploadVideo = () => {
       );
       console.log(result);
       setLoad(false);
-      getAllVideos();
       alertHandler("Video Uploaded Sucessfullly!");
       navigate("/");
     } catch (error) {

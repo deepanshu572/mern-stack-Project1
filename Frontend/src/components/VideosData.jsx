@@ -17,6 +17,7 @@ const VideosData = () => {
                 image={item?.videoBanner}
                 video={item?.video}
                 title={item?.title}
+                views={item?.views}
                 description={item?.description}
                 channel={item?.channel}
               />

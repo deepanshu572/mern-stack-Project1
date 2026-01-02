@@ -5,35 +5,33 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { alertHandler } from "../components/customAlert";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "../redux/userSlice";
-import { getUser } from "../Hooks/getCurrentUser";
+import { getChannelData, getUserData } from "../redux/userSlice";
 import Loader from "../childComponent/Loader";
-import { getAllVideos } from "../Hooks/getAllVideos";
 const UpdateChannel = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  getUser();
-  const user = useSelector((state) => state.usersData.userData);
+  const user = useSelector((state) => state.usersData.usersData);
+  const channel = useSelector((state) => state.usersData.channelData);
   const [load, setload] = useState(false);
 
   const [step, setStep] = useState(1);
-  const [title, setTitle] = useState(user?.channel?.name);
-  const [category, setCategory] = useState(user?.channel?.category);
-  const [desc, setDesc] = useState(user?.channel?.description);
+  const [title, setTitle] = useState(channel?.name);
+  const [category, setCategory] = useState(channel?.category);
+  const [desc, setDesc] = useState(channel?.description);
   const [backendImage, setBackendImage] = useState({
-    avatar: user?.channel?.avatar || null,
-    banner: user?.channel?.bannerImage || null,
+    avatar: channel?.avatar || null,
+    banner: channel?.bannerImage || null,
   });
   const [frontendImage, setFrontendImage] = useState({
-    avatar: user?.channel?.avatar || null,
-    banner: user?.channel?.bannerImage || null,
+    avatar: channel?.avatar || user?.image|| null,
+    banner: channel?.bannerImage || null,
   });
 
   const handleUpdateChannel = async (e) => {
     e.preventDefault();
     setload(true);
     const formData = new FormData();
-    formData.append("channelId", user?.channel?._id);
+    formData.append("channelId", channel?._id);
     formData.append("name", title);
     formData.append("description", desc);
     formData.append("category", category);
@@ -51,11 +49,11 @@ const UpdateChannel = () => {
         }
       );
             alertHandler("Update Successfully")
-      dispatch(getUserData(result?.data?.user));
+        dispatch(getChannelData(result?.data?.channel));
       // getAllVideos()
       setload(false);
       navigate("/");
-      // setload(false);
+      setload(false);
     } catch (error) {
       console.log(error);
       setload(false);
@@ -266,7 +264,7 @@ const UpdateChannel = () => {
               >
                 Back
               </Link>
-              <button className=" bg-[green] text-xs w-1/2 rounded-sm px-[8px] py-[8px]  cursor-pointer  transition-all duration-300 ease-in-out">
+              <button className=" bg-[green] text-xs w-1/2 rounded-sm px-[8px] py-[8px]  cursor-pointer  transition-all duration-300 flex items-center justify-center ease-in-out">
                 {load ? <Loader /> : "Update"}
               </button>
             </div>

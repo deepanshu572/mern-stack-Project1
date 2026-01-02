@@ -24,26 +24,26 @@ const channelSchema = new mongoose.Schema({
   category: {
     type: String,
   },
-  communityPosts: {
+  communityPosts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "comunityPost",
-  },
-  playlists: {
+  }],
+  playlists: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "playlist",
-  },
-  shorts: {
+  }],
+  shorts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "short",
-  },
-  subscribers: {
+  }],
+  subscribers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "subscriber",
-  },
-  videos: {
+  }],
+  videos: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "video",
-  },
+  }],
 });
 
 const channels = mongoose.model("channel", channelSchema);

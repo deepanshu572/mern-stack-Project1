@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 import SideNav from "../components/SideNav";
 import { Link } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../Hooks/getCurrentUser";
+import { useSelector } from "react-redux";
 
 const ViewChannelPage = () => {
-  getUser();
-
-  const user = useSelector((state) => state.usersData.userData);
-  console.log(user);
+  
+  const channel = useSelector((state) => state.usersData.channelData);
+  console.log(channel);
 
   return (
     <div className="flex">
@@ -17,7 +15,7 @@ const ViewChannelPage = () => {
         <div className="banner h-45 w-full rounded-md overflow-hidden">
           <img
             className="w-full h-full object-cover object-top "
-            src={user?.channel?.bannerImage}
+            src={channel?.bannerImage}
             alt=""
           />
         </div>
@@ -25,16 +23,16 @@ const ViewChannelPage = () => {
           <div className="channel_img w-15 h-15 rounded-full overflow-hidden">
             <img
               className="w-full h-full object-cover  object-top "
-              src={user?.channel?.avatar}
+              src={channel?.avatar}
               alt=""
             />
           </div>
-          <h3>{user?.channel?.name}</h3>
-          <p className="text-xs my-1 text-gray-500">@{user?.channel?.name}</p>
+          <h3>{channel?.name}</h3>
+          <p className="text-xs my-1 text-gray-500">@{channel?.name}</p>
           <small className="flex items-center gap-1">
             more about this channel...{" "}
             <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">
-              {user?.channel?.category}
+              {channel?.category}
             </p>
           </small>
           <div className="btn_box flex gap-4 mt-4">

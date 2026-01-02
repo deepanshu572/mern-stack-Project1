@@ -5,7 +5,7 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { alertHandler } from "../components/customAlert";
 import { useDispatch } from "react-redux";
-import { getUserData } from "../redux/userSlice";
+import { getChannelData, getUserData } from "../redux/userSlice";
 
 const CreateChannel = () => {
   const navigate = useNavigate();
@@ -43,10 +43,10 @@ const CreateChannel = () => {
           },
         }
       );
-      console.log(result?.data?.user)
-      dispatch(getUserData(result?.data?.user));
+      console.log(result?.data.channel);
+      dispatch(getChannelData(result?.data?.channel));
       navigate("/");
-      // setload(false);
+      setload(false);
     } catch (error) {
       console.log(error);
     }

@@ -4,19 +4,38 @@ import users from "../model/userModel.js";
 
 export const getCurrentUser = async (req, res) => {
   try {
-    const user = await users
-      .findById(req.userId)
-      .select("-password")
-      .populate("channel"); // select("-password") to not show password
+    const user = await users.findById(req.userId).select("-password"); // select("-password") to not show password
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    console.log(req.userId)
+    console.log(req.userId);
 
     return res.status(200).json({ user });
   } catch (error) {
     return res.status(500).json({
       message: "on getCurrentUser fnc Error fetching current user: " + error,
+    });
+  }
+};
+export const getCurrentChannel = async (req, res) => {
+  try {
+    const user = await users.findById(req.userId); // select("-password") to not show password
+   const existChannel = await user?.channel;
+    if (!existChannel) {
+      return res.status(404).json({ message: "user doesn't have any channel ! " });
+    }
+    const channel = await channels.findById(existChannel).populate("videos");
+
+    if (!channel) {
+      return res.status(404).json({ message: "this channelId doesn't found in channels model so channel not found" });
+    }
+    console.log(channel)
+
+    return res.status(200).json({ channel });
+  } catch (error) {
+    return res.status(400).json({
+      message:
+        "on getCurrentchannel fnc Error fetching current channel: " + error,
     });
   }
 };
@@ -45,19 +64,17 @@ export const CreateChannel = async (req, res) => {
       category,
       ownerId: userId,
     });
-    const user = await users
-      .findByIdAndUpdate(
-        userId,
-        {
-          username: name,
-          image: avatar,
-          channel: channel._id,
-        },
-        { new: true }
-      )
-      .populate("channel");
+    const user = await users.findByIdAndUpdate(
+      userId,
+      {
+        username: name,
+        image: avatar,
+        channel: channel._id,
+      },
+      { new: true }
+    );
 
-    return res.status(200).json({ user });
+    return res.status(200).json({ channel });
   } catch (error) {
     return res.status(400).json({ message: `somthing went wrong ! ${error}` });
   }
@@ -90,19 +107,18 @@ export const updateChannel = async (req, res) => {
       },
       { new: true }
     );
-    const user = await users
-      .findByIdAndUpdate(
-        userId,
-        {
-          username: name,
-          image: avatar,
-        },
-        { new: true }
-      )
-      .populate("channel");
-      console.log(user);
+    const user = await users.findByIdAndUpdate(
+      userId,
+      {
+        username: name,
+        image: avatar,
+      },
+      { new: true }
+    );
 
-    return res.status(200).json({ user });
+    console.log(user);
+
+    return res.status(200).json({ channel });
   } catch (error) {
     return res.status(400).json({ message: `somthing went wrong ! ${error}` });
   }
