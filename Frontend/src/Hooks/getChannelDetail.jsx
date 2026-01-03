@@ -12,7 +12,7 @@ export const fetchChannelDetail = async (req, res) => {
     const ChannelDetailGet = async () => {
       try {
         const result = await axios.get(
-          serverUrl + `/api/content/channelDetail/${id}`,
+          serverUrl + `/api/channel/channelDetail/${id}`,
           {
             withCredentials: true,
           }
@@ -26,3 +26,15 @@ export const fetchChannelDetail = async (req, res) => {
     ChannelDetailGet();
   }, [id]);
 };
+// export const getChannelContent = async (name) => {
+//   const { id } = useParams();
+//   console.log(name + "getChannelVideos");
+//   try {
+//     const result = await axios.post(serverUrl + `/api/channel/${name}/${id}`, {
+//       withCredentials: true,
+//     });
+//     return result;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

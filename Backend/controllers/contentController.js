@@ -45,15 +45,3 @@ export const getAllPost = async (req, res) => {
   }
 };
 
-export const getChannelDetail = async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ message: "Channel ID is required" });
-    }
-    const channelDetail = await channels.findById({ _id: id });
-    return res.status(200).json({channelDetail})
-  } catch (error) {
-    return res.status(400).json({message : `channelDetail errorr getChannelDetail :  ${error}`});
-  }
-};

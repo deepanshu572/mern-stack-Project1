@@ -6,6 +6,7 @@ import cors from "cors";
 import userRouter from "./routes/userRoute.js";
 import uploadRouter from "./routes/uploadRoute.js";
 import contentRouter from "./routes/contentRoute.js";
+import channelRouter from "./routes/channelRoute.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -24,6 +25,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/content", contentRouter);
+app.use("/api/channel", channelRouter);
 
 app.get("/", (req, res) => {
   res.send("done");

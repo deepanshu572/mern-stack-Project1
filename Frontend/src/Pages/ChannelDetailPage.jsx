@@ -2,30 +2,72 @@ import React, { useEffect, useState } from "react";
 import SideNav from "../components/SideNav";
 import ChannelCard from "../components/ChannelCard";
 import { useSelector } from "react-redux";
-import { fetchChannelDetail } from "../Hooks/getChannelDetail";
+import { fetchChannelDetail  } from "../Hooks/getChannelDetail";
+import { useParams } from "react-router";
+import axios from "axios";
+import { serverUrl } from "../App";
 
 const ChannelDetailPage = () => {
   fetchChannelDetail();
+  const { id } = useParams();
 
-  const channelDetail = useSelector((state) => state.content.channelDetail);
+  const channelData = useSelector((state) => state.content.channelDetail);
 
+  const [channelDetail, setChannelDetail] = useState();
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [channelContent, setChannelContent] = useState();
 
+  const getChannelContent = async (name) => {
+   console.log(name + "getChannelVideos");
+   try {
+     const result = await axios.post(serverUrl + `/api/channel/${name}/${id}`, {
+       withCredentials: true,
+     });
+     return result;
+   } catch (error) {
+     console.log(error);
+   }
+ };
+  
+  const handleDataFilter = async (index, name) => {
+    setSelectedIndex(index);
+
+    switch (name || "Home") {
+      case "Home":
+        console.log(name);
+        const data =  await getChannelContent("videos");
+        console.log(data);
+        // channelContent(channelDetail?.Videos);
+        break;
+      case "Shorts":
+        console.log(name);
+        break;
+      case "Playlist":
+        console.log(name);
+        break;
+
+      case "Posts":
+        console.log(name);
+        break;
+    }
+  };
+
+
   useEffect(() => {
-    if (channelDetail?.length > 0 || channelDetail !== null) {
-      setChannelContent(channelDetail);
+    if (channelData?.length > 0 || channelData !== null) {
+      setChannelDetail(channelData);
     }
   });
-  console.log(channelDetail);
+  // console.log(channelData);
   return (
     <div className="flex">
       <SideNav />
       <div className="channel_wrap  w-full p-4 md:mt-[5rem]  ">
         <div className="channel_banner w-full h-[162px] ">
-          {channelContent?.bannerImage ? (
+          {channelDetail?.bannerImage ? (
             <img
               className="w-full h-full object-cover"
-              src={channelContent?.bannerImage}
+              src={channelDetail?.bannerImage}
               alt=""
             />
           ) : (
@@ -38,10 +80,10 @@ const ChannelDetailPage = () => {
         </div>
         <div className="channel_desc_img flex sm:px-4 lg:px-0 items-center lg:items-center gap-3 flex-col lg:flex-row relative ">
           <div className="channel_img flex-shrink-0 w-[130px] h-[130px] absolute rounded-full overflow-hidden top-[-41%]  lg:relative ">
-            {channelContent?.avatar ? (
+            {channelDetail?.avatar ? (
               <img
                 className="w-full h-full object-cover object-top"
-                src={channelContent?.avatar}
+                src={channelDetail?.avatar}
                 alt=""
               />
             ) : (
@@ -54,15 +96,15 @@ const ChannelDetailPage = () => {
           </div>
           <div className="channel_info flex gap-2 p-[10px] mt-[2rem] lg:mt-0 lg:p-0 flex-col items-start ">
             <h2 className="channel_title font-[700] text-3xl ">
-              {channelContent?.name}
+              {channelDetail?.name}
             </h2>
             <span className="flex gap-2 text-gray-500">
-              <b className={`text-[13px] `}>{channelContent?.category}</b>
+              <b className={`text-[13px] `}>{channelDetail?.category}</b>
               <p className="text-[13px]">231k subscribers</p>
               <p className="text-[13px]">30 videos</p>
             </span>
             <p className=" channel_desc text-[13px] text-gray-500">
-              {channelContent?.description}
+              {channelDetail?.description}
             </p>
             {/* <button className=" rounded-full p-2 px-5  text-[12px] ">
               Subscribed
@@ -71,21 +113,15 @@ const ChannelDetailPage = () => {
         </div>
         <div className="channel_tabs ">
           <div className="channel_tab flex gap-[25px] pt-7 p-3">
-            {["Home", "Shorts", "Videos", "Posts"].map((item, index) => (
+            {["Home", "Shorts", "Playlist", "Community"].map((item, index) => (
               <p
                 key={index}
                 onClick={() => {
-                  FilterChanelType(item.name);
-                  setselectedIndex(index);
+                  handleDataFilter(index, item);
                 }}
-                // className={` ${
-                //   selectedIndex === index
-                //     ? toggle
-                //       ? "text-white  border-bt " // Subscribed + Dark mode
-                //       : "text-black border-bb "
-                //     : " text-gray-500"
-                // } channel_tab_item text-[13.6px] font-[500]  cursor-pointer`}
-                className={`  channel_tab_item text-[13.6px] font-[500]  cursor-pointer`}
+                className={` ${
+                  selectedIndex === index ? " border-b" : " text-gray-500"
+                } channel_tab_item text-[13.6px] font-[500]  cursor-pointer`}
               >
                 {item}
               </p>
@@ -93,8 +129,8 @@ const ChannelDetailPage = () => {
           </div>
         </div>
         <div className="channel_video p-3 flex gap-3 flex-wrap">
-          {channelContent > 0 ? (
-            channelContent?.map((item, index) => {
+          {channelDetail?.length > 0 ? (
+            channelDetail?.map((item, index) => {
               return <ChannelCard data={item} key={index} />;
             })
           ) : (
