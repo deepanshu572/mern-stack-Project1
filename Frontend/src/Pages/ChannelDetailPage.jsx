@@ -1,64 +1,65 @@
 import React, { useEffect, useState } from "react";
 import SideNav from "../components/SideNav";
-import ChannelCard from "../components/ChannelCard";
+import ChannelVideoCard from "../childComponent/ChannelCards/ChannelVideoCard";
+import ChannelCommunityCard from "../childComponent/ChannelCards/ChannelCommunityCard";
+import ChannelShortsCard from "../childComponent/ChannelCards/ChannelShortsCard";
 import { useSelector } from "react-redux";
-import { fetchChannelDetail  } from "../Hooks/getChannelDetail";
 import { useParams } from "react-router";
-import axios from "axios";
-import { serverUrl } from "../App";
 
 const ChannelDetailPage = () => {
-  fetchChannelDetail();
   const { id } = useParams();
-
-  const channelData = useSelector((state) => state.content.channelDetail);
+  const channels = useSelector((state) => state.channels.AllChannels);
 
   const [channelDetail, setChannelDetail] = useState();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [channelContent, setChannelContent] = useState();
+  const [selectedName, setSelectedName] = useState("Home");
 
-  const getChannelContent = async (name) => {
-   console.log(name + "getChannelVideos");
-   try {
-     const result = await axios.post(serverUrl + `/api/channel/${name}/${id}`, {
-       withCredentials: true,
-     });
-     return result;
-   } catch (error) {
-     console.log(error);
-   }
- };
-  
   const handleDataFilter = async (index, name) => {
     setSelectedIndex(index);
+    setSelectedName(name);
 
-    switch (name || "Home") {
-      case "Home":
-        console.log(name);
-        const data =  await getChannelContent("videos");
-        console.log(data);
-        // channelContent(channelDetail?.Videos);
-        break;
-      case "Shorts":
-        console.log(name);
-        break;
-      case "Playlist":
-        console.log(name);
-        break;
+    // switch (name || "Home") {
+    //   case "Home":
+    //     console.log(name);
+    //     console.log(data);
+    //     break;
+    //   case "Shorts":
+    //     console.log(name);
+    //     break;
+    //   case "Playlist":
+    //     console.log(name);
+    //     break;
 
-      case "Posts":
-        console.log(name);
-        break;
-    }
+    //   case "Posts":
+    //     console.log(name);
+    //     break;
+    // }
   };
 
-
   useEffect(() => {
-    if (channelData?.length > 0 || channelData !== null) {
-      setChannelDetail(channelData);
+    if (channels?.length > 0 || channels !== null) {
+      const AllChannel = channels.find((item) => item?._id === id);
+      console.log(AllChannel);
+      setChannelDetail(AllChannel);
     }
-  });
-  // console.log(channelData);
+  }, []);
+
+  const renderContent = (data, name, renderItem) => {
+    if (!data || data.length === 0) {
+      return (
+        <div className="flex text-center h-[20rem] w-full items-center justify-center flex-col">
+          <img
+            className="w-20 h-20"
+            src="https://myntra-umber.vercel.app/assets/sad-Csmh6fkm.gif"
+            alt=""
+          />
+          <p>Oops! We couldn’t find any {name === "Home" ?"Videos" : name}</p>
+        </div>
+      );
+    }
+    return data.map(renderItem);
+  };
+
   return (
     <div className="flex">
       <SideNav />
@@ -129,20 +130,38 @@ const ChannelDetailPage = () => {
           </div>
         </div>
         <div className="channel_video p-3 flex gap-3 flex-wrap">
-          {channelDetail?.length > 0 ? (
-            channelDetail?.map((item, index) => {
-              return <ChannelCard data={item} key={index} />;
-            })
-          ) : (
-            <div className="flex text-center h-[20rem] w-full items-center justify-center flex-col">
+          {selectedName === "Home" &&
+            renderContent(channelDetail?.videos, "Home", (item, index) => (
+              <ChannelVideoCard data={item} channel={channelDetail} key={index} />
+            ))}
+
+          {selectedName === "Shorts" &&
+            renderContent(channelDetail?.shorts, "Shorts", (item, index) => (
+              <ChannelShortsCard data={item} channel={channelDetail} key={index} />
+            ))}
+
+          {selectedName === "Playlist" &&
+            renderContent(
+              channelDetail?.playlists,
+              "Playlists",
+              (item, index) => <p key={index}>{item._id}</p>
+            )}
+
+          {selectedName === "Community" &&
+            renderContent(
+              channelDetail?.communityPosts,
+              "Community",
+              (item, index) => <ChannelCommunityCard data={item} channel={channelDetail} key={index} />
+            )}
+
+          {/* <div className="flex text-center h-[20rem] w-full items-center justify-center flex-col">
               <img
                 className="w-20 h-20"
                 src="https://myntra-umber.vercel.app/assets/sad-Csmh6fkm.gif"
                 alt=""
               />
               <p>Oops! We couldn’t find any videos</p>
-            </div>
-          )}
+            </div> */}
         </div>
       </div>
     </div>

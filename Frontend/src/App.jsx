@@ -21,6 +21,7 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import UpdateChannel from "./Pages/UpdateChannel";
 import { getchannel } from "./Hooks/getCurrentChannelData";
 import ChannelDetailPage from "./Pages/ChannelDetailPage";
+import { getAllChannel } from "./Hooks/getAllChannel";
 
 export const serverUrl = "http://localhost:8080";
 
@@ -35,11 +36,11 @@ const App = () => {
 
   getUser();
   getchannel();
+  getAllChannel();
   getAllContentData();
 
   return (
     <>
-    
       {!hideLayout2 && <Header />}
       {/* {!hideLayout1 && <SideNav />} */}
 

@@ -16,6 +16,13 @@ body{
     width: 100px;
     height: 2px;
 }
+.title_elipse{
+    display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow: hidden;
+text-overflow: ellipsis;
+}
 .btn{
   background: #850000;
 background: radial-gradient(circle, rgba(133, 0, 0, 1) 0%, rgba(199, 97, 97, 1) 100%);

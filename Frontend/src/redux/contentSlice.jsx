@@ -5,7 +5,6 @@ const initialState = {
   shorts: null,
   playlist: null,
   commmunity: null,
-  channelDetail: null,
 };
 
 export const contentSlice = createSlice({
@@ -23,9 +22,6 @@ export const contentSlice = createSlice({
     },
     getCommmunity: (state, action) => {
       state.commmunity = action.payload;
-    },
-    getChannelDetail: (state, action) => {
-      state.channelDetail = action.payload;
     },
   },
 });

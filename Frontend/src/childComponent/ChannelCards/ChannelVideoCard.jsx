@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { timeAgo } from "../../Utils/timeConvertor";
 
-const ChannelCard = ({ data }) => {
-
+const ChannelVideoCard = ({ data, channel }) => {
   const svg = (
     <svg
       className="cursor-pointer "
@@ -20,14 +20,14 @@ const ChannelCard = ({ data }) => {
   return (
     <>
       <Link
-        to={`/videos/${data?.id?.videoId}`}
+        to={`/videos/${data?._id}`}
         className="channel_card w-full lg:w-[240px]"
       >
         <div className="channel_img w-full overflow-hidden rounded-[10px] h-[200px] sm:h-[145px] ">
           {data ? (
             <img
               className="w-full h-full object-cover"
-              src={data?.snippet?.thumbnails?.high?.url}
+              src={data?.videoBanner}
               alt=""
             />
           ) : (
@@ -38,18 +38,28 @@ const ChannelCard = ({ data }) => {
             />
           )}
         </div>
-        <div className="channel_txt flex py-2 ">
-          <p className="text-[12px] font-semibold">{data?.snippet?.title}</p>
-          {svg}
+        <div className="flex items-start gap-2 mt-2  ">
+          <div className=" shrink-0 w-6 h-6 overflow-hidden rounded-full mt-1">
+            <img
+              className="w-full h-full object-cover"
+              src={channel?.avatar}
+              alt=""
+            />
+          </div>
+
+          <div className="channel_txt flex flex-col ">
+            <p className="text-[12px] title_elipse">{data?.title}</p>
+           
+            <span className="flex items-center gap-1 text-[11px] text-gray-500 ">
+              <p>{data.views} view</p>
+              <p>•</p>
+              <p>{timeAgo(data?.createdAt)}</p>
+            </span>
+          </div>
         </div>
-        <span className="flex gap-1 text-[11px] text-gray-500 ">
-          <p>12k view</p>
-          <p>•</p>
-          <p>3 days ago</p>
-        </span>
       </Link>
     </>
   );
 };
 
-export default ChannelCard;
+export default ChannelVideoCard;
