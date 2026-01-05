@@ -50,7 +50,7 @@ export const getAllContentData = async (req, res) => {
             withCredentials: true,
           }
         );
-        // console.log("Playlist data :", result.data.allPlaylist);
+        console.log("Playlist data :", result.data.allPlaylist);
         dispatch(getPlaylist(result?.data?.allPlaylist));
       } catch (error) {
         console.log("Error fetching Playlist data:", error);
@@ -65,7 +65,7 @@ export const getAllContentData = async (req, res) => {
         const result = await axios.post(serverUrl + "/api/content/allPost", {
           withCredentials: true,
         });
-        // console.log("Post data :", result.data.allPost);
+        console.log("Post data :", result.data.allPost);
         dispatch(getCommmunity(result?.data?.allPost));
       } catch (error) {
         console.log("Error fetching Post data:", error);

@@ -26,7 +26,9 @@ export const getAllShorts = async (req, res) => {
 };
 export const getAllPlaylist = async (req, res) => {
   try {
-    const allPlaylist = await playlists.find({}).populate("channel");
+    const allPlaylist = await playlists
+      .find({})
+      .populate("channel");
     return res.status(200).json({ allPlaylist });
   } catch (error) {
     return res
@@ -44,4 +46,3 @@ export const getAllPost = async (req, res) => {
       .json({ message: `getAllPost fnc error  : ${error}` });
   }
 };
-

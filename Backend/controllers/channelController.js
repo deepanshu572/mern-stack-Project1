@@ -2,13 +2,19 @@ import channels from "../model/channelModel.js";
 
 export const getAllChannels = async (req, res) => {
   try {
-    const Allchannels = await channels
-      .find({})
-      .populate("videos")
-      .populate("shorts")
-      .populate("playlists")
-      .populate("communityPosts")
-      
+  const Allchannels = await channels
+  .find({})
+  .populate("videos")
+  .populate("shorts")
+  .populate({
+    path: "playlists",
+    populate: {
+      path: "selectedVideos",
+      model: "video",
+    },
+  })
+  .populate("communityPosts");
+
     return res.status(200).json({ Allchannels });
   } catch (error) {
     return res

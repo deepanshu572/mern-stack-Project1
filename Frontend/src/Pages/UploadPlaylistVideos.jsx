@@ -13,6 +13,7 @@ const UploadPlaylistVideos = () => {
 
   const channelId = channel?._id;
   const navigate = useNavigate();
+  console.log(channelId)
 
   const [video, setvideo] = useState([]);
   const [title, setTitle] = useState("");
@@ -31,7 +32,8 @@ const UploadPlaylistVideos = () => {
     e.preventDefault();
     setLoad(true);
     try {
-      const result = axios.post(
+     
+      const result = await axios.post(
         serverUrl + "/api/upload/playlist",
         {
           channelId,

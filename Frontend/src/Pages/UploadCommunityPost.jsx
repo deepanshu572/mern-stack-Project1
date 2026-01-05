@@ -25,7 +25,7 @@ const UploadCommunityPost = () => {
     setLoad(true);
 
     try {
-      const result = axios.post(
+      const result =await  axios.post(
         serverUrl + "/api/upload/communityPost",
         formData,
         {

@@ -5,6 +5,7 @@ import ChannelCommunityCard from "../childComponent/ChannelCards/ChannelCommunit
 import ChannelShortsCard from "../childComponent/ChannelCards/ChannelShortsCard";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import ChannelPlaylistCard from "../childComponent/ChannelCards/ChannelPlaylistCard";
 
 const ChannelDetailPage = () => {
   const { id } = useParams();
@@ -17,23 +18,6 @@ const ChannelDetailPage = () => {
   const handleDataFilter = async (index, name) => {
     setSelectedIndex(index);
     setSelectedName(name);
-
-    // switch (name || "Home") {
-    //   case "Home":
-    //     console.log(name);
-    //     console.log(data);
-    //     break;
-    //   case "Shorts":
-    //     console.log(name);
-    //     break;
-    //   case "Playlist":
-    //     console.log(name);
-    //     break;
-
-    //   case "Posts":
-    //     console.log(name);
-    //     break;
-    // }
   };
 
   useEffect(() => {
@@ -42,7 +26,7 @@ const ChannelDetailPage = () => {
       console.log(AllChannel);
       setChannelDetail(AllChannel);
     }
-  }, []);
+  });
 
   const renderContent = (data, name, renderItem) => {
     if (!data || data.length === 0) {
@@ -53,7 +37,7 @@ const ChannelDetailPage = () => {
             src="https://myntra-umber.vercel.app/assets/sad-Csmh6fkm.gif"
             alt=""
           />
-          <p>Oops! We couldn’t find any {name === "Home" ?"Videos" : name}</p>
+          <p>Oops! We couldn’t find any {name === "Home" ? "Videos" : name}</p>
         </div>
       );
     }
@@ -112,7 +96,7 @@ const ChannelDetailPage = () => {
             </button> */}
           </div>
         </div>
-        <div className="channel_tabs ">
+        <div className="channel_tabs border-b border-gray-800 ">
           <div className="channel_tab flex gap-[25px] pt-7 p-3">
             {["Home", "Shorts", "Playlist", "Community"].map((item, index) => (
               <p
@@ -121,7 +105,7 @@ const ChannelDetailPage = () => {
                   handleDataFilter(index, item);
                 }}
                 className={` ${
-                  selectedIndex === index ? " border-b" : " text-gray-500"
+                  selectedIndex === index ? " " : " text-gray-500"
                 } channel_tab_item text-[13.6px] font-[500]  cursor-pointer`}
               >
                 {item}
@@ -129,29 +113,49 @@ const ChannelDetailPage = () => {
             ))}
           </div>
         </div>
-        <div className="channel_video p-3 flex gap-3 flex-wrap">
+        <div className="channel_video p-3 mt-3 flex gap-3 flex-wrap">
           {selectedName === "Home" &&
             renderContent(channelDetail?.videos, "Home", (item, index) => (
-              <ChannelVideoCard data={item} channel={channelDetail} key={index} />
+              <ChannelVideoCard
+                data={item}
+                channel={channelDetail}
+                key={index}
+              />
             ))}
 
           {selectedName === "Shorts" &&
             renderContent(channelDetail?.shorts, "Shorts", (item, index) => (
-              <ChannelShortsCard data={item} channel={channelDetail} key={index} />
+              <ChannelShortsCard
+                data={item}
+                channel={channelDetail}
+                key={index}
+              />
             ))}
 
           {selectedName === "Playlist" &&
             renderContent(
               channelDetail?.playlists,
               "Playlists",
-              (item, index) => <p key={index}>{item._id}</p>
+              (item, index) => (
+                <ChannelPlaylistCard
+                  data={item}
+                  channel={channelDetail}
+                  key={index}
+                />
+              )
             )}
 
           {selectedName === "Community" &&
             renderContent(
               channelDetail?.communityPosts,
               "Community",
-              (item, index) => <ChannelCommunityCard data={item} channel={channelDetail} key={index} />
+              (item, index) => (
+                <ChannelCommunityCard
+                  data={item}
+                  channel={channelDetail}
+                  key={index}
+                />
+              )
             )}
 
           {/* <div className="flex text-center h-[20rem] w-full items-center justify-center flex-col">

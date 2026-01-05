@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 const playlistScheme = new mongoose.Schema({
-  channel: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "channel",
-  },
+ channel: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "channel",
+   },
   title: {
     type: String,
     required: true,

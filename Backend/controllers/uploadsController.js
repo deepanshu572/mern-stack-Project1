@@ -60,7 +60,7 @@ export const handleUploadShort = async (req, res) => {
     });
     // const shortsPopulated = await shortsData.populate("channel");
 
-      await channels.findByIdAndUpdate(
+    await channels.findByIdAndUpdate(
       chanelId,
 
       { $push: { shorts: shortsData?._id } },
@@ -77,16 +77,18 @@ export const handleUploadShort = async (req, res) => {
 };
 export const handleUploadPlaylist = async (req, res) => {
   try {
-    const { chanelId, title, description, selectedVideos } = req.body;
+    const { channelId, title, description, selectedVideos } = req.body;
     const playlist = await playlists.create({
-      channel: chanelId,
+      channel: channelId,
       title,
       description,
       selectedVideos,
     });
+   
+
     // const populatedPlaylist = await playlist.populate("channel");
     const channelUpdate = await channels.findByIdAndUpdate(
-      chanelId,
+      channelId,
 
       { $push: { playlists: playlist._id } },
 
@@ -121,8 +123,9 @@ export const handleUploadCommunityPost = async (req, res) => {
     const channelUpdate = await channels.findByIdAndUpdate(
       chanelId,
       {
-        communityPosts: communityData._id,
+        $push: { communityPosts: communityData._id },
       },
+
       { new: true }
     );
 
