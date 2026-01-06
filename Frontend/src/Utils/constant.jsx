@@ -20,14 +20,55 @@ import { FaPlus } from "react-icons/fa6";
 import { HiUserCircle } from "react-icons/hi2";
 
 export const categories = [
-  { name: "Home", icon: <IoHomeOutline />, class: "mob" },
-  { name: "Shorts", icon: <SiYoutubeshorts />, class: "mob" },
-  { name: "Create", icon: <FaPlus />,  class: "web somecss " },
-  { name: "Subscription", icon: <MdOutlineSubscriptions />,  class: "mob big_svg" },
-  { name: "Profile", icon: <HiUserCircle />,  class: "web big_svg" },
-  { name: "Playlist", icon: <LuListVideo />, title: true },
-  { name: "Saved video", icon: <PiVideo /> },
-  { name: "Liked videos", icon: <BiLike />, divider: true, addData: true },
+  {
+    name: "Home",
+    icon: <IoHomeOutline />,
+    class: "mob",
+    route: "/",
+  },
+  {
+    name: "Shorts",
+    icon: <SiYoutubeshorts />,
+    class: "mob",
+    route: "/shorts",
+  },
+  {
+    name: "Create",
+    icon: <FaPlus />,
+    class: "web somecss",
+    route: "/create",
+  },
+  {
+    name: "Subscription",
+    icon: <MdOutlineSubscriptions />,
+    class: "mob big_svg",
+    route: "/subscription",
+  },
+  {
+    name: "Profile",
+    icon: <HiUserCircle />,
+    class: "web big_svg",
+    route: "/profile",
+  },
+  {
+    name: "Playlist",
+    icon: <LuListVideo />,
+    title: true,
+    route: "/playlist",
+  },
+  {
+    name: "Saved video",
+    icon: <PiVideo />,
+    route: "/savedvideo",
+  },
+  {
+    name: "Liked videos",
+    icon: <BiLike />,
+    divider: true,
+    addData: true,
+    route: "/likedvideo",
+  },
+
   // { name: "Settings", icon: <FiSettings />, type: "menu" },
   // { name: "Report History", icon: <AiOutlineFlag />, type: "menu" },
   // { name: "Help", icon: <FiHelpCircle />, type: "menu" },

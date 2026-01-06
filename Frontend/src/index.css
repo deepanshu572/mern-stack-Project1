@@ -23,6 +23,9 @@ body{
 overflow: hidden;
 text-overflow: ellipsis;
 }
+.hide_scroll::-webkit-scrollbar{
+    display:none;
+}
 .btn{
   background: #850000;
 background: radial-gradient(circle, rgba(133, 0, 0, 1) 0%, rgba(199, 97, 97, 1) 100%);

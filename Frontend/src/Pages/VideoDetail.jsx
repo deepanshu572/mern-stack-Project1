@@ -8,8 +8,6 @@ import { IoMdArrowRoundDown } from "react-icons/io";
 import { FaRegSave } from "react-icons/fa";
 
 import ReactPlayer from "react-player";
-import RelatedVideoData from "../childComponent/RelatedVideoData";
-// import RelatedVideoData from "./RelatedVideoData";
 
 const VideoDetail = () => {
   const [video, SetVideo] = useState();

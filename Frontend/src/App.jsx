@@ -22,6 +22,8 @@ import UpdateChannel from "./Pages/UpdateChannel";
 import { getchannel } from "./Hooks/getCurrentChannelData";
 import ChannelDetailPage from "./Pages/ChannelDetailPage";
 import { getAllChannel } from "./Hooks/getAllChannel";
+import Shorts from "./Pages/Shorts";
+import Subscription from "./Pages/Subscription";
 
 export const serverUrl = "http://localhost:8080";
 
@@ -47,6 +49,8 @@ const App = () => {
       <CustomAlert />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/shorts" element={<Shorts />} />
+        <Route path="/Subscription" element={<Subscription />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />

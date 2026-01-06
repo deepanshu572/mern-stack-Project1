@@ -1,12 +1,12 @@
 import React from "react";
 
-const SideNavItem = ({ text, icon, name, action , MobileMenu }) => {
-   
+const SideNavItem = ({ somename , text, icon, name, action , MobileMenu }) => {
+    console.log(somename)
   return (
     <>
       <div
        key={text} 
-       className={`side_nav_btn cursor-pointer transition-all duration-300 ease-in-out flex ${MobileMenu ? "justify-center" : ""}   ${name}`}
+       className={` ${somename} side_nav_btn cursor-pointer transition-all duration-300 ease-in-out flex ${MobileMenu ? "justify-center" : ""}   ${name}`}
        onClick={action}
        >
         {icon}

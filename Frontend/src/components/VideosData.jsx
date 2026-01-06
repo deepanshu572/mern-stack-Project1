@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 const VideosData = () => {
   const videos = useSelector((state) => state.content.videos);
 
-  console.log(videos);
   return (
     <>
       <div className="videoCard_wrapper">
