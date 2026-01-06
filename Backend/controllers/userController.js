@@ -8,7 +8,7 @@ export const getCurrentUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    console.log(req.userId);
+    // console.log(req.userId);
 
     return res.status(200).json({ user });
   } catch (error) {
@@ -29,7 +29,7 @@ export const getCurrentChannel = async (req, res) => {
     if (!channel) {
       return res.status(404).json({ message: "this channelId doesn't found in channels model so channel not found" });
     }
-    console.log(channel)
+    // console.log(channel)
 
     return res.status(200).json({ channel });
   } catch (error) {
@@ -116,7 +116,7 @@ export const updateChannel = async (req, res) => {
       { new: true }
     );
 
-    console.log(user);
+    // console.log(user);
 
     return res.status(200).json({ channel });
   } catch (error) {

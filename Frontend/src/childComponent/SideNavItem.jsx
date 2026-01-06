@@ -1,7 +1,6 @@
 import React from "react";
 
 const SideNavItem = ({ somename , text, icon, name, action , MobileMenu }) => {
-    console.log(somename)
   return (
     <>
       <div

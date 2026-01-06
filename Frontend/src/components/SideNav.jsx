@@ -13,7 +13,7 @@ const SideNav = () => {
   const [toggle, SetToggle] = useState(true);
   useEffect(() => {
     SetMobileMenu(toggleFnc);
-    console.log("toggle value in sidenav:", MobileMenu);
+    // console.log("toggle value in sidenav:", MobileMenu);
   }, [toggleFnc]);
 
 

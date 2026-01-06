@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import SideNav from "../components/SideNav";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa6";
 import { AiFillDislike } from "react-icons/ai";
@@ -11,9 +11,16 @@ import { FaRegCommentDots } from "react-icons/fa";
 import { LuDownload } from "react-icons/lu";
 import { FaBookmark } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa";
+import { serverUrl } from "../App";
+import axios from "axios";
+import { getShorts } from "../redux/contentSlice";
 
 const Shorts = () => {
+  const dispatch = useDispatch();
   const shorts = useSelector((state) => state.content.shorts);
+  const users = useSelector((state) => state.usersData.userData);
+  const channel = useSelector((state) => state.usersData.channelData);
+  const [user, setUser] = useState();
   const [shortsData, setShortsData] = useState();
   const [toggleControls, setToggleControls] = useState();
   const shortsRefs = useRef([]);
@@ -21,6 +28,9 @@ const Shorts = () => {
   useEffect(() => {
     if (shorts || shorts?.length > 0) {
       setShortsData(shorts);
+    }
+    if (users || users?.length > 0) {
+      setUser(users);
     }
   }, []);
 
@@ -71,7 +81,80 @@ const Shorts = () => {
     }
     //   setToggleControls(!toggleControls)
   };
-  console.log(shorts);
+
+  const handleLikes = async (shortId) => {
+    // console.log(shortId);
+    try {
+      const { data } = await axios.put(
+        `${serverUrl}/api/toggles/short/${shortId}/likeToggle`,
+        {},
+        { withCredentials: true }
+      );
+
+      const updatedShorts = shorts.map((item) => {
+        if (item._id.toString() === shortId) {
+          return {
+            ...item,
+            like: data?.short?.like,
+            dislike: data?.short?.dislike,
+          };
+        }
+        return item;
+      });
+
+      setShortsData(updatedShorts);
+      dispatch(getShorts(updatedShorts));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleDisLikes = async (shortId) => {
+    try {
+      const { data } = await axios.put(
+        `${serverUrl}/api/toggles/short/${shortId}/DislikeToggle`,
+        {},
+        { withCredentials: true }
+      );
+      const updatedShorts = shorts.map((item) => {
+        if (item._id.toString() === shortId) {
+          return {
+            ...item,
+            like: data?.short?.like,
+            dislike: data?.short?.dislike,
+          };
+        }
+        return item;
+      });
+
+      setShortsData(updatedShorts);
+      dispatch(getShorts(updatedShorts));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSave = async (shortId) => {
+    try {
+      const { data } = await axios.put(
+        `${serverUrl}/api/toggles/short/${shortId}/saveShort`,
+        { channelId: channel?._id },
+        { withCredentials: true }
+      );
+      const updatedShorts = shorts.map((item) => {
+        if (item._id.toString() === shortId) {
+          return {
+            ...item,
+            saveBy: data?.short?.saveBy,
+          };
+        }
+        return item;
+      });
+
+      setShortsData(updatedShorts);
+      dispatch(getShorts(updatedShorts));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex">
@@ -92,36 +175,56 @@ const Shorts = () => {
                   loop
                   src={item?.video}
                 ></video>
-                <div className="flex absolute top-2 right-2 bg-[#7877778a] text-white w-10 h-10 items-center justify-center rounded-full">
+                <div className="flex absolute top-2 right-2 bg-[#7877778a] hover:bg-[#b1b1b19e] text-white w-10 h-10 items-center justify-center rounded-full">
                   {toggleControls === index ? <FaPlay /> : <FaPause />}
                 </div>
                 <div className="flex flex-col gap-1 absolute bottom-20 right-2 ">
-                  <div className="flex_like mb-1 text-white  items-center justify-center  flex flex-col">
-                    <div className="  bg-[#7877778a] w-8 h-8  rounded-full items-center justify-center  flex">
-                      {1 === 1 ? <AiOutlineLike /> : <AiFillLike />}
+                  <div
+                    onClick={() => handleLikes(item?._id)}
+                    className="flex_like mb-1 text-white  items-center justify-center  flex flex-col"
+                  >
+                    <div className="  bg-[#7877778a] hover:bg-[#b1b1b19e] w-8 h-8  rounded-full items-center justify-center  flex">
+                      {item?.like.find((item) => item === user?._id) ? (
+                        <AiFillLike />
+                      ) : (
+                        <AiOutlineLike />
+                      )}
                     </div>
-                    <p className="text-[11px] mt-0.5">10k</p>
+                    <p className="text-[11px] mt-0.5">{item?.like?.length} </p>
+                  </div>
+                  <div
+                    onClick={() => handleDisLikes(item?._id)}
+                    className="flex_like mb-1 text-white  items-center justify-center  flex flex-col"
+                  >
+                    <div className="  bg-[#7877778a] hover:bg-[#b1b1b19e] w-8 h-8  rounded-full items-center justify-center  flex">
+                      {item?.dislike.find((item) => item === user?._id) ? (
+                        <AiFillDislike />
+                      ) : (
+                        <AiOutlineDislike />
+                      )}
+                    </div>
+                    <p className="text-[11px] mt-0.5">
+                      {item?.dislike?.length}{" "}
+                    </p>
                   </div>
                   <div className="flex_like mb-1 text-white  items-center justify-center  flex flex-col">
-                    <div className="  bg-[#7877778a] w-8 h-8  rounded-full items-center justify-center  flex">
-                      {1 === 1 ? <AiOutlineDislike /> : <AiFillDislike />}
-                    </div>
-                    <p className="text-[11px] mt-0.5">dislike</p>
-                  </div>
-                  <div className="flex_like mb-1 text-white  items-center justify-center  flex flex-col">
-                    <div className="  bg-[#7877778a] w-8 h-8  rounded-full items-center justify-center  flex">
+                    <div className="  bg-[#7877778a] hover:bg-[#b1b1b19e] w-8 h-8  rounded-full items-center justify-center  flex">
                       <FaRegCommentDots />
                     </div>
                     <p className="text-[11px] mt-0.5">22k</p>
                   </div>
                   <div className="flex_like mb-1 text-white  items-center justify-center  flex flex-col">
-                    <div className="  bg-[#7877778a] w-8 h-8  rounded-full items-center justify-center  flex">
-                      {1 === 1 ? <FaRegBookmark /> : <FaBookmark />}
+                    <div className="  bg-[#7877778a] hover:bg-[#b1b1b19e] w-8 h-8  rounded-full items-center justify-center  flex">
+                     {item?.saveBy.find((item) => item === user?._id) ? (
+                        <FaBookmark />
+                      ) : (
+                        <FaRegBookmark/>
+                      )} 
                     </div>
                     <p className="text-[11px] mt-0.5">save</p>
                   </div>
                   <div className="flex_like mb-1 text-white  items-center justify-center  flex flex-col">
-                    <div className="  bg-[#7877778a] w-8 h-8  rounded-full items-center justify-center  flex">
+                    <div className="  bg-[#7877778a] hover:bg-[#b1b1b19e] w-8 h-8  rounded-full items-center justify-center  flex">
                       <LuDownload />
                     </div>
                   </div>
@@ -150,7 +253,6 @@ const Shorts = () => {
                           Subscribed
                         </button>
                       )}
-                     
                     </div>
                     <p className="text-[10px] mt-1 title_elipse">
                       {item?.title}
