@@ -4,43 +4,68 @@ import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { RiShareForwardLine } from "react-icons/ri";
 import { IoMdArrowRoundDown } from "react-icons/io";
+import { SiYoutubeshorts } from "react-icons/si";
+import { PiVideo } from "react-icons/pi";
 
 import { FaRegSave } from "react-icons/fa";
 
-import ReactPlayer from "react-player";
+import { useSelector } from "react-redux";
+import RelatedVideoData from "../childComponent/VideoDetail/RelatedVideoData";
+import RelatedShortsData from "../childComponent/VideoDetail/RelatedShortsData";
+import ChannelShortsCard from "../childComponent/ChannelCards/ChannelShortsCard";
 
 const VideoDetail = () => {
-  const [video, SetVideo] = useState();
-  const [relatedVideo, SetRelatedVideo] = useState();
-  const [Channel, SetChannel] = useState();
+  const videos = useSelector((state) => state.content.videos);
+  const shorts = useSelector((state) => state.content.shorts);
+
+  const [videoData, setVideoData] = useState();
+  const [relatedVideo, setRelatedVideo] = useState();
+  const [relatedshorts, setRelatedshorts] = useState();
   const { toggle, Settoggle } = useState(true);
-  const [Subscribe, SetSubscribe] = useState();
   const { id } = useParams();
+
+  useEffect(() => {
+    if (videos?.length > 0 || videos !== null) {
+      const Allvideos = videos.find((item) => item?._id === id);
+      const AllrelatedVideos = videos.filter(
+        (item) => item?.tags == Allvideos?.tags
+      );
+      const AllrelatedShorts = shorts.filter(
+        (item) => item?.tags == Allvideos?.tags
+      );
+      const shuffledRelatedShorts = [...AllrelatedShorts].sort(
+        () => Math.random() - 0.5
+      );
+      const shuffledrelatedVideos = [...AllrelatedVideos].sort(
+        () => Math.random() - 0.5
+      );
+      setVideoData(Allvideos);
+      setRelatedVideo(shuffledrelatedVideos);
+      setRelatedshorts(shuffledRelatedShorts);
+    }
+  }, [id]);
+  console.log(videoData, videos, relatedVideo, relatedshorts);
 
   return (
     <>
       <div className="flex justify-center w-full pt-[2.7rem] sm:px-[3rem] sm:pt-[5.2rem] flex-col sm:flex-col lg:flex-row">
         <div className="wraper relative lg:w-[44rem] ">
-          <div className="fixed w-full yt_player  sm:relative sm:h-[26rem] lg:h-[22rem] lg:w-[44rem]  h-[14.7rem]  flex-shrink-0">
-            <ReactPlayer
-              className="react-player"
-              width="100%"
-              height="100%"
-              url={`https://www.youtube.com/watch?v=${id}`}
+          <div className="fixed w-full yt_player z-1080   sm:relative sm:h-[26rem] lg:h-[22rem] lg:w-[44rem]  h-[14.7rem]  flex-shrink-0">
+            <video
+              className="react-player bg-black  relative z-1080  w-full h-full"
+              src={videoData?.video}
+              muted
               controls
-            />
-            <div
-              className={`blank sm:hidden ${
-                toggle ? "bg-black " : " bg-[#fff]"
-              } `}
-            ></div>
+            ></video>
+            <div className={`blank sm:hidden bg-black `}></div>
           </div>
 
           <div className="yt_desc mt-[15rem] sm:mt-0 px-[18px] sm:px-0 py-[10px]">
             <div className="top">
               <h3 className=" font-[600] text-[13px] sm:text-[16px]">
-                video?.snippet?.title
+                {videoData?.title}
               </h3>
+
               <div className="yt_time flex items-center gap-[6px] py-[2px] ">
                 <p
                   className={`${
@@ -66,27 +91,22 @@ const VideoDetail = () => {
             <div className="wrapper_dets flex sm:items-center flex-col sm:flex-row sm:justify-between ">
               <div className="chanel_dets flex items-center justify-between py-[7px] sm:gap-[20px] ">
                 <div className="chanel_left flex items-center gap-[12px] ">
-                  {/* <img
-                    className=" w-[30px] rounded-full "
-                    src={Channel?.snippet?.thumbnails?.high?.url}
+                  <img
+                    className=" w-[30px] h-[40px] rounded-full "
+                    src={videoData?.channel?.avatar}
                     alt=""
-                  /> */}
+                  />
                   <h4 className=" text-[13px] font-[500] ">
-                    Channel?.snippet?.title
+                    {videoData?.channel?.name}
                   </h4>
-                  <small className=" text-[#383838] font-[700] text-[12px] ">
-                    subscribe
-                  </small>
                 </div>
                 <div className="chanel_right">
-                  {/* <button className="bg-black text-white rounded-[40px] px-[18px] py-[9px] text-[11px]" onClick={()=>subscribeFetcher(video)} >Subscribe</button> */}
-
                   <button
-                    className={`
-    font-[500] rounded-[40px] px-[18px] py-[9px] text-[11px]
-    
-  `}
-                  ></button>
+                    className="bg-black text-white rounded-[40px] px-[18px] py-[9px] text-[11px]"
+                    onClick={() => subscribeFetcher(video)}
+                  >
+                    Subscribe
+                  </button>
                 </div>
               </div>
               <div className="bottom flex items-center justify-between py-[10px] gap-[9px] overflow-x-scroll sm:gap-[10px] ">
@@ -162,12 +182,26 @@ const VideoDetail = () => {
                 return  <RelatedVideoData item={item} channelData={item?.snippet?.channelId} index={index}/>
 
                 })} */}
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => {
-              return (
-                <RelatedVideoData
-                  index={index}
-                />
-              );
+            <h4 className="p-4 flex items-center gap-2">
+              <SiYoutubeshorts /> Related Shorts
+            </h4>
+            <div className="flex items-center p-4 gap-3 overflow-x-auto">
+              {relatedshorts?.map((item, index) => {
+                return (
+                  <ChannelShortsCard
+                    data={item}
+                    key={index}
+                    channel={item?.channel}
+                  />
+                );
+              })}
+            </div>
+            <h4 className="p-4  flex items-center gap-2">
+              {" "}
+              <PiVideo /> Related Videos
+            </h4>
+            {relatedVideo?.map((item, index) => {
+              return <RelatedVideoData data={item} key={index} />;
             })}
           </div>
         </div>

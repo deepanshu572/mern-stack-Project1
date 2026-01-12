@@ -4,7 +4,7 @@ import { serverUrl } from "../App";
 import { useDispatch } from "react-redux";
 import { getUserData } from "../redux/userSlice";
 
-export const getUser = async (req, res) => {
+export const getUser =  (req, res) => {
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchUser = async () => {

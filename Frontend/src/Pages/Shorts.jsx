@@ -14,23 +14,32 @@ import { FaRegBookmark } from "react-icons/fa";
 import { serverUrl } from "../App";
 import axios from "axios";
 import { getShorts } from "../redux/contentSlice";
+import { getAllChannels } from "../redux/channelsSlice";
+import { Link } from "react-router";
 
 const Shorts = () => {
   const dispatch = useDispatch();
   const shorts = useSelector((state) => state.content.shorts);
   const users = useSelector((state) => state.usersData.userData);
-  const channel = useSelector((state) => state.usersData.channelData);
+  const channels = useSelector((state) => state.usersData.channelData);
+  const Allchannels = useSelector((state) => state.channels.AllChannels);
   const [user, setUser] = useState();
+  const [channel, setchannel] = useState();
+
   const [shortsData, setShortsData] = useState();
   const [toggleControls, setToggleControls] = useState();
   const shortsRefs = useRef([]);
 
   useEffect(() => {
     if (shorts || shorts?.length > 0) {
-      setShortsData(shorts);
+      const shuffledRelatedShorts = [...shorts].sort(() => Math.random() - 0.5);
+      setShortsData(shuffledRelatedShorts);
     }
     if (users || users?.length > 0) {
       setUser(users);
+    }
+    if (Allchannels || Allchannels?.length > 0) {
+      setchannel(Allchannels);
     }
   }, []);
 
@@ -136,7 +145,7 @@ const Shorts = () => {
     try {
       const { data } = await axios.put(
         `${serverUrl}/api/toggles/short/${shortId}/saveShort`,
-        { channelId: channel?._id },
+        {},
         { withCredentials: true }
       );
       const updatedShorts = shorts.map((item) => {
@@ -155,6 +164,36 @@ const Shorts = () => {
       console.log(error);
     }
   };
+
+  const handleSubscriber = async (channelId) => {
+    try {
+      const { data } = await axios.post(
+        `${serverUrl}/api/users/subscribe`,
+        { channelId },
+        { withCredentials: true }
+      );
+
+      const updatedShorts = shortsData.map((item) => {
+        if (item.channel._id === channelId) {
+          return {
+            ...item,
+            channel: {
+              ...item.channel,
+              subscribers: data.channel.subscribers,
+            },
+          };
+        }
+        return item;
+      });
+
+      setShortsData(updatedShorts);
+      dispatch(getShorts(updatedShorts));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // console.log(shortsData);
 
   return (
     <div className="flex">
@@ -214,12 +253,15 @@ const Shorts = () => {
                     <p className="text-[11px] mt-0.5">22k</p>
                   </div>
                   <div className="flex_like mb-1 text-white  items-center justify-center  flex flex-col">
-                    <div className="  bg-[#7877778a] hover:bg-[#b1b1b19e] w-8 h-8  rounded-full items-center justify-center  flex">
-                     {item?.saveBy.find((item) => item === user?._id) ? (
+                    <div
+                      onClick={() => handleSave(item?._id)}
+                      className="  bg-[#7877778a] hover:bg-[#b1b1b19e] w-8 h-8  rounded-full items-center justify-center  flex"
+                    >
+                      {item?.saveBy.find((item) => item === user?._id) ? (
                         <FaBookmark />
                       ) : (
-                        <FaRegBookmark/>
-                      )} 
+                        <FaRegBookmark />
+                      )}
                     </div>
                     <p className="text-[11px] mt-0.5">save</p>
                   </div>
@@ -241,18 +283,24 @@ const Shorts = () => {
 
                   <div className="channel_txt flex flex-col w-full ">
                     <div className="flex items-center  justify-between">
-                      <h2 className="channel_title text-xs ">
-                        {item?.channel?.name}
-                      </h2>
-                      {1 === 1 ? (
-                        <button className="bg-white text-black p-1.5 rounded-full text-[9px] font-medium px-2">
-                          Subscribe
-                        </button>
-                      ) : (
-                        <button className="bg-[#000000c4] border border-gray-600 text-white p-1.5 rounded-full text-[9px] font-medium px-2">
-                          Subscribed
-                        </button>
-                      )}
+                      <Link to={`/ChannelDetail/${item?.channel?._id}`}>
+                        <h2 className="channel_title text-xs ">
+                          {item?.channel?.name}
+                        </h2>
+                      </Link>
+
+                      <button
+                        className={` ${
+                          item?.channel?.subscribers?.includes(user?._id)
+                            ? "bg-[#000000c4] text-white border border-gray-600 "
+                            : "bg-white text-black border "
+                        }  p-1.5 rounded-full text-[9px] font-medium px-2`}
+                        onClick={() => handleSubscriber(item?.channel?._id)}
+                      >
+                        {item?.channel?.subscribers?.includes(user?._id)
+                          ? "Subscribed"
+                          : "Subscribe"}
+                      </button>
                     </div>
                     <p className="text-[10px] mt-1 title_elipse">
                       {item?.title}

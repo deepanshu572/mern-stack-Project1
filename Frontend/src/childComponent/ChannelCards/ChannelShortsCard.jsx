@@ -3,7 +3,7 @@ import { timeAgo } from "../../Utils/timeConvertor";
 
 const ChannelShortsCard = ({ data, channel }) => {
   return (
-    <div className="shorts  w-48 h-63 rounded-xl overflow-hidden relative">
+    <div className="shorts shrink-0 w-48 h-63 rounded-xl overflow-hidden relative">
       <video className="w-full h-full object-cover" src={data?.video}></video>
       <div className="absolute p-2 bottom-0 left-0 bg-[#00000057]">
         <h3 className="text-xs title_elipse">{data?.title}</h3>

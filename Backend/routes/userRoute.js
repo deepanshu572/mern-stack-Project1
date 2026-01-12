@@ -5,6 +5,7 @@ import {
   getCurrentChannel,
   getCurrentUser,
   updateChannel,
+  subscriberToggle,
 } from "../controllers/userController.js";
 import upload from "../middleware/multer.js";
 
@@ -30,5 +31,6 @@ userRouter.post(
   ]),
   updateChannel
 );
+userRouter.post("/subscribe", isAuth, subscriberToggle);
 
 export default userRouter;

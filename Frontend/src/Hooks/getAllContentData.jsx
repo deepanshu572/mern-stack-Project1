@@ -9,7 +9,7 @@ import {
   getCommmunity,
 } from "../redux/contentSlice.jsx";
 
-export const getAllContentData = async (req, res) => {
+export const getAllContentData =  (req, res) => {
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchVideos = async () => {

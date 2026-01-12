@@ -4,7 +4,8 @@ import { Link } from "react-router";
 import { useSelector } from "react-redux";
 
 const ViewChannelPage = () => {
-  
+
+   
   const channel = useSelector((state) => state.usersData.channelData);
   console.log(channel);
 

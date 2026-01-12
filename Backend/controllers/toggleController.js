@@ -44,15 +44,22 @@ export const handletoggleDisLikes = async (req, res) => {
   }
 };
 export const handleSaveBy = async (req, res) => {
-  // try {
-  //   const { shortId } = req.params;
-  //   const { channelId } = req.body;
-  //   const userId = req.userId.toString();
-
-  //   // return res.status(200).json({ short });
-  // } catch (error) {
-  //   console.error("Error toggling dislike:", error);
-  //   return res.status(500).json({ message: "Server error" });
-  // }
+  try {
+    const { shortId } = req.params;
+    const userId = req.userId.toString();
+    const short = await shorts.findById(shortId);
+    if (!short) return res.status(404).json({ message: "Short not found" });
+    if (short.saveBy.includes(userId)) {
+      short.saveBy.pull(userId);
+      console.log("unsaved");
+    } else {
+      short.saveBy.push(userId);
+      console.log("saved");
+    }
+    await short.save();
+    return res.status(200).json({ short });
+  } catch (error) {
+    console.error("Error toggling dislike:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
-

@@ -20,14 +20,19 @@ export const getCurrentUser = async (req, res) => {
 export const getCurrentChannel = async (req, res) => {
   try {
     const user = await users.findById(req.userId); // select("-password") to not show password
-   const existChannel = await user?.channel;
+    const existChannel = await user?.channel;
     if (!existChannel) {
-      return res.status(404).json({ message: "user doesn't have any channel ! " });
+      return res
+        .status(404)
+        .json({ message: "user doesn't have any channel ! " });
     }
     const channel = await channels.findById(existChannel).populate("videos");
 
     if (!channel) {
-      return res.status(404).json({ message: "this channelId doesn't found in channels model so channel not found" });
+      return res.status(404).json({
+        message:
+          "this channelId doesn't found in channels model so channel not found",
+      });
     }
     // console.log(channel)
 
@@ -121,5 +126,37 @@ export const updateChannel = async (req, res) => {
     return res.status(200).json({ channel });
   } catch (error) {
     return res.status(400).json({ message: `somthing went wrong ! ${error}` });
+  }
+};
+
+export const subscriberToggle = async (req, res) => {
+  try {
+    const { channelId } = req.body;
+    const userId = req.userId;
+    if (!channelId) {
+      return res.status(400).json({ message: "channel not found!" });
+    }
+    const user = await users.findOne({ _id: userId });
+    if (user?.subscriptions?.includes(channelId)) {
+      user?.subscriptions?.pull(channelId);
+      console.log("unsubscribed");
+    } else {
+      user?.subscriptions?.push(channelId);
+      console.log("subscribed");
+    }
+    await user.save();
+
+    const channel = await channels.findOne({ _id: channelId });
+    if (channel?.subscribers?.includes(userId)) {
+      channel?.subscribers?.pull(userId);
+      console.log("unsubscribed");
+    } else {
+      channel?.subscribers?.push(userId);
+      console.log("subscribed");
+    }
+    await channel.save();
+    return res.status(200).json({ channel });
+  } catch (error) {
+    console.log(error);
   }
 };

@@ -4,7 +4,7 @@ import { serverUrl } from "../App";
 import { getAllChannels } from "../redux/channelsSlice";
 import { useDispatch } from "react-redux";
 
-export const getAllChannel = async (req, res) => {
+export const getAllChannel =  (req, res) => {
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchAllChannel = async () => {
