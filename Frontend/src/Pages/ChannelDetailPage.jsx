@@ -9,9 +9,9 @@ import ChannelPlaylistCard from "../childComponent/ChannelCards/ChannelPlaylistC
 import { getAllChannel } from "../Hooks/getAllChannel";
 
 const ChannelDetailPage = () => {
+  getAllChannel();
   const { id } = useParams();
   const channels = useSelector((state) => state.channels.AllChannels);
-   console.log(channels)
   const [channelDetail, setChannelDetail] = useState();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedName, setSelectedName] = useState("Home");
@@ -26,7 +26,7 @@ const ChannelDetailPage = () => {
       const AllChannel = channels.find((item) => item?._id === id);
       setChannelDetail(AllChannel);
     }
-  },[]);
+  }, [id]);
 
   const renderContent = (data, name, renderItem) => {
     if (!data || data.length === 0) {
@@ -85,8 +85,12 @@ const ChannelDetailPage = () => {
             </h2>
             <span className="flex gap-2 text-gray-500">
               <b className={`text-[13px] `}>{channelDetail?.category}</b>
-              <p className="text-[13px]">{channelDetail?.subscribers?.length} subscribers</p>
-              <p className="text-[13px]">{channelDetail?.videos?.length} videos</p>
+              <p className="text-[13px]">
+                {channelDetail?.subscribers?.length} subscribers
+              </p>
+              <p className="text-[13px]">
+                {channelDetail?.videos?.length} videos
+              </p>
             </span>
             <p className=" channel_desc text-[13px] text-gray-500">
               {channelDetail?.description}

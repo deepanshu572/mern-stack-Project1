@@ -3,19 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 
 import SideNavItem from "../childComponent/SideNavItem";
 import { categories } from "../Utils/constant";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import { getUser } from "../Hooks/getCurrentUser";
 
 const SideNav = () => {
+  getUser()
   const toggleFnc = useSelector((state) => state.toggle.toggle);
+  const user = useSelector((state) => state.usersData.userData);
+
   const [MobileMenu, SetMobileMenu] = useState();
+  const [userChannel, setuserChannel] = useState();
   const navigate = useNavigate();
   const location = useLocation();
   const [toggle, SetToggle] = useState(true);
   useEffect(() => {
     SetMobileMenu(toggleFnc);
-    // console.log("toggle value in sidenav:", MobileMenu);
   }, [toggleFnc]);
 
+  useEffect(() => {
+    if (user || user?.length > 0) {
+      setuserChannel(user);
+    }
+  }, [user]);
 
   return (
     <div
@@ -88,27 +97,31 @@ const SideNav = () => {
                         toggle ? "border-b-[#1a1a1abd]" : "border-b-[#e6e6e6]"
                       } border-b-[1px] pb-4`}
                     >
-                      <div
-                        className={` ${
-                          MobileMenu ? "justify-center" : ""
-                        } subscribe_box hover:bg-[#dedede38] cursor-pointer flex items-center  gap-2 py-[5px] px-[8px] `}
-                        onClick={() => FetchSubscribedChannel(item)}
-                      >
-                        <div className="subscribe_box_img w-[25px] h-[25px] ">
-                          <img
-                            className=" w-full h-full object-cover rounded-full "
-                            src="https://images.unsplash.com/photo-1646446835625-4f23efd5c662?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt=""
-                          />
-                        </div>
-                        <p
-                          className={`text-[14px] lg:text-[13px] ${
-                            MobileMenu ? "hidden" : "block"
-                          } `}
-                        >
-                          T series
-                        </p>
-                      </div>
+                      {userChannel?.subscriptions?.map((item) => {
+                        return (
+                          <Link to={`/ChannelDetail/${item?._id}`}
+                            className={` ${
+                              MobileMenu ? "justify-center" : ""
+                            } subscribe_box hover:bg-[#161616] cursor-pointer flex items-center  gap-2 py-[5px] px-[8px] `}
+                          
+                          >
+                            <div className="subscribe_box_img w-[25px] h-[25px] ">
+                              <img
+                                className=" w-full h-full object-cover rounded-full object-top "
+                                src={item?.avatar}
+                                alt=""
+                              />
+                            </div>
+                            <p
+                              className={`text-[12.5px] sm:text-[13px]  ${
+                                MobileMenu ? "hidden" : "block"
+                              } `}
+                            >
+                              {item?.name}
+                            </p>
+                          </Link>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -116,9 +129,7 @@ const SideNav = () => {
             );
           })}
 
-          {/* <div className=" sm:hidden px-[11px] py-3   ">
-            <h3 className="font-[500] text-[15px] mb-2">Switch mode</h3>
-          </div> */}
+        
         </div>
       </div>
     </div>

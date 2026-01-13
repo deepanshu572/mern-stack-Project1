@@ -22,6 +22,7 @@ import { auth, provider } from "../config/firebase";
 import { toggleSidebar } from "../redux/toggleSlice";
 
 const Header = () => {
+  
   const user = useSelector((state) => state.usersData.userData);
   const toggleFnc = useSelector((state) => state.toggle.toggle);
   const dispatch = useDispatch();
@@ -107,13 +108,13 @@ const Header = () => {
       {visible ? (
         <div
           onMouseMove={handleProfile}
-          className=" z-[999] absolute h-screen w-full"
+          className=" z-[1080] absolute h-screen w-full"
         ></div>
       ) : (
         ""
       )}
       <div
-        className={`top_nav top-0 z-999 flex items-center justify-between border-b border-b-[#1a1a1abd] ${
+        className={`top_nav top-0 z-[1090] flex items-center justify-between border-b border-b-[#1a1a1abd] ${
           toggle ? "bg-black text-[#fff]" : "text-black bg-[#fff]"
         } gap-4 sm:justify-between px-[8px] py-[10px] sm:px-5 sm:py-[1rem] fixed w-full `}
       >

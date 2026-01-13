@@ -14,7 +14,6 @@ import { FaRegBookmark } from "react-icons/fa";
 import { serverUrl } from "../App";
 import axios from "axios";
 import { getShorts } from "../redux/contentSlice";
-import { getAllChannels } from "../redux/channelsSlice";
 import { Link } from "react-router";
 
 const Shorts = () => {
@@ -167,7 +166,7 @@ const Shorts = () => {
 
   const handleSubscriber = async (channelId) => {
     try {
-      const { data } = await axios.post(
+      const { data, user } = await axios.post(
         `${serverUrl}/api/users/subscribe`,
         { channelId },
         { withCredentials: true }
@@ -188,6 +187,7 @@ const Shorts = () => {
 
       setShortsData(updatedShorts);
       dispatch(getShorts(updatedShorts));
+      // dispatch(getUserData(user));
     } catch (error) {
       console.log(error);
     }

@@ -8,7 +8,7 @@ const VideoCard = ({ id, image, video, views, title, description , channel}) => 
         to={`/video/${id}`}
         className="card p-1 w-[25rem]   sm:w-[31vw] lg:w-[15rem]  "
       >
-        <div className="card_video w-full h-[14rem] sm:w-full sm:h-[8rem] bg-white overflow-hidden self-center rounded-[10px]">
+        <div className="card_video w-full h-[14rem] sm:w-full sm:h-[8rem]  overflow-hidden self-center rounded-[10px]">
           <img className="w-full h-full object-cover" src={image} alt="" />
         </div>
         <div className="flex gap-3 w-full sm:pt-[14px] h-[85px] sm:h-auto px-[12px] py-[13px] sm:p-2 ">

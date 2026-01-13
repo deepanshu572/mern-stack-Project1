@@ -4,7 +4,10 @@ import users from "../model/userModel.js";
 
 export const getCurrentUser = async (req, res) => {
   try {
-    const user = await users.findById(req.userId).select("-password"); // select("-password") to not show password
+    const user = await users
+      .findById(req.userId)
+      .select("-password")
+      .populate("subscriptions"); // select("-password") to not show password
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -139,24 +142,70 @@ export const subscriberToggle = async (req, res) => {
     const user = await users.findOne({ _id: userId });
     if (user?.subscriptions?.includes(channelId)) {
       user?.subscriptions?.pull(channelId);
-      console.log("unsubscribed");
+      console.log("user unsubscribe");
     } else {
       user?.subscriptions?.push(channelId);
-      console.log("subscribed");
+      console.log("channel subscribed");
     }
     await user.save();
 
     const channel = await channels.findOne({ _id: channelId });
     if (channel?.subscribers?.includes(userId)) {
       channel?.subscribers?.pull(userId);
-      console.log("unsubscribed");
+      console.log("channel unsubscribed");
     } else {
       channel?.subscribers?.push(userId);
-      console.log("subscribed");
+      console.log(" channel subscribed");
     }
+    console.log(user);
     await channel.save();
-    return res.status(200).json({ channel });
+    return res.status(200).json({ channel, user });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getSubscriptionData = async (req, res) => {
+  try {
+    const userId = req.userId;
+    console.log(userId);
+    if (!userId) {
+      return res.status(404).json({ message: "UserID not found" });
+    }
+    const user = await users
+      .findById(req.userId)
+      .select("-password")
+      
+       .populate({
+        path: "subscriptions",
+        populate: [
+          {
+            path: "videos",
+            populate: {
+              path: "channel",
+             
+            },
+          },
+          {
+            path: "shorts",
+            populate: {
+              path: "channel",
+             
+            },
+          },
+        ],
+      });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json({
+      subscriptions: user.subscriptions,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message:
+        "on getSubscriptionData fnc Error fetching current subscription: " +
+        error,
+    });
   }
 };

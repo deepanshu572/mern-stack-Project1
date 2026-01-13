@@ -8,7 +8,7 @@ const RelatedVideoData = ({ data }) => {
       to={`/video/${data?._id}`}
       data-discover="true"
     >
-      <div className="card_video w-[95%] h-[200px] sm:w-[169px] sm:h-[95px] rounded-[8px] flex-shrink-0 bg-white overflow-hidden self-center">
+      <div className="card_video w-[95%] h-[200px] sm:w-[169px] sm:h-[95px] rounded-[8px] flex-shrink-0  overflow-hidden self-center">
         {data?.videoBanner ? (
           <img
             src={data?.videoBanner}

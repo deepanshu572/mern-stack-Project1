@@ -6,6 +6,7 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { SiYoutubeshorts } from "react-icons/si";
 import { PiVideo } from "react-icons/pi";
+import { timeAgo } from "../Utils/timeConvertor";
 
 import { FaRegSave } from "react-icons/fa";
 
@@ -21,6 +22,7 @@ const VideoDetail = () => {
   const [videoData, setVideoData] = useState();
   const [relatedVideo, setRelatedVideo] = useState();
   const [relatedshorts, setRelatedshorts] = useState();
+  const [ToggleComment, setToggleComment] = useState(false);
   const { toggle, Settoggle } = useState(true);
   const { id } = useParams();
 
@@ -67,55 +69,53 @@ const VideoDetail = () => {
               </h3>
 
               <div className="yt_time flex items-center gap-[6px] py-[2px] ">
-                <p
-                  className={`${
-                    toggle ? " text-[#fff]" : "text-black "
-                  } text-[12px] `}
-                >
-                  Views
+                <p className={`text-white  text-[12px] `}>
+                  {videoData?.views} Views
                 </p>
                 <div
-                  className={`w-[2px] h-[2px] rounded-full ${
-                    toggle ? "bg-black text-[#fff]" : "text-black bg-[#fff]"
-                  } `}
+                  className={`w-[2px] h-[2px] rounded-full text-black bg-[#e3e3e3] `}
                 ></div>
-                <p
-                  className={` ${
-                    toggle ? " text-[#fff]" : "text-black "
-                  } text-[12px]`}
-                >
-                  time
+                <p className={` text-white text-[12px]`}>
+                  {timeAgo(videoData?.createdAt)}
                 </p>
               </div>
             </div>
             <div className="wrapper_dets flex sm:items-center flex-col sm:flex-row sm:justify-between ">
               <div className="chanel_dets flex items-center justify-between py-[7px] sm:gap-[20px] ">
-                <div className="chanel_left flex items-center gap-[12px] ">
+                <Link
+                  to={`/ChannelDetail/${videoData?.channel?._id}`}
+                  className="chanel_left flex items-center gap-[12px] "
+                >
                   <img
-                    className=" w-[30px] h-[40px] rounded-full "
+                    className=" w-[40px] shrink-0 h-[40px] object-cover object-top rounded-full "
                     src={videoData?.channel?.avatar}
                     alt=""
                   />
-                  <h4 className=" text-[13px] font-[500] ">
-                    {videoData?.channel?.name}
-                  </h4>
-                </div>
+                  <div className="flex flex-col">
+                    <h4 className=" text-[13px] font-[500] ">
+                      {videoData?.channel?.name}
+                    </h4>
+                    <p className="text-[11px] text-[#aaa]">
+                      {videoData?.channel?.subscribers?.length} subscribers
+                    </p>
+                  </div>
+                </Link>
                 <div className="chanel_right">
                   <button
-                    className="bg-black text-white rounded-[40px] px-[18px] py-[9px] text-[11px]"
-                    onClick={() => subscribeFetcher(video)}
+                    className={` ${
+                      1 === 2
+                        ? "bg-[#000000c4] text-white border border-gray-600 "
+                        : "bg-white text-black border border-gray-600"
+                    }  p-2 rounded-full text-xs  font-medium px-4`}
+                    onClick={() => handleSubscriber(item?.channel?._id)}
                   >
-                    Subscribe
+                    {1 === 2 ? "Subscribed" : "Subscribe"}
                   </button>
                 </div>
               </div>
               <div className="bottom flex items-center justify-between py-[10px] gap-[9px] overflow-x-scroll sm:gap-[10px] ">
                 <div
-                  className={`icon_sec_wrap flex items-center  gap-2 px-[10px] py-[4px]  ${
-                    toggle
-                      ? "bg-[#1d1d1d] text-[#fff]"
-                      : "text-black bg-[#e3e3e3]"
-                  } rounded-[27px] `}
+                  className={` rounded-full icon_sec_wrap flex items-center  gap-2 px-[10px] py-[4px]  bg-[#21212161] text-[#fff]rounded-[27px] `}
                 >
                   <div className="icon1 flex items-center gap-2 text-[12px]">
                     <BiLike />
@@ -131,32 +131,21 @@ const VideoDetail = () => {
                   </div>
                 </div>
                 <div
-                  className={`icon3 flex items-center gap-2 px-[8px] py-[6px] text-[12px]   rounded-[20px]  ${
-                    toggle
-                      ? "bg-[#1d1d1d] text-[#fff]"
-                      : "text-black bg-[#e3e3e3]"
-                  }`}
+                  className={`icon3 flex items-center gap-2 px-[8px] py-[6px] text-[12px]   rounded-[20px] bg-[#21212161] text-[#fff]`}
                 >
                   <RiShareForwardLine />
                   <p>Share</p>
                 </div>
                 <div
-                  className={`icon3 flex items-center gap-2  px-[8px] py-[6px]  text-[12px]  rounded-[20px] ${
-                    toggle
-                      ? "bg-[#1d1d1d] text-[#fff]"
-                      : "text-black bg-[#e3e3e3]"
-                  } `}
+                  className={`icon3 flex items-center gap-2  px-[8px] py-[6px]  text-[12px]  rounded-[20px] bg-[#21212161] text-[#fff]`}
                 >
                   <FaRegSave />
 
                   <p>Save</p>
                 </div>
                 <div
-                  className={`icon3 flex items-center gap-2  px-[8px] py-[6px]  text-[12px]  rounded-[20px] ${
-                    toggle
-                      ? "bg-[#1d1d1d] text-[#fff]"
-                      : "text-black bg-[#e3e3e3]"
-                  } `}
+                  className={`icon3 flex items-center gap-2  px-[8px] py-[6px]  text-[12px]  rounded-[20px] 
+                   bg-[#21212161] text-[#fff]`}
                 >
                   <IoMdArrowRoundDown />
 
@@ -165,27 +154,123 @@ const VideoDetail = () => {
               </div>
             </div>
             <div
-              className={`comment h-[57px] p-3 py-2 w-full ${
-                toggle ? "bg-[#1d1d1d] text-[#fff]" : "text-black bg-[#fff]"
-              } rounded-[10px]   `}
+              className={`Description  p-3 py-2 w-full  mt-2
+                 bg-[#21212161] text-[#fff] 
+               rounded-[10px]   `}
             >
-              <h3 className=" text-[13px] ">Comments comments</h3>
-              <p className="text-[10px]">Click Here To View Comments</p>
+              <h3 className=" text-sm ">Description</h3>
+              <p
+                className={`text-xs my-2 mb-0 text-gray-300 whitespace-pre-line ${
+                  ToggleComment ? " " : "line-clamp-1"
+                } `}
+              >
+                {videoData?.description}
+              </p>
+              <button
+                onClick={() => setToggleComment(!ToggleComment)}
+                class="text-xs text-blue-400 mt-1 cursor-pointer hover:underline"
+              >
+                {ToggleComment ? " Show less" : "Show more"}
+              </button>
+            </div>
+            <div className="comments p-3 mt-3 ">
+              <h3 className="text-sm">30 Comments</h3>
+              <div className="comment_box flex w-full  gap-3 pt-4">
+                <div className="comment_img w-10 h-10 shrink-0">
+                  <img
+                    className="w-full rounded-full h-full object-cover object-top"
+                    src={videoData?.channel?.avatar}
+                    alt=""
+                  />
+                </div>
+                <div className="comment_input w-full ">
+                  <input
+                    type="text"
+                    placeholder="Add a comment..."
+                    className=" outline-none text-sm p-2 w-full border-b border-b-gray-600"
+                  />
+                  <div className="flex gap-2 w-full justify-end p-2">
+                    <button className="hover:bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
+                      cancel
+                    </button>
+                    <button className="hover:bg-[#212121ab] bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
+                      comment
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="comment_wrap">
+              <div className="comment_box_reply flex gap-2 ">
+                <div className="comment_img w-7 h-7 shrink-0">
+                  <img
+                    className="w-full rounded-full h-full object-cover object-top"
+                    src={videoData?.channel?.avatar}
+                    alt=""
+                  />
+                </div>
+                <div className=" flex gap-1 items-center">
+                  <h4 className="text-xs"> @deepanshu</h4>
+                  <small className="text-[9px] text-[#858585]">
+                    1 Days ago
+                  </small>
+                </div>
+              </div>
+              <div className="comment p-2 ">
+                <p className="text-xs pl-7">
+                  Thanks for sharing. I have a few questions: How can I find the
+                  company’s founder or CTO on Twitter/X? I mean, what is the
+                  best way to search for them? I am a frontend developer. Do I
+                  really need to learn everything from start to end (like CI/CD
+                  and all the tools you mentioned), or is basic knowledge
+                </p>
+              </div>
+              <div className="btns flex items-center gap-2  pl-9">
+                <div className="btn_wrap text-xs flex items-center gap-2">
+                  <button> <BiLike className="w-3 h-3" /></button> 1
+                </div>
+                <div className="btn_wrap text-xs flex items-center gap-2">
+                  <button> <BiDislike className="w-3 h-3" /></button> 2
+                </div>
+                <div className="btn_wrap text-xs flex items-center gap-2 hover:bg-[#21212161] rounded-2xl p-1">
+                  <button> <RiShareForwardLine className="w-3 h-3" /></button> Reply
+                </div>
+              </div>
+              <div className="reply w-[94%] ml-auto">
+                <div className="comment_box flex w-full  gap-3 pt-4">
+                <div className="comment_img w-7 h-7 shrink-0">
+                  <img
+                    className="w-full rounded-full h-full object-cover object-top"
+                    src={videoData?.channel?.avatar}
+                    alt=""
+                  />
+                </div>
+                <div className="comment_input w-full ">
+                  <input
+                    type="text"
+                    placeholder="Add a reply..."
+                    className=" outline-none text-xs p-2 w-full border-b border-b-gray-800"
+                  />
+                  <div className="flex gap-2 w-full justify-end p-2">
+                    <button className="hover:bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
+                      cancel
+                    </button>
+                    <button className="hover:bg-[#212121ab] bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
+                      Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+              </div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="yt_player_content">
-          <div className="yt_related_data flex item-center gap-[2px] flex-col  sm:overflow-y-scroll sm:h-[100vh] ">
-            {/* {relatedVideo?.length > 0 &&
-              relatedVideo.map((item, index) => {
-                // console.log(item.snippet.channelId);
-                return  <RelatedVideoData item={item} channelData={item?.snippet?.channelId} index={index}/>
-
-                })} */}
+        <div className="yt_player_content sm:w-[40%]">
+          <div className="yt_related_data w-full flex item-center gap-[2px] flex-col  ">
             <h4 className="p-4 flex items-center gap-2">
               <SiYoutubeshorts /> Related Shorts
             </h4>
-            <div className="flex items-center p-4 gap-3 overflow-x-auto">
+            <div className=" hide_scroll flex items-center p-4 gap-3 w-full overflow-x-auto">
               {relatedshorts?.map((item, index) => {
                 return (
                   <ChannelShortsCard

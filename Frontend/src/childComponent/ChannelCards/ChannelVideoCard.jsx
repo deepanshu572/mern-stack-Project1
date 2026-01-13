@@ -20,7 +20,7 @@ const ChannelVideoCard = ({ data, channel }) => {
   return (
     <>
       <Link
-        to={`/videos/${data?._id}`}
+        to={`/video/${data?._id}`}
         className="channel_card w-full lg:w-[240px]"
       >
         <div className="channel_img w-full overflow-hidden rounded-[10px] h-[200px] sm:h-[145px] ">
