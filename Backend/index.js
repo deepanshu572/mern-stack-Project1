@@ -7,7 +7,8 @@ import userRouter from "./routes/userRoute.js";
 import uploadRouter from "./routes/uploadRoute.js";
 import contentRouter from "./routes/contentRoute.js";
 import channelRouter from "./routes/channelRoute.js";
-import toggleRouter from "./routes/toggleRoute.js";
+import shortsRouter from "./routes/shortsRoute.js";
+import videosRouter from "./routes/videosRoute.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -27,7 +28,8 @@ app.use("/api/users", userRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/content", contentRouter);
 app.use("/api/channel", channelRouter);
-app.use("/api/toggles", toggleRouter);
+app.use("/api/toggles", shortsRouter);
+app.use("/api/toggles", videosRouter);
 
 app.get("/", (req, res) => {
   res.send("done");

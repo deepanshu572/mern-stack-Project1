@@ -14,11 +14,18 @@ import { useSelector } from "react-redux";
 import RelatedVideoData from "../childComponent/VideoDetail/RelatedVideoData";
 import RelatedShortsData from "../childComponent/VideoDetail/RelatedShortsData";
 import ChannelShortsCard from "../childComponent/ChannelCards/ChannelShortsCard";
+import { getVideos } from "../redux/contentSlice";
+import axios from "axios";
+import { serverUrl } from "../App";
+import { getAllContentData } from "../Hooks/getAllContentData";
 
 const VideoDetail = () => {
+   getAllContentData()
   const videos = useSelector((state) => state.content.videos);
   const shorts = useSelector((state) => state.content.shorts);
+  const users = useSelector((state) => state.usersData.userData);
 
+  const [user, setUser] = useState();
   const [videoData, setVideoData] = useState();
   const [relatedVideo, setRelatedVideo] = useState();
   const [relatedshorts, setRelatedshorts] = useState();
@@ -46,6 +53,38 @@ const VideoDetail = () => {
       setRelatedshorts(shuffledRelatedShorts);
     }
   }, [id]);
+
+  useEffect(() => {
+    if (users || users?.length > 0) {
+      setUser(users);
+    }
+  }, [id]);
+
+  const handleSubscriber = async (channelId) => {
+    try {
+      const { data, user } = await axios.post(
+        `${serverUrl}/api/users/subscribe`,
+        { channelId },
+        { withCredentials: true }
+      );
+      if (videoData?.channel?._id === channelId) {
+        setVideoData((prev) => {
+          return {
+            ...prev,
+            channel: {
+              ...prev.channel,
+              subscribers: data.channel.subscribers,
+            },
+          };
+        });
+          dispatch(getVideos(videoData));
+      }
+
+    
+    } catch (error) {
+      console.log(error);
+    }
+  };
   console.log(videoData, videos, relatedVideo, relatedshorts);
 
   return (
@@ -103,13 +142,15 @@ const VideoDetail = () => {
                 <div className="chanel_right">
                   <button
                     className={` ${
-                      1 === 2
+                      videoData?.channel?.subscribers?.includes(user?._id)
                         ? "bg-[#000000c4] text-white border border-gray-600 "
                         : "bg-white text-black border border-gray-600"
                     }  p-2 rounded-full text-xs  font-medium px-4`}
-                    onClick={() => handleSubscriber(item?.channel?._id)}
+                    onClick={() => handleSubscriber(videoData?.channel?._id)}
                   >
-                    {1 === 2 ? "Subscribed" : "Subscribe"}
+                    {videoData?.channel?.subscribers?.includes(user?._id)
+                      ? "Subscribed"
+                      : "Subscribe"}
                   </button>
                 </div>
               </div>
@@ -200,67 +241,107 @@ const VideoDetail = () => {
                 </div>
               </div>
               <div className="comment_wrap">
-              <div className="comment_box_reply flex gap-2 ">
-                <div className="comment_img w-7 h-7 shrink-0">
-                  <img
-                    className="w-full rounded-full h-full object-cover object-top"
-                    src={videoData?.channel?.avatar}
-                    alt=""
-                  />
-                </div>
-                <div className=" flex gap-1 items-center">
-                  <h4 className="text-xs"> @deepanshu</h4>
-                  <small className="text-[9px] text-[#858585]">
-                    1 Days ago
-                  </small>
-                </div>
-              </div>
-              <div className="comment p-2 ">
-                <p className="text-xs pl-7">
-                  Thanks for sharing. I have a few questions: How can I find the
-                  company’s founder or CTO on Twitter/X? I mean, what is the
-                  best way to search for them? I am a frontend developer. Do I
-                  really need to learn everything from start to end (like CI/CD
-                  and all the tools you mentioned), or is basic knowledge
-                </p>
-              </div>
-              <div className="btns flex items-center gap-2  pl-9">
-                <div className="btn_wrap text-xs flex items-center gap-2">
-                  <button> <BiLike className="w-3 h-3" /></button> 1
-                </div>
-                <div className="btn_wrap text-xs flex items-center gap-2">
-                  <button> <BiDislike className="w-3 h-3" /></button> 2
-                </div>
-                <div className="btn_wrap text-xs flex items-center gap-2 hover:bg-[#21212161] rounded-2xl p-1">
-                  <button> <RiShareForwardLine className="w-3 h-3" /></button> Reply
-                </div>
-              </div>
-              <div className="reply w-[94%] ml-auto">
-                <div className="comment_box flex w-full  gap-3 pt-4">
-                <div className="comment_img w-7 h-7 shrink-0">
-                  <img
-                    className="w-full rounded-full h-full object-cover object-top"
-                    src={videoData?.channel?.avatar}
-                    alt=""
-                  />
-                </div>
-                <div className="comment_input w-full ">
-                  <input
-                    type="text"
-                    placeholder="Add a reply..."
-                    className=" outline-none text-xs p-2 w-full border-b border-b-gray-800"
-                  />
-                  <div className="flex gap-2 w-full justify-end p-2">
-                    <button className="hover:bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
-                      cancel
-                    </button>
-                    <button className="hover:bg-[#212121ab] bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
-                      Reply
-                    </button>
+                <div className="comment_box_reply flex gap-2 ">
+                  <div className="comment_img w-7 h-7 shrink-0">
+                    <img
+                      className="w-full rounded-full h-full object-cover object-top"
+                      src={videoData?.channel?.avatar}
+                      alt=""
+                    />
+                  </div>
+                  <div className=" flex gap-1 items-center">
+                    <h4 className="text-xs"> @deepanshu</h4>
+                    <small className="text-[9px] text-[#858585]">
+                      1 Days ago
+                    </small>
                   </div>
                 </div>
-              </div>
-              </div>
+                <div className="comment p-2 ">
+                  <p className="text-xs pl-7">
+                    Thanks for sharing. I have a few questions: How can I find
+                    the company’s founder or CTO on Twitter/X? I mean, what is
+                    the best way to search for them? I am a frontend developer.
+                    Do I really need to learn everything from start to end (like
+                    CI/CD and all the tools you mentioned), or is basic
+                    knowledge
+                  </p>
+                </div>
+                <div className="btns flex items-center gap-2  pl-9">
+                  <div className="btn_wrap text-xs flex items-center gap-2">
+                    <button>
+                      {" "}
+                      <BiLike className="w-3 h-3" />
+                    </button>{" "}
+                    1
+                  </div>
+                  <div className="btn_wrap text-xs flex items-center gap-2">
+                    <button>
+                      {" "}
+                      <BiDislike className="w-3 h-3" />
+                    </button>{" "}
+                    2
+                  </div>
+                  <div className="btn_wrap text-xs flex items-center gap-2 hover:bg-[#21212161] rounded-2xl p-1">
+                    <button>
+                      {" "}
+                      <RiShareForwardLine className="w-3 h-3" />
+                    </button>{" "}
+                    Reply
+                  </div>
+                </div>
+                <div className="reply w-[94%] ml-auto">
+                  <div className="comment_box flex w-full  gap-3 pt-4">
+                    <div className="comment_img w-7 h-7 shrink-0">
+                      <img
+                        className="w-full rounded-full h-full object-cover object-top"
+                        src={videoData?.channel?.avatar}
+                        alt=""
+                      />
+                    </div>
+                    <div className="comment_input w-full ">
+                      <input
+                        type="text"
+                        placeholder="Add a reply..."
+                        className=" outline-none text-xs p-2 w-full border-b border-b-gray-800"
+                      />
+                      <div className="flex gap-2 w-full justify-end p-2">
+                        <button className="hover:bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
+                          cancel
+                        </button>
+                        <button className="hover:bg-[#212121ab] bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
+                          Reply
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="reply_more pl-9">
+                  <div className="comment_box_reply flex gap-2 ">
+                    <div className="comment_img w-7 h-7 shrink-0">
+                      <img
+                        className="w-full rounded-full h-full object-cover object-top"
+                        src={videoData?.channel?.avatar}
+                        alt=""
+                      />
+                    </div>
+                    <div className=" flex gap-1 items-center">
+                      <h4 className="text-xs"> @deepanshu</h4>
+                      <small className="text-[9px] text-[#858585]">
+                        1 Days ago
+                      </small>
+                    </div>
+                  </div>
+                  <div className="comment p-2 ">
+                    <p className="text-xs pl-7">
+                      Thanks for sharing. I have a few questions: How can I find
+                      the company’s founder or CTO on Twitter/X? I mean, what is
+                      the best way to search for them? I am a frontend
+                      developer. Do I really need to learn everything from start
+                      to end (like CI/CD and all the tools you mentioned), or is
+                      basic knowledge
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

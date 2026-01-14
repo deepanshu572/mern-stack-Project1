@@ -15,8 +15,10 @@ import { serverUrl } from "../App";
 import axios from "axios";
 import { getShorts } from "../redux/contentSlice";
 import { Link } from "react-router";
+import { getAllContentData } from "../Hooks/getAllContentData";
 
 const Shorts = () => {
+  getAllContentData()
   const dispatch = useDispatch();
   const shorts = useSelector((state) => state.content.shorts);
   const users = useSelector((state) => state.usersData.userData);
@@ -188,6 +190,7 @@ const Shorts = () => {
       setShortsData(updatedShorts);
       dispatch(getShorts(updatedShorts));
       // dispatch(getUserData(user));
+     
     } catch (error) {
       console.log(error);
     }
