@@ -7,26 +7,27 @@ import { IoMdArrowRoundDown } from "react-icons/io";
 import { SiYoutubeshorts } from "react-icons/si";
 import { PiVideo } from "react-icons/pi";
 import { timeAgo } from "../Utils/timeConvertor";
-
-import { FaRegSave } from "react-icons/fa";
-
+import { FaBookmark } from "react-icons/fa";
+import { FaRegBookmark } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import RelatedVideoData from "../childComponent/VideoDetail/RelatedVideoData";
-import RelatedShortsData from "../childComponent/VideoDetail/RelatedShortsData";
 import ChannelShortsCard from "../childComponent/ChannelCards/ChannelShortsCard";
 import { getVideos } from "../redux/contentSlice";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { getAllContentData } from "../Hooks/getAllContentData";
+import { BiSolidLike } from "react-icons/bi";
+import { BiSolidDislike } from "react-icons/bi";
 
 const VideoDetail = () => {
-   getAllContentData()
+  getAllContentData();
   const videos = useSelector((state) => state.content.videos);
   const shorts = useSelector((state) => state.content.shorts);
   const users = useSelector((state) => state.usersData.userData);
 
   const [user, setUser] = useState();
   const [videoData, setVideoData] = useState();
+  const [AllVideoData, setAllVideoData] = useState();
   const [relatedVideo, setRelatedVideo] = useState();
   const [relatedshorts, setRelatedshorts] = useState();
   const [ToggleComment, setToggleComment] = useState(false);
@@ -35,6 +36,7 @@ const VideoDetail = () => {
 
   useEffect(() => {
     if (videos?.length > 0 || videos !== null) {
+      setAllVideoData(videos);
       const Allvideos = videos.find((item) => item?._id === id);
       const AllrelatedVideos = videos.filter(
         (item) => item?.tags == Allvideos?.tags
@@ -77,10 +79,81 @@ const VideoDetail = () => {
             },
           };
         });
-          dispatch(getVideos(videoData));
+        dispatch(getVideos(videoData));
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSave = async (videoId) => {
+    try {
+      const { data } = await axios.put(
+        `${serverUrl}/api/toggles/video/${videoId}/savevideo`,
+        {},
+        { withCredentials: true }
+      );
+      if (videoData?._id === videoId) {
+        setVideoData((prev) => {
+          return {
+            ...prev,
+            saveBy: data?.video?.saveBy,
+          };
+        });
+        console.log(videoData);
+        dispatch(getVideos(videoData));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleLikes = async (videoId) => {
+    try {
+      const { data } = await axios.put(
+        `${serverUrl}/api/toggles/video/${videoId}/likeToggle`,
+        {},
+        { withCredentials: true }
+      );
 
-    
+      if (videoData?._id === videoId) {
+        setVideoData((prev) => {
+          return {
+            ...prev,
+            like: data?.video?.like,
+            dislike: data?.video?.dislike,
+          };
+        });
+        dispatch(getVideos(videoData));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleDisLikes = async (videoId) => {
+    try {
+      const { data } = await axios.put(
+        `${serverUrl}/api/toggles/video/${videoId}/DislikeToggle`,
+        {},
+        { withCredentials: true }
+      );
+
+      if (videoData?._id === videoId) {
+        setVideoData((prev) => {
+          return {
+            ...prev,
+            like: data?.video?.like,
+            dislike: data?.video?.dislike,
+          };
+        });
+        setAllVideoData((prev) => {
+          return {
+            ...prev,
+            like: data?.video?.like,
+            dislike: data?.video?.dislike,
+          };
+        });
+        dispatch(getVideos(AllVideoData));
+        console.log("===========", AllVideoData)
+      }
     } catch (error) {
       console.log(error);
     }
@@ -91,9 +164,9 @@ const VideoDetail = () => {
     <>
       <div className="flex justify-center w-full pt-[2.7rem] sm:px-[3rem] sm:pt-[5.2rem] flex-col sm:flex-col lg:flex-row">
         <div className="wraper relative lg:w-[44rem] ">
-          <div className="fixed w-full yt_player z-1080   sm:relative sm:h-[26rem] lg:h-[22rem] lg:w-[44rem]  h-[14.7rem]  flex-shrink-0">
+          <div className="fixed w-full yt_player z-1080   sm:relative sm:h-[24rem]  lg:w-[44rem]  h-[14.7rem]  flex-shrink-0">
             <video
-              className="react-player bg-black  relative z-1080  w-full h-full"
+              className="react-player rounded-2xl bg-black  relative z-1080  object-contain w-full h-full"
               src={videoData?.video}
               muted
               controls
@@ -141,9 +214,9 @@ const VideoDetail = () => {
                 </Link>
                 <div className="chanel_right">
                   <button
-                    className={` ${
+                    className={` cursor-pointer ${
                       videoData?.channel?.subscribers?.includes(user?._id)
-                        ? "bg-[#000000c4] text-white border border-gray-600 "
+                        ? "bg-[#21212161] text-white  "
                         : "bg-white text-black border border-gray-600"
                     }  p-2 rounded-full text-xs  font-medium px-4`}
                     onClick={() => handleSubscriber(videoData?.channel?._id)}
@@ -158,17 +231,27 @@ const VideoDetail = () => {
                 <div
                   className={` rounded-full icon_sec_wrap flex items-center  gap-2 px-[10px] py-[4px]  bg-[#21212161] text-[#fff]rounded-[27px] `}
                 >
-                  <div className="icon1 flex items-center gap-2 text-[12px]">
-                    <BiLike />
-                    {/* <BiSolidLike /> */}
-
-                    <p>likes</p>
+                  <div
+                    onClick={() => handleLikes(videoData?._id)}
+                    className="icon1  flex items-center cursor-pointer gap-2 text-[12px]"
+                  >
+                    {videoData?.like?.find((item) => item === user?._id) ? (
+                      <BiSolidLike />
+                    ) : (
+                      <BiLike />
+                    )}
+                    <p>{videoData?.like?.length}</p>
                   </div>
                   <p>|</p>
-                  <div className="icon2">
-                    {/* <BiSolidDislike /> */}
-
-                    <BiDislike />
+                  <div
+                    onClick={() => handleDisLikes(videoData?._id)}
+                    className="icon2 cursor-pointer"
+                  >
+                    {videoData?.dislike?.find((item) => item === user?._id) ? (
+                      <BiSolidDislike />
+                    ) : (
+                      <BiDislike />
+                    )}
                   </div>
                 </div>
                 <div
@@ -178,11 +261,21 @@ const VideoDetail = () => {
                   <p>Share</p>
                 </div>
                 <div
-                  className={`icon3 flex items-center gap-2  px-[8px] py-[6px]  text-[12px]  rounded-[20px] bg-[#21212161] text-[#fff]`}
+                  onClick={() => handleSave(videoData?._id)}
+                  className={`icon3 flex cursor-pointer items-center gap-1  px-[8px] py-[6px]  text-[12px]  rounded-[20px] bg-[#21212161] text-[#fff]`}
                 >
-                  <FaRegSave />
+                  {videoData?.saveBy?.find((item) => item === user?._id) ? (
+                    <FaBookmark />
+                  ) : (
+                    <FaRegBookmark />
+                  )}
 
-                  <p>Save</p>
+                  <p>
+                    {" "}
+                    {videoData?.saveBy?.find((item) => item === user?._id)
+                      ? "Saved"
+                      : "Save"}
+                  </p>
                 </div>
                 <div
                   className={`icon3 flex items-center gap-2  px-[8px] py-[6px]  text-[12px]  rounded-[20px] 
@@ -348,10 +441,11 @@ const VideoDetail = () => {
         </div>
         <div className="yt_player_content sm:w-[40%]">
           <div className="yt_related_data w-full flex item-center gap-[2px] flex-col  ">
-            <h4 className="p-4 flex items-center gap-2">
-              <SiYoutubeshorts /> Related Shorts
+            <h4 className="p-4 pt-0 flex items-center gap-2">
+              <SiYoutubeshorts className="fill-[#FF0033] w-6 h-8" /> Related
+              Shorts
             </h4>
-            <div className=" hide_scroll flex items-center p-4 gap-3 w-full overflow-x-auto">
+            <div className=" hide_scroll flex items-center pt-0 p-4 gap-3 w-full overflow-x-auto">
               {relatedshorts?.map((item, index) => {
                 return (
                   <ChannelShortsCard
@@ -364,7 +458,7 @@ const VideoDetail = () => {
             </div>
             <h4 className="p-4  flex items-center gap-2">
               {" "}
-              <PiVideo /> Related Videos
+              <PiVideo className="fill-[#FF0033] w-6 h-8" /> Related Videos
             </h4>
             {relatedVideo?.map((item, index) => {
               return <RelatedVideoData data={item} key={index} />;

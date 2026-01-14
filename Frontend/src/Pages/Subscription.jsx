@@ -34,7 +34,7 @@ const Subscription = () => {
   return (
     <div className="flex">
       <SideNav />
-      <div className="subscribed_wrap w-full p-4 md:mt-[5rem] ">
+      <div className="subscribed_wrap w-full p-4 mt-[3rem] md:mt-[5rem] ">
         <div className="subscribed_top_item flex items-center gap-4">
           <div className="subscribed_item_box flex flex-col items-center gap-1">
             <div
@@ -67,11 +67,11 @@ const Subscription = () => {
             );
           })}
         </div>
-        <h4 className="p-4 mt-3 flex items-center gap-2">
+        <h4 className="p-4 pl-1 text-sm mt-3 flex items-center gap-2">
           {" "}
-          <SiYoutubeshorts /> Subscribed shorts
+          <SiYoutubeshorts className="fill-[#FF0033] w-6 h-8" /> Subscribed shorts
         </h4>
-        <div className="subscibed_content flex overflow-x-auto justify-center sm:justify-start  w-full ml-auto sm:gap-[10px]  pt-[25px]">
+        <div className="subscibed_content flex overflow-x-auto justify-center sm:justify-start  w-full ml-auto sm:gap-[10px]  pt-[8px]">
           {subscribedData?.map((item, index) => {
             return item?.shorts.map((el) => {
               return (
@@ -84,11 +84,11 @@ const Subscription = () => {
             });
           })}
         </div>
-        <h4 className="p-4 mt-3 flex items-center gap-2">
+        <h4 className="p-4 pl-1 text-sm mt-3 flex items-center gap-2">
           {" "}
-          <PiVideo /> Subscribed Videos
+          <PiVideo className="fill-[#FF0033] w-6 h-8" /> Subscribed Videos
         </h4>
-        <div className="subscibed_content flex flex-wrap justify-center sm:justify-start  w-full ml-auto sm:gap-[10px]  pt-[25px]">
+        <div className="subscibed_content flex flex-wrap justify-center sm:justify-start  w-full ml-auto sm:gap-[10px]  pt-[8px]">
           {subscribedData?.map((item, index) => {
             return item?.videos.map((el) => {
               return (

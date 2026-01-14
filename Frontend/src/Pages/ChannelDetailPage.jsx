@@ -47,8 +47,8 @@ const ChannelDetailPage = () => {
   return (
     <div className="flex">
       <SideNav />
-      <div className="channel_wrap  w-full p-4 md:mt-[5rem]  ">
-        <div className="channel_banner w-full h-[162px] ">
+      <div className="channel_wrap  w-full p-4 px-0 md:mt-[5rem]  ">
+        <div className="channel_banner w-full h-[231px] overflow-hidden rounded-2xl mb-5 ">
           {channelDetail?.bannerImage ? (
             <img
               className="w-full h-full object-cover"
@@ -64,7 +64,7 @@ const ChannelDetailPage = () => {
           )}
         </div>
         <div className="channel_desc_img flex sm:px-4 lg:px-0 items-center lg:items-center gap-3 flex-col lg:flex-row relative ">
-          <div className="channel_img flex-shrink-0 w-[130px] h-[130px] absolute rounded-full overflow-hidden top-[-41%]  lg:relative ">
+          <div className="channel_img flex-shrink-0 w-[130px] h-[130px] absolute rounded-full overflow-hidden top-[-66%]  lg:relative ">
             {channelDetail?.avatar ? (
               <img
                 className="w-full h-full object-cover object-top"
@@ -79,7 +79,7 @@ const ChannelDetailPage = () => {
               />
             )}
           </div>
-          <div className="channel_info flex gap-2 p-[10px] mt-[2rem] lg:mt-0 lg:p-0 flex-col items-start ">
+          <div className="channel_info flex items-center gap-2 p-[10px] mt-[2rem] lg:mt-0 lg:p-0 flex-col sm:items-start ">
             <h2 className="channel_title font-[700] text-3xl ">
               {channelDetail?.name}
             </h2>

@@ -1,6 +1,6 @@
 import express from "express";
 import isAuth from "../middleware/isAuth.js";
-import { handletoggleLikes, handletoggleDisLikes, handleSaveBy } from "../controllers/shortsController.js";
+import { handletoggleLikes, handletoggleDisLikes, handleSaveBy } from "../controllers/videoController.js";
 
 const videosRouter = express.Router();
 
