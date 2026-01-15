@@ -87,7 +87,10 @@ export const handleAddComment = async (req, res) => {
     });
 
     await video.save();
-    await video.populate("comments.author");
+    await video.populate([
+      { path: "comments.author" },
+      { path: "comments.replies.author" },
+    ])
 
     return res.status(200).json({ video });
   } catch (error) {
@@ -125,8 +128,10 @@ export const handleAddReply = async (req, res) => {
       message: message,
     });
     await video.save();
-    
-    await video.populate("comments.replies.author");
+    await video.populate([
+      { path: "comments.author" },
+      { path: "comments.replies.author" },
+    ]);
 
     return res.status(200).json({ video });
   } catch (error) {

@@ -16,17 +16,25 @@ import axios from "axios";
 import { getShorts } from "../redux/contentSlice";
 import { Link } from "react-router";
 import { getAllContentData } from "../Hooks/getAllContentData";
+import { GoX } from "react-icons/go";
+import { RiShareForwardLine } from "react-icons/ri";
 
 const Shorts = () => {
-  getAllContentData()
+  getAllContentData();
   const dispatch = useDispatch();
   const shorts = useSelector((state) => state.content.shorts);
   const users = useSelector((state) => state.usersData.userData);
   const channels = useSelector((state) => state.usersData.channelData);
   const Allchannels = useSelector((state) => state.channels.AllChannels);
   const [user, setUser] = useState();
-  const [channel, setchannel] = useState();
 
+  const [newComment, setNewComment] = useState();
+  const [newReply, setNewReply] = useState();
+  const [commentData, setCommentData] = useState([]);
+  const [selectedCommentId, setSelectedCommentId] = useState([]);
+
+  const [channel, setchannel] = useState();
+  const [toggleComment, setToggleComment] = useState(false);
   const [shortsData, setShortsData] = useState();
   const [toggleControls, setToggleControls] = useState();
   const shortsRefs = useRef([]);
@@ -190,11 +198,46 @@ const Shorts = () => {
       setShortsData(updatedShorts);
       dispatch(getShorts(updatedShorts));
       // dispatch(getUserData(user));
-     
     } catch (error) {
       console.log(error);
     }
   };
+  const handleComments = async (shortId) => {
+    try {
+      const { data } = await axios.post(
+        `${serverUrl}/api/toggles/short/${shortId}/AddComment`,
+        { message: newComment },
+        { withCredentials: true }
+      );
+      console.log(data);
+      setShortsData((prev) =>
+        prev.map((item) => (item?._id === shortId ? data?.short : item))
+      );
+      // setCommentData(data?.short?.comments);
+      setNewComment("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleReply = async (shortId, commentId) => {
+    try {
+      const { data } = await axios.post(
+        `${serverUrl}/api/toggles/short/${shortId}/AddReply`,
+        { message: newReply, commentId },
+        { withCredentials: true }
+      );
+      console.log(data?.short?.comments);
+
+      setCommentData(data?.short?.comments);
+
+      setNewReply("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    console.log(shortsData);
+  }, [shortsData]);
 
   // console.log(shortsData);
 
@@ -210,7 +253,7 @@ const Shorts = () => {
                 className="relative w-[420px] md:w-[250px] aspect-[9/16]  rounded-2xl overflow-hidden shadow-xl border border-gray-700 cursor-pointer"
               >
                 <video
-                  className="h-full w-full object-cover"
+                  className="h-full hidden w-full object-cover"
                   ref={(el) => (shortsRefs.current[index] = el)}
                   data-index={index}
                   playsInline
@@ -249,12 +292,16 @@ const Shorts = () => {
                       {item?.dislike?.length}{" "}
                     </p>
                   </div>
-                  <div className="flex_like mb-1 text-white  items-center justify-center  flex flex-col">
+                  <div
+                    onClick={() => setToggleComment(true)}
+                    className="flex_like mb-1 text-white  items-center justify-center  flex flex-col"
+                  >
                     <div className="  bg-[#7877778a] hover:bg-[#b1b1b19e] w-8 h-8  rounded-full items-center justify-center  flex">
                       <FaRegCommentDots />
                     </div>
                     <p className="text-[11px] mt-0.5">22k</p>
                   </div>
+
                   <div className="flex_like mb-1 text-white  items-center justify-center  flex flex-col">
                     <div
                       onClick={() => handleSave(item?._id)}
@@ -308,6 +355,105 @@ const Shorts = () => {
                     <p className="text-[10px] mt-1 title_elipse">
                       {item?.title}
                     </p>
+                  </div>
+                </div>
+
+                <div
+                  className={`
+                    comment
+                    absolute bottom-0 w-full h-60 rounded-xl overflow-hidden
+                    bg-[#2020208a] backdrop-blur-xl
+                    transition-all duration-700 ease-in-out
+                    z-10
+                    ${
+                      toggleComment
+                        ? "translate-y-0 opacity-100"
+                        : "translate-y-full opacity-0 pointer-events-none"
+                    }
+                  `}
+                >
+                  <div className="flex justify-between border-b border-b-gray-800 px-2 ">
+                    <h4 className="text-xs p-2 px-1">Comments</h4>
+                    <div
+                      className="p-2"
+                      onClick={() => setToggleComment(false)}
+                    >
+                      <GoX />
+                    </div>
+                  </div>
+
+                  <div className="wrapper hide_scroll h-[86%] overflow-y-auto pb-[11px]">
+                    <div className="comment_box flex justify-between items-center p-1 py-2 gap-1">
+                      <input
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        type="text"
+                        className="text-[10px] w-full outline-0  border-b border-b-gray-700 p-1 "
+                        placeholder="Add your comments..."
+                      />
+                      <button
+                        onClick={() => handleComments(item?._id)}
+                        className="p-1 text-[9px]  px-3 rounded-sm backdrop-blur-xl bg-[#2f2f2fbd]"
+                      >
+                        Post
+                      </button>
+                    </div>
+                    {[item?.comments].map((comment) => {
+                      console.log(comment , "comment ")
+                      return (
+                        <div div className=" px-2">
+                          <div className="comment_item pt-5 flex gap-1 items-center">
+                            <div className="comment_item_img w-6 rounded-full overflow-hidden  h-6">
+                              <img
+                                className="w-full h-full object-top object-cover"
+                                src={comment?.author?.image}
+                                alt=""
+                              />
+                            </div>
+                            <p className="text-[9px]">{comment?.message}</p>
+                            <RiShareForwardLine
+                              onClick={() => setSelectedCommentId(comment?._id)}
+                            />
+                          </div>
+                          {comment?.map((reply) => {
+                            return (
+                              <div className="comment_item pt-3 px-3 flex gap-1 items-center">
+                                <div className="comment_item_img w-6 rounded-full overflow-hidden  h-6">
+                                  <img
+                                    className="w-full h-full object-top object-cover"
+                                    src={reply?.author?.image}
+                                    alt=""
+                                  />
+                                </div>
+                                <p className="text-[9px]">{reply?.message}</p>
+                              </div>
+                            );
+                          })}
+
+                          {selectedCommentId === item?._id ? (
+                            <div className="comment_box flex justify-between items-center p-1 py-2 gap-1">
+                              <input
+                                type="text"
+                                onChange={(e) => setNewReply(e.target.value)}
+                                value={newReply}
+                                className="text-[10px] outline-0 w-full border-b border-b-gray-700 p-1 "
+                                placeholder="Add your reply..."
+                              />
+                              <button
+                                onClick={() =>
+                                  handleReply(item?._id, comment?._id)
+                                }
+                                className="p-1 text-[8px]  px-3 rounded-sm backdrop-blur-xl bg-[#2f2f2fbd]"
+                              >
+                                reply
+                              </button>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

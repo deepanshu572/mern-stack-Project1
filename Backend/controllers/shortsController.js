@@ -63,3 +63,78 @@ export const handleSaveBy = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+export const handleAddComment = async (req, res) => {
+  try {
+    const { shortId } = req.params;
+    const userId = req.userId;
+    const { message } = req.body;
+    if (!shortId || !userId || !message) {
+      return res.status(400).json({
+        message:
+          " shortId || userId || message is missing or undefined or null",
+      });
+    }
+    const short = await shorts.findOne({ _id: shortId });
+
+    if (!short) {
+      return res.status(400).json({
+        message: "shortId not mached",
+      });
+    }
+    short?.comments.push({
+      author: userId,
+      message: message,
+    });
+
+    await short.save();
+    await short.populate([
+      { path: "comments.author" },
+      { path: "comments.replies.author" },
+    ])
+
+    return res.status(200).json({ short });
+  } catch (error) {
+    console.log(`something wents wrong in handleAddComment fnc ${error}`);
+  }
+};
+export const handleAddReply = async (req, res) => {
+  try {
+    const { shortId } = req.params;
+    const userId = req.userId;
+    const { message, commentId } = req.body;
+    if (!shortId || !userId || !message || !commentId) {
+      return res.status(400).json({
+        message:
+          " shortId || userId || message || commentId  is missing or undefined or null",
+      });
+    }
+    const short = await shorts.findOne({ _id: shortId });
+    if (!short) {
+      return res.status(400).json({
+        message: "shortId not matched",
+      });
+    }
+
+    const comment = short.comments.id(commentId);
+
+    if (!comment) {
+      return res.status(404).json({
+        message: "comment not found",
+      });
+    }
+
+    comment?.replies?.push({
+      author: userId,
+      message: message,
+    });
+    await short.save();
+    await short.populate([
+      { path: "comments.author" },
+      { path: "comments.replies.author" },
+    ]);
+
+    return res.status(200).json({ short });
+  } catch (error) {
+    console.log(error);
+  }
+};

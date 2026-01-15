@@ -6,7 +6,7 @@ import channels from "../model/channelModel.js";
 
 export const getAllVideos = async (req, res) => {
   try {
-    const allVideos = await videos.find({}).populate("channel").populate("comments.author");
+    const allVideos = await videos.find({}).populate("channel").populate("comments.author").populate("comments.replies.author");
     return res.status(200).json({ allVideos });
   } catch (error) {
     return res
@@ -16,7 +16,7 @@ export const getAllVideos = async (req, res) => {
 };
 export const getAllShorts = async (req, res) => {
   try {
-    const allShorts = await shorts.find({}).populate("channel");
+    const allShorts = await shorts.find({}).populate("channel").populate("comments.author").populate("comments.replies.author");
     return res.status(200).json({ allShorts });
   } catch (error) {
     return res

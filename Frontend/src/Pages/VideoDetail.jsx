@@ -42,12 +42,12 @@ const VideoDetail = () => {
     if (videos?.length > 0 || videos !== null) {
       setAllVideoData(videos);
 
-      const Allvideos = videos.find((item) => item?._id === id);
+      const video = videos.find((item) => item?._id === id);
       const AllrelatedVideos = videos.filter(
-        (item) => item?.tags == Allvideos?.tags
+        (item) => item?.tags == video?.tags
       );
       const AllrelatedShorts = shorts.filter(
-        (item) => item?.tags == Allvideos?.tags
+        (item) => item?.tags == video?.tags
       );
       const shuffledRelatedShorts = [...AllrelatedShorts].sort(
         () => Math.random() - 0.5
@@ -55,10 +55,10 @@ const VideoDetail = () => {
       const shuffledrelatedVideos = [...AllrelatedVideos].sort(
         () => Math.random() - 0.5
       );
-      setVideoData(Allvideos);
+      setVideoData(video);
       setRelatedVideo(shuffledrelatedVideos);
       setRelatedshorts(shuffledRelatedShorts);
-      setCommentData(Allvideos?.comments);
+      setCommentData(video?.comments);
     }
   }, [id]);
 
@@ -185,15 +185,9 @@ const VideoDetail = () => {
         { message: newReply, commentId },
         { withCredentials: true }
       );
+      console.log(data?.video?.comments);
 
-      if (commentData?._id === commentId) {
-        setCommentData((prev) => {
-          return {
-            ...prev,
-            replies: data?.video?.comments?.replies,
-          };
-        });
-      }
+      setCommentData(data?.video?.comments);
 
       setNewReply("");
     } catch (err) {
@@ -483,7 +477,7 @@ const VideoDetail = () => {
                                   <div className="comment_img w-7 h-7 shrink-0">
                                     <img
                                       className="w-full rounded-full h-full object-cover object-top"
-                                      src={videoData?.channel?.avatar}
+                                      src={reply?.author?.image}
                                       alt=""
                                     />
                                   </div>
@@ -506,39 +500,11 @@ const VideoDetail = () => {
                       );
                     })
                   : ""}
-
-                <div className="reply_more pl-9">
-                  <div className="comment_box_reply flex gap-2 ">
-                    <div className="comment_img w-7 h-7 shrink-0">
-                      <img
-                        className="w-full rounded-full h-full object-cover object-top"
-                        src={videoData?.channel?.avatar}
-                        alt=""
-                      />
-                    </div>
-                    <div className=" flex gap-1 items-center">
-                      <h4 className="text-xs"> @deepanshu</h4>
-                      <small className="text-[9px] text-[#858585]">
-                        1 Days ago
-                      </small>
-                    </div>
-                  </div>
-                  <div className="comment p-2 ">
-                    <p className="text-xs pl-7">
-                      Thanks for sharing. I have a few questions: How can I find
-                      the company’s founder or CTO on Twitter/X? I mean, what is
-                      the best way to search for them? I am a frontend
-                      developer. Do I really need to learn everything from start
-                      to end (like CI/CD and all the tools you mentioned), or is
-                      basic knowledge
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="yt_player_content sm:w-[40%]">
+        <div className="yt_player_content md:w-[40%]">
           <div className="yt_related_data w-full flex item-center gap-[2px] flex-col  ">
             <h4 className="p-4 pt-0 flex items-center gap-2">
               <SiYoutubeshorts className="fill-[#FF0033] w-6 h-8" /> Related
