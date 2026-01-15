@@ -2,15 +2,15 @@ import mongoose from "mongoose";
 
 const replySchema = new mongoose.Schema(
   {
-    autor: {
+    author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "channel",
+      ref: "user",
     },
     message: {
       type: String,
       required: true,
     },
-    createdAt: { type: Date, Default: Date.now() },
+    createdAt: { type: Date, default: Date.now() },
     updatedAt: { type: Date },
   },
   { _id: true }
@@ -18,16 +18,16 @@ const replySchema = new mongoose.Schema(
 
 const commentSchema = new mongoose.Schema(
   {
-    autor: {
+    author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "channel",
+      ref: "user",
     },
     message: {
       type: String,
       required: true,
     },
-    replies: { replySchema },
-    createdAt: { type: Date, Default: Date.now() },
+    replies: [ replySchema ],
+    createdAt: { type: Date, default: Date.now() },
     updatedAt: { type: Date },
   },
   { _id: true }
@@ -78,6 +78,7 @@ const VideoScheme = new mongoose.Schema({
       ref: "user",
     },
   ],
+  comments: [commentSchema]
 },{timestamps:true});
 const videos = mongoose.model("video", VideoScheme);
 

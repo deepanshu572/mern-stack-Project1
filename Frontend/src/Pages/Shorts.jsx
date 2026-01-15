@@ -207,10 +207,10 @@ const Shorts = () => {
             <div className="min-h-full w-full flex md:items-center items-start justify-center snap-start relative pt-[40px] md:pt-[0px] mt-[3rem] ">
               <div
                 onClick={() => togglePlayPause(index)}
-                className="relative w-[420px] md:w-[250px] aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-xl border border-gray-700 cursor-pointer"
+                className="relative w-[420px] md:w-[250px] aspect-[9/16]  rounded-2xl overflow-hidden shadow-xl border border-gray-700 cursor-pointer"
               >
                 <video
-                  className="h-full w-full"
+                  className="h-full w-full object-cover"
                   ref={(el) => (shortsRefs.current[index] = el)}
                   data-index={index}
                   playsInline

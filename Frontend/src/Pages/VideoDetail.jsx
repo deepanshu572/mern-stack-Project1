@@ -31,12 +31,17 @@ const VideoDetail = () => {
   const [relatedVideo, setRelatedVideo] = useState();
   const [relatedshorts, setRelatedshorts] = useState();
   const [ToggleComment, setToggleComment] = useState(false);
+  const [newComment, setNewComment] = useState();
+  const [newReply, setNewReply] = useState();
+  const [commentData, setCommentData] = useState([]);
+  const [selectedCommentId, setSelectedCommentId] = useState([]);
   const { toggle, Settoggle } = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
     if (videos?.length > 0 || videos !== null) {
       setAllVideoData(videos);
+
       const Allvideos = videos.find((item) => item?._id === id);
       const AllrelatedVideos = videos.filter(
         (item) => item?.tags == Allvideos?.tags
@@ -53,6 +58,7 @@ const VideoDetail = () => {
       setVideoData(Allvideos);
       setRelatedVideo(shuffledrelatedVideos);
       setRelatedshorts(shuffledRelatedShorts);
+      setCommentData(Allvideos?.comments);
     }
   }, [id]);
 
@@ -152,13 +158,50 @@ const VideoDetail = () => {
           };
         });
         dispatch(getVideos(AllVideoData));
-        console.log("===========", AllVideoData)
+        console.log("===========", AllVideoData);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(videoData, videos, relatedVideo, relatedshorts);
+  const handleComments = async (videoId) => {
+    try {
+      const { data } = await axios.post(
+        `${serverUrl}/api/toggles/video/${videoId}/AddComment`,
+        { message: newComment },
+        { withCredentials: true }
+      );
+      console.log(data);
+      setCommentData(data?.video?.comments);
+      setNewComment("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleReply = async (videoId, commentId) => {
+    try {
+      const { data } = await axios.post(
+        `${serverUrl}/api/toggles/video/${videoId}/AddReply`,
+        { message: newReply, commentId },
+        { withCredentials: true }
+      );
+
+      if (commentData?._id === commentId) {
+        setCommentData((prev) => {
+          return {
+            ...prev,
+            replies: data?.video?.comments?.replies,
+          };
+        });
+      }
+
+      setNewReply("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log(commentData);
 
   return (
     <>
@@ -308,17 +351,19 @@ const VideoDetail = () => {
               </button>
             </div>
             <div className="comments p-3 mt-3 ">
-              <h3 className="text-sm">30 Comments</h3>
-              <div className="comment_box flex w-full  gap-3 pt-4">
-                <div className="comment_img w-10 h-10 shrink-0">
+              <h3 className="text-sm">{commentData?.length} Comments</h3>
+              <div className="comment_box flex w-full  gap-2 pt-4">
+                <div className="comment_img w-8 h-8 shrink-0">
                   <img
                     className="w-full rounded-full h-full object-cover object-top"
-                    src={videoData?.channel?.avatar}
+                    src={user?.image}
                     alt=""
                   />
                 </div>
                 <div className="comment_input w-full ">
                   <input
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
                     type="text"
                     placeholder="Add a comment..."
                     className=" outline-none text-sm p-2 w-full border-b border-b-gray-600"
@@ -327,87 +372,141 @@ const VideoDetail = () => {
                     <button className="hover:bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
                       cancel
                     </button>
-                    <button className="hover:bg-[#212121ab] bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
+                    <button
+                      onClick={() => handleComments(videoData?._id)}
+                      className="hover:bg-[#212121ab] bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs "
+                    >
                       comment
                     </button>
                   </div>
                 </div>
               </div>
               <div className="comment_wrap">
-                <div className="comment_box_reply flex gap-2 ">
-                  <div className="comment_img w-7 h-7 shrink-0">
-                    <img
-                      className="w-full rounded-full h-full object-cover object-top"
-                      src={videoData?.channel?.avatar}
-                      alt=""
-                    />
-                  </div>
-                  <div className=" flex gap-1 items-center">
-                    <h4 className="text-xs"> @deepanshu</h4>
-                    <small className="text-[9px] text-[#858585]">
-                      1 Days ago
-                    </small>
-                  </div>
-                </div>
-                <div className="comment p-2 ">
-                  <p className="text-xs pl-7">
-                    Thanks for sharing. I have a few questions: How can I find
-                    the company’s founder or CTO on Twitter/X? I mean, what is
-                    the best way to search for them? I am a frontend developer.
-                    Do I really need to learn everything from start to end (like
-                    CI/CD and all the tools you mentioned), or is basic
-                    knowledge
-                  </p>
-                </div>
-                <div className="btns flex items-center gap-2  pl-9">
-                  <div className="btn_wrap text-xs flex items-center gap-2">
-                    <button>
-                      {" "}
-                      <BiLike className="w-3 h-3" />
-                    </button>{" "}
-                    1
-                  </div>
-                  <div className="btn_wrap text-xs flex items-center gap-2">
-                    <button>
-                      {" "}
-                      <BiDislike className="w-3 h-3" />
-                    </button>{" "}
-                    2
-                  </div>
-                  <div className="btn_wrap text-xs flex items-center gap-2 hover:bg-[#21212161] rounded-2xl p-1">
-                    <button>
-                      {" "}
-                      <RiShareForwardLine className="w-3 h-3" />
-                    </button>{" "}
-                    Reply
-                  </div>
-                </div>
-                <div className="reply w-[94%] ml-auto">
-                  <div className="comment_box flex w-full  gap-3 pt-4">
-                    <div className="comment_img w-7 h-7 shrink-0">
-                      <img
-                        className="w-full rounded-full h-full object-cover object-top"
-                        src={videoData?.channel?.avatar}
-                        alt=""
-                      />
-                    </div>
-                    <div className="comment_input w-full ">
-                      <input
-                        type="text"
-                        placeholder="Add a reply..."
-                        className=" outline-none text-xs p-2 w-full border-b border-b-gray-800"
-                      />
-                      <div className="flex gap-2 w-full justify-end p-2">
-                        <button className="hover:bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
-                          cancel
-                        </button>
-                        <button className="hover:bg-[#212121ab] bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs ">
-                          Reply
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {commentData?.length > 0
+                  ? commentData?.map((item) => {
+                      return (
+                        <>
+                          <div className="comment_box_reply flex gap-2 mt-3 ">
+                            <div className="comment_img w-7 h-7 shrink-0">
+                              <img
+                                className="w-full rounded-full h-full object-cover object-top"
+                                src={item?.author?.image}
+                                alt=""
+                              />
+                            </div>
+                            <div className=" flex gap-1 items-center">
+                              <h4 className="text-xs">
+                                {" "}
+                                @{item?.author?.username}
+                              </h4>
+                              <small className="text-[9px] text-[#858585]">
+                                {/* {t(item?.createdAt)} */}
+                                {timeAgo(item?.createdAt)}
+                              </small>
+                            </div>
+                          </div>
+                          <div className="comment p-2 ">
+                            <p className="text-xs pl-7">{item?.message}</p>
+                          </div>
+                          <div className="btns flex items-center gap-2  pl-9">
+                            <div className="btn_wrap text-xs flex items-center gap-2">
+                              <button>
+                                {" "}
+                                <BiLike className="w-3 h-3" />
+                              </button>{" "}
+                              1
+                            </div>
+                            <div className="btn_wrap text-xs flex items-center gap-2">
+                              <button>
+                                {" "}
+                                <BiDislike className="w-3 h-3" />
+                              </button>{" "}
+                              2
+                            </div>
+                            <div
+                              onClick={() => setSelectedCommentId(item?._id)}
+                              className="btn_wrap text-xs cursor-pointer flex items-center gap-2 hover:bg-[#21212161] rounded-2xl p-1"
+                            >
+                              <button>
+                                {" "}
+                                <RiShareForwardLine className="w-3 h-3" />
+                              </button>{" "}
+                              Reply
+                            </div>
+                          </div>
+                          {selectedCommentId === item?._id ? (
+                            <div className="reply w-[94%] ml-auto">
+                              <div className="comment_box flex w-full  gap-3 pt-4">
+                                <div className="comment_img w-7 h-7 shrink-0">
+                                  <img
+                                    className="w-full rounded-full h-full object-cover object-top"
+                                    src={videoData?.channel?.avatar}
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="comment_input w-full ">
+                                  <input
+                                    type="text"
+                                    onChange={(e) =>
+                                      setNewReply(e.target.value)
+                                    }
+                                    value={newReply}
+                                    placeholder="Add a reply..."
+                                    className=" outline-none text-xs p-2 w-full border-b border-b-gray-800"
+                                  />
+                                  <div className="flex gap-2 w-full justify-end p-2">
+                                    <button
+                                      onClick={() => setSelectedCommentId("")}
+                                      className="hover:bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs "
+                                    >
+                                      cancel
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        handleReply(videoData?._id, item?._id)
+                                      }
+                                      className="hover:bg-[#212121ab] bg-[#21212161] cursor-pointer text-[#fff] p-2 rounded-2xl px-3 text-xs "
+                                    >
+                                      Reply
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          {item?.replies?.map((reply) => {
+                            return (
+                              <div className="reply_more pl-9 mt-4">
+                                <div className="comment_box_reply flex gap-2 ">
+                                  <div className="comment_img w-7 h-7 shrink-0">
+                                    <img
+                                      className="w-full rounded-full h-full object-cover object-top"
+                                      src={videoData?.channel?.avatar}
+                                      alt=""
+                                    />
+                                  </div>
+                                  <div className=" flex gap-1 items-center">
+                                    <h4 className="text-xs"> @deepanshu</h4>
+                                    <small className="text-[9px] text-[#858585]">
+                                      1 Days ago
+                                    </small>
+                                  </div>
+                                </div>
+                                <div className="comment p-2 ">
+                                  <p className="text-xs pl-7">
+                                    {reply?.message}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </>
+                      );
+                    })
+                  : ""}
+
                 <div className="reply_more pl-9">
                   <div className="comment_box_reply flex gap-2 ">
                     <div className="comment_img w-7 h-7 shrink-0">

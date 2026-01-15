@@ -63,3 +63,73 @@ export const handleSaveBy = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+export const handleAddComment = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    const userId = req.userId;
+    const { message } = req.body;
+    if (!videoId || !userId || !message) {
+      return res.status(400).json({
+        message:
+          " videoId || userId || message is missing or undefined or null",
+      });
+    }
+    const video = await videos.findOne({ _id: videoId });
+
+    if (!video) {
+      return res.status(400).json({
+        message: "videoId not mached",
+      });
+    }
+    video?.comments.push({
+      author: userId,
+      message: message,
+    });
+
+    await video.save();
+    await video.populate("comments.author");
+
+    return res.status(200).json({ video });
+  } catch (error) {
+    console.log(`something wents wrong in handleAddComment fnc ${error}`);
+  }
+};
+export const handleAddReply = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    const userId = req.userId;
+    const { message, commentId } = req.body;
+    if (!videoId || !userId || !message || !commentId) {
+      return res.status(400).json({
+        message:
+          " videoId || userId || message || commentId  is missing or undefined or null",
+      });
+    }
+    const video = await videos.findOne({ _id: videoId });
+    if (!video) {
+      return res.status(400).json({
+        message: "videoId not matched",
+      });
+    }
+
+    const comment = video.comments.id(commentId);
+
+    if (!comment) {
+      return res.status(404).json({
+        message: "comment not found",
+      });
+    }
+
+    comment?.replies?.push({
+      author: userId,
+      message: message,
+    });
+    await video.save();
+    
+    await video.populate("comments.replies.author");
+
+    return res.status(200).json({ video });
+  } catch (error) {
+    console.log(error);
+  }
+};

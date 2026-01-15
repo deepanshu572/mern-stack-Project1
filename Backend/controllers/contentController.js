@@ -6,7 +6,7 @@ import channels from "../model/channelModel.js";
 
 export const getAllVideos = async (req, res) => {
   try {
-    const allVideos = await videos.find({}).populate("channel");
+    const allVideos = await videos.find({}).populate("channel").populate("comments.author");
     return res.status(200).json({ allVideos });
   } catch (error) {
     return res

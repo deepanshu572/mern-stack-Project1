@@ -23,7 +23,7 @@ const CustomAlert = () => {
   };
 
   return visible ? (
-    <div className="h-screen w-full flex items-start  z-[1080] justify-center fixed left-0 top-0 bg-[#00000072]">
+    <div className="h-screen w-full flex items-start  z-[1095] justify-center fixed left-0 top-0 bg-[#00000072]">
       <div className="flex_alert bg-[#202124] p-4 w-[18rem] h-[6rem] rounded-sm mt-5">
         <h3 className="pb-2 capitalize text-xs ">{msg}</h3>
         <div className="flex justify-end">
