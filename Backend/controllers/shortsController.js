@@ -88,6 +88,7 @@ export const handleAddComment = async (req, res) => {
 
     await short.save();
     await short.populate([
+      {path: "channel"},
       { path: "comments.author" },
       { path: "comments.replies.author" },
     ])
@@ -129,6 +130,7 @@ export const handleAddReply = async (req, res) => {
     });
     await short.save();
     await short.populate([
+      {path: "channel"},
       { path: "comments.author" },
       { path: "comments.replies.author" },
     ]);

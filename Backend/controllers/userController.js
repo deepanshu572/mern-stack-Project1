@@ -1,6 +1,7 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import channels from "../model/channelModel.js";
 import users from "../model/userModel.js";
+import videos from "../model/videoModel.js";
 
 export const getCurrentUser = async (req, res) => {
   try {
@@ -209,3 +210,14 @@ export const getSubscriptionData = async (req, res) => {
     });
   }
 };
+
+export const getLikedData = async (req,res) =>{
+  try{
+    const userId = req.userId;
+    
+    // const LikedData = await videos.filter((item)=> item?.like.)
+
+  }catch(error){
+    console.log(error)
+  }
+}

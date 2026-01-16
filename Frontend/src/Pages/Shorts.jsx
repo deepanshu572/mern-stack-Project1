@@ -228,7 +228,9 @@ const Shorts = () => {
       );
       console.log(data?.short?.comments);
 
-      setCommentData(data?.short?.comments);
+      setShortsData((prev) =>
+        prev.map((item) => (item?._id === shortId ? data?.short : item))
+      );
 
       setNewReply("");
     } catch (err) {
@@ -253,7 +255,7 @@ const Shorts = () => {
                 className="relative w-[420px] md:w-[250px] aspect-[9/16]  rounded-2xl overflow-hidden shadow-xl border border-gray-700 cursor-pointer"
               >
                 <video
-                  className="h-full hidden w-full object-cover"
+                  className="h-full w-full object-cover"
                   ref={(el) => (shortsRefs.current[index] = el)}
                   data-index={index}
                   playsInline
@@ -393,67 +395,70 @@ const Shorts = () => {
                       />
                       <button
                         onClick={() => handleComments(item?._id)}
-                        className="p-1 text-[9px]  px-3 rounded-sm backdrop-blur-xl bg-[#2f2f2fbd]"
+                        className="p-1 cursor-pointer text-[9px]  px-3 rounded-sm backdrop-blur-xl bg-[#2f2f2fbd]"
                       >
                         Post
                       </button>
                     </div>
-                    {[item?.comments].map((comment) => {
-                      console.log(comment , "comment ")
-                      return (
-                        <div div className=" px-2">
-                          <div className="comment_item pt-5 flex gap-1 items-center">
-                            <div className="comment_item_img w-6 rounded-full overflow-hidden  h-6">
-                              <img
-                                className="w-full h-full object-top object-cover"
-                                src={comment?.author?.image}
-                                alt=""
-                              />
-                            </div>
-                            <p className="text-[9px]">{comment?.message}</p>
-                            <RiShareForwardLine
-                              onClick={() => setSelectedCommentId(comment?._id)}
-                            />
-                          </div>
-                          {comment?.map((reply) => {
-                            return (
-                              <div className="comment_item pt-3 px-3 flex gap-1 items-center">
-                                <div className="comment_item_img w-6 rounded-full overflow-hidden  h-6">
-                                  <img
-                                    className="w-full h-full object-top object-cover"
-                                    src={reply?.author?.image}
-                                    alt=""
-                                  />
-                                </div>
-                                <p className="text-[9px]">{reply?.message}</p>
-                              </div>
-                            );
-                          })}
 
-                          {selectedCommentId === item?._id ? (
-                            <div className="comment_box flex justify-between items-center p-1 py-2 gap-1">
-                              <input
-                                type="text"
-                                onChange={(e) => setNewReply(e.target.value)}
-                                value={newReply}
-                                className="text-[10px] outline-0 w-full border-b border-b-gray-700 p-1 "
-                                placeholder="Add your reply..."
-                              />
-                              <button
+                    {Array.isArray(item?.comments) &&
+                      item?.comments.map((comment) => {
+                        return (
+                          <div div className=" px-2">
+                            <div className="comment_item pt-5 flex gap-1 items-center">
+                              <div className="comment_item_img w-6 rounded-full overflow-hidden  h-6">
+                                <img
+                                  className="w-full h-full object-top object-cover"
+                                  src={comment?.author?.image}
+                                  alt=""
+                                />
+                              </div>
+                              <p className="text-[9px]">{comment?.message}</p>
+                              <RiShareForwardLine
                                 onClick={() =>
-                                  handleReply(item?._id, comment?._id)
+                                  setSelectedCommentId(comment?._id)
                                 }
-                                className="p-1 text-[8px]  px-3 rounded-sm backdrop-blur-xl bg-[#2f2f2fbd]"
-                              >
-                                reply
-                              </button>
+                              />
                             </div>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      );
-                    })}
+                            {comment?.replies?.map((reply) => {
+                              return (
+                                <div className="comment_item pt-3 px-3 flex gap-1 items-center">
+                                  <div className="comment_item_img w-6 rounded-full overflow-hidden  h-6">
+                                    <img
+                                      className="w-full h-full object-top object-cover"
+                                      src={reply?.author?.image}
+                                      alt=""
+                                    />
+                                  </div>
+                                  <p className="text-[9px]">{reply?.message}</p>
+                                </div>
+                              );
+                            })}
+
+                            {selectedCommentId === comment?._id ? (
+                              <div className="comment_box flex justify-between items-center p-1 py-2 gap-1">
+                                <input
+                                  type="text"
+                                  onChange={(e) => setNewReply(e.target.value)}
+                                  value={newReply}
+                                  className="text-[10px] outline-0 w-full border-b border-b-gray-700 p-1 "
+                                  placeholder="Add your reply..."
+                                />
+                                <button
+                                  onClick={() =>
+                                    handleReply(item?._id, comment?._id)
+                                  }
+                                  className="p-1 text-[8px] cursor-pointer px-3 rounded-sm backdrop-blur-xl bg-[#2f2f2fbd]"
+                                >
+                                  reply
+                                </button>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               </div>
