@@ -211,13 +211,3 @@ export const getSubscriptionData = async (req, res) => {
   }
 };
 
-export const getLikedData = async (req,res) =>{
-  try{
-    const userId = req.userId;
-    
-    // const LikedData = await videos.filter((item)=> item?.like.)
-
-  }catch(error){
-    console.log(error)
-  }
-}

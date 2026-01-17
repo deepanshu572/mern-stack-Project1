@@ -8,7 +8,7 @@ import { MdMessage } from "react-icons/md";
 
 const ChannelCommunityCard = ({ data, channel }) => {
   return (
-    <div className="community_card bg-[#060606] rounded-xl border w-80 max-h-85 p-4 border-[#1a1a1a] ">
+    <div className="community_card bg-[#060606] rounded-xl border w-full sm:w-80 sm:max-h-85 p-4 border-[#1a1a1a] ">
       <div className="header_post flex items-start gap-2">
         <div className="left_post shrink-0 w-6 h-6 overflow-hidden rounded-full">
           <img

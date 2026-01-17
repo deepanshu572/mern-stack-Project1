@@ -24,6 +24,9 @@ import ChannelDetailPage from "./Pages/ChannelDetailPage";
 import { getAllChannel } from "./Hooks/getAllChannel";
 import Shorts from "./Pages/Shorts";
 import Subscription from "./Pages/Subscription";
+import SavedLikedData from "./Pages/SavedLikedData";
+import SavedContentData from "./Pages/SavedContentData";
+import SavedPlaylistData from './Pages/SavedPlaylistData'
 
 export const serverUrl = "http://localhost:8080";
 
@@ -51,7 +54,9 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/shorts" element={<Shorts />} />
         <Route path="/Subscription" element={<Subscription />} />
-        {/* <Route path="/likedvideo" element={<LikeVideo />} /> */}
+        <Route path="/likeData" element={<SavedLikedData />} />
+        <Route path="/savedData" element={<SavedContentData />} />
+        <Route path="/PlaylistData" element={<SavedPlaylistData />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />

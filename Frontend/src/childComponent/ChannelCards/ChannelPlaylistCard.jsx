@@ -1,12 +1,14 @@
 import React from "react";
 import { timeAgo } from "../../Utils/timeConvertor";
+import { IoBookmarksOutline } from "react-icons/io5";
+import { IoBookmarks } from "react-icons/io5";
 
 import { CgPlayListAdd } from "react-icons/cg";
 
 const ChannelPlaylistCard = ({ data, channel }) => {
   return (
     <div className="playlist_box">
-      <div className="playlist_item w-65 flex justify-center relative ">
+      <div className="playlist_item sm:w-65 flex justify-center relative ">
         <img  src={data?.selectedVideos?.[0]?.videoBanner} className="bg_playlist  rounded-xl blur-[0.6px]  h-full object-cover w-[87%] top-[-5px]   absolute z-2"/>
         <img  src={data?.selectedVideos?.[0]?.videoBanner} className="bg_playlist rounded-xl blur-[0.6px]  h-full object-cover w-[93%]   absolute z-2"/>
         <img src={data?.selectedVideos?.[0]?.videoBanner} className="w-full top-[5px] rounded-xl h-full object-cover relative z-4"/>
@@ -17,6 +19,11 @@ const ChannelPlaylistCard = ({ data, channel }) => {
           </div>
         </div>
         <div className="title_play mt-3">
+          {
+            1===2 ? <IoBookmarks/> : <IoBookmarksOutline/>
+          }
+          
+          
               <p className="text-[12px] title_elipse uppercase">{data?.title}</p>
                <p className="text-[10px] text-gray-500 ">Updated {timeAgo(data?.createdAt)}</p>
                <p  className="font-bold text-[10px] text-gray-500 ">View full playlist</p>

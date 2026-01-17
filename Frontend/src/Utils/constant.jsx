@@ -54,19 +54,19 @@ export const categories = [
     name: "Playlist",
     icon: <LuListVideo />,
     title: true,
-    route: "/playlist",
+    route: "/PlaylistData",
   },
   {
     name: "Saved video",
     icon: <PiVideo />,
-    route: "/savedvideo",
+    route: "/savedData",
   },
   {
     name: "Liked videos",
     icon: <BiLike />,
     divider: true,
     addData: true,
-    route: "/likedvideo",
+    route: "/likeData",
   },
 
   // { name: "Settings", icon: <FiSettings />, type: "menu" },

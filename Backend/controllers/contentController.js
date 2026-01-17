@@ -6,7 +6,11 @@ import channels from "../model/channelModel.js";
 
 export const getAllVideos = async (req, res) => {
   try {
-    const allVideos = await videos.find({}).populate("channel").populate("comments.author").populate("comments.replies.author");
+    const allVideos = await videos
+      .find({})
+      .populate("channel")
+      .populate("comments.author")
+      .populate("comments.replies.author");
     return res.status(200).json({ allVideos });
   } catch (error) {
     return res
@@ -16,7 +20,11 @@ export const getAllVideos = async (req, res) => {
 };
 export const getAllShorts = async (req, res) => {
   try {
-    const allShorts = await shorts.find({}).populate("channel").populate("comments.author").populate("comments.replies.author");
+    const allShorts = await shorts
+      .find({})
+      .populate("channel")
+      .populate("comments.author")
+      .populate("comments.replies.author");
     return res.status(200).json({ allShorts });
   } catch (error) {
     return res
@@ -26,9 +34,7 @@ export const getAllShorts = async (req, res) => {
 };
 export const getAllPlaylist = async (req, res) => {
   try {
-    const allPlaylist = await playlists
-      .find({})
-      .populate("channel");
+    const allPlaylist = await playlists.find({}).populate("channel");
     return res.status(200).json({ allPlaylist });
   } catch (error) {
     return res
@@ -44,5 +50,37 @@ export const getAllPost = async (req, res) => {
     return res
       .status(400)
       .json({ message: `getAllPost fnc error  : ${error}` });
+  }
+};
+
+export const getLikedData = async (req, res) => {
+  try {
+
+    console.log(req.userId);
+    const short = await shorts.find({ like: req.userId }).populate("channel");
+    const video = await videos.find({ like: req.userId }).populate("channel");
+
+    if(!video || !short){
+       return res.status(400).json({message : "video and short are not found !!!!"})
+    }
+    return res.status(200).json({ video ,  short})
+    // console.log(short , video);
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getSavedData = async (req, res) => {
+  try {
+
+    const short = await shorts.find({ saveBy: req.userId }).populate("channel");
+    const video = await videos.find({ saveBy: req.userId }).populate("channel");
+
+    if(!video || !short){
+       return res.status(400).json({message : "video and short are not found !!!!"})
+    }
+    return res.status(200).json({ video ,  short})
+    // console.log(short , video);
+  } catch (error) {
+    console.log(error);
   }
 };
