@@ -9,6 +9,7 @@ import contentRouter from "./routes/contentRoute.js";
 import channelRouter from "./routes/channelRoute.js";
 import shortsRouter from "./routes/shortsRoute.js";
 import videosRouter from "./routes/videosRoute.js";
+import playlistRouter from "./routes/playlistRoute.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -30,6 +31,7 @@ app.use("/api/content", contentRouter);
 app.use("/api/channel", channelRouter);
 app.use("/api/toggles", shortsRouter);
 app.use("/api/toggles", videosRouter);
+app.use("/api/toggles", playlistRouter);
 
 app.get("/", (req, res) => {
   res.send("done");

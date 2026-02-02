@@ -55,15 +55,16 @@ export const getAllPost = async (req, res) => {
 
 export const getLikedData = async (req, res) => {
   try {
-
     console.log(req.userId);
     const short = await shorts.find({ like: req.userId }).populate("channel");
     const video = await videos.find({ like: req.userId }).populate("channel");
 
-    if(!video || !short){
-       return res.status(400).json({message : "video and short are not found !!!!"})
+    if (!video || !short) {
+      return res
+        .status(400)
+        .json({ message: "video and short are not found !!!!" });
     }
-    return res.status(200).json({ video ,  short})
+    return res.status(200).json({ video, short });
     // console.log(short , video);
   } catch (error) {
     console.log(error);
@@ -71,15 +72,35 @@ export const getLikedData = async (req, res) => {
 };
 export const getSavedData = async (req, res) => {
   try {
-
     const short = await shorts.find({ saveBy: req.userId }).populate("channel");
     const video = await videos.find({ saveBy: req.userId }).populate("channel");
 
-    if(!video || !short){
-       return res.status(400).json({message : "video and short are not found !!!!"})
+    if (!video || !short) {
+      return res
+        .status(400)
+        .json({ message: "video and short are not found !!!!" });
     }
-    return res.status(200).json({ video ,  short})
+    return res.status(200).json({ video, short });
     // console.log(short , video);
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getSavedPlaylistData = async (req, res) => {
+  try {
+    const playlist = await playlists
+      .find({ saveBy: req.userId })
+      .populate("channel")
+      .populate({
+        path: "selectedVideos",
+        model: "video",
+      });
+
+    if (!playlist) {
+      return res.status(400).json({ message: "playlist are not found !!!!" });
+    }
+    console.log(playlist);
+    return res.status(200).json({ playlist });
   } catch (error) {
     console.log(error);
   }

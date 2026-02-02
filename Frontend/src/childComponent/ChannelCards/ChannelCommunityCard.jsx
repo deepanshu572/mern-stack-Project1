@@ -28,7 +28,7 @@ const ChannelCommunityCard = ({ data, channel }) => {
       </div>
       <h3 className="text-xs py-4 text-gray-300">{data?.description}</h3>
 
-      <div className="card_img w-full ">
+      <div className="card_img w-full h-40.5 ">
         <img
           className="w-full h-full object-contain"
           src={data?.image}

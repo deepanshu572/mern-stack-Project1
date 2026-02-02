@@ -148,7 +148,7 @@ const Channel = () => {
             ))}
           </div>
         </div>
-        <div className="channel_video p-3 flex gap-3 flex-wrap">
+        <div className="channel_video  p-3 flex gap-3 flex-wrap">
           {channelVideo?.length > 0 ? (
             channelVideo?.map((item, index) => {
               return <ChannelCard data={item} key={index} />;

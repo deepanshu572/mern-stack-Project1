@@ -20,15 +20,17 @@ import { getUserData } from "../redux/userSlice";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../config/firebase";
 import { toggleSidebar } from "../redux/toggleSlice";
+import { TbXboxX } from "react-icons/tb";
 
 const Header = () => {
-  
   const user = useSelector((state) => state.usersData.userData);
   const toggleFnc = useSelector((state) => state.toggle.toggle);
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(true);
+  const [togglemic, setTogglemic] = useState(false);
   const [mobileToggle, setMobileToggle] = useState(true);
   const [visible, setvisible] = useState(false);
+  const [searchQuery, setsearchQuery] = useState("");
   const navigate = useNavigate();
 
   const handleMobileToggle = () => {
@@ -49,6 +51,39 @@ const Header = () => {
   };
   const handleProfile = () => {
     setvisible(!visible);
+  };
+
+  const handlegoogleAuth = async () => {
+    try {
+      const res = await signInWithPopup(auth, provider);
+      const { displayName, email, photoURL } = res.user;
+      let username = displayName;
+      let data = await axios.post(
+        serverUrl + "/api/auth/googleauth",
+        {
+          username,
+          email,
+          image: photoURL,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+      dispatch(getUserData(data.data));
+      console.log(data, res, "google signin response");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const SearchQueryHandler = () => {
+    if (
+      event?.key == "Enter" ||
+      (event == "SerchButton" && searchQuery?.length > 0)
+    ) {
+      navigate(`/search/${searchQuery}`);
+    }
+    // navigate(`/search/${searchQuery}`);
   };
   const svg = (
     <svg
@@ -80,31 +115,52 @@ const Header = () => {
       </g>
     </svg>
   );
-  const handlegoogleAuth = async () => {
-    try {
-      const res = await signInWithPopup(auth, provider);
-      const { displayName, email, photoURL } = res.user;
-      let username = displayName;
-      let data = await axios.post(
-        serverUrl + "/api/auth/googleauth",
-        {
-          username,
-          email,
-          image: photoURL,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      dispatch(getUserData(data.data));
-      console.log(data, res, "google signin response");
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
+      <div
+        className={`${togglemic ? "block" : "hidden"}   transition-all duration-700 ease-in-out
+                    z-10
+                    ${
+                      1===1 ? " opacity-100" : " opacity-0 pointer-events-none"
+                    } fixed inset-0 bg-[#00000032] flex justify-center items-center z-[1090] backdrop-blur-sm`}
+      >
+        <div className="flex items-center flex-col justify-between bg-black hide_scroll w-[85%] h-[35%] p-5 rounded-xl overflow-hidden sm:w-1/3 sm:h-1/2 overflow-y-auto">
+        <div className="flex flex-col"> 
+          <TbXboxX/>
+         <p className="text-center">Speak or type your query </p>
+         
+         <div
+            className={` flex serch_wrap mt-4  items-center gap-3 sm:w-full border-1 border-[#242424] rounded-full overflow-hidden`}
+          >
+            <input
+              className={` ${
+                1===1 ? "bg-black text-[#fff]" : "text-black bg-[#fff]"
+              } text-[13px]  sm:block  border-0 outline-none  px-[17px] py-[4px] sm:w-full `}
+              type="text"
+              placeholder="Search"
+              onChange={(e) => setsearchQuery(e.target.value)}
+              value={searchQuery}
+              onKeyUp={() => SearchQueryHandler()}
+            />
+            <div className="serch bg-[#6f6f6f33] p-3 py-1.5 ">
+              <IoSearchOutline
+                className={`text-[20px] ${
+                  1===1 ? " text-[#fff]" : "text-black "
+                } `}
+              />
+            </div>
+          </div>
+          </div>
+        <div
+          className={`p-6 sm:p-4 rounded-full shadow-xl w-20 h-20 sm:w-15 sm:h-15 transition-all duration-300 transform hover:scale-110 bg-orange-500 hover:bg-orange-600 shadow-orange-500/40`}
+        >
+          <FaMicrophone className="w-full h-full" />
+        </div>
+
+        </div>
+      </div>
+
       {visible ? (
         <div
           onMouseMove={handleProfile}
@@ -116,7 +172,7 @@ const Header = () => {
       <div
         className={`top_nav top-0 z-[1090] flex items-center justify-between border-b border-b-[#1a1a1abd] ${
           toggle ? "bg-black text-[#fff]" : "text-black bg-[#fff]"
-        } gap-4 sm:justify-between px-[8px] py-[10px] sm:px-5 sm:py-[1rem] fixed w-full `}
+        } gap-4 sm:justify-between px-[12px] py-[10px] sm:px-5 sm:py-[1rem] fixed w-full `}
       >
         <div className="top_nav_left sm:mr-[10vw] flex lg:gap-5">
           <SlMenu
@@ -128,7 +184,7 @@ const Header = () => {
         </div>
         <div className="top_nav_middle  flex items-center gap-3 sm:w-1/3">
           <div
-            className={`serch_wrap flex items-center gap-3 sm:w-full border-1 border-[#242424] rounded-full overflow-hidden`}
+            className={`hidden sm:flex serch_wrap  items-center gap-3 sm:w-full border-1 border-[#242424] rounded-full overflow-hidden`}
           >
             <input
               className={` ${
@@ -136,9 +192,9 @@ const Header = () => {
               } text-[13px]  sm:block  border-0 outline-none px-[17px] py-[4px] sm:w-full `}
               type="text"
               placeholder="Search"
-              // onChange={(e) => SetsearchQuery(e.target.value)}
-              // onKeyUp={SearchQueryHandler}
-              // value={searchQuery}
+              onChange={(e) => setsearchQuery(e.target.value)}
+              value={searchQuery}
+              onKeyUp={() => SearchQueryHandler()}
             />
             <div className="serch bg-[#6f6f6f33] p-3 py-1.5 ">
               <IoSearchOutline
@@ -148,6 +204,13 @@ const Header = () => {
               />
             </div>
             {/* <SearchBar key={SearchRelatedData?.results?.value} data={SearchRelatedData} /> */}
+          </div>
+          <div className="serch  p-3 py-1.5 " onClick={()=>setTogglemic(true)}>
+            <IoSearchOutline
+              className={`text-[20px] ${
+                toggle ? " text-[#fff]" : "text-black "
+              } `}
+            />
           </div>
 
           <div

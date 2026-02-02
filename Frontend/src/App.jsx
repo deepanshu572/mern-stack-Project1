@@ -27,6 +27,8 @@ import Subscription from "./Pages/Subscription";
 import SavedLikedData from "./Pages/SavedLikedData";
 import SavedContentData from "./Pages/SavedContentData";
 import SavedPlaylistData from './Pages/SavedPlaylistData'
+import SearchResult from './Pages/SearchResult'
+import Profile from "./Pages/Profile";
 
 export const serverUrl = "http://localhost:8080";
 
@@ -59,8 +61,10 @@ const App = () => {
         <Route path="/PlaylistData" element={<SavedPlaylistData />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/video/:id" element={<VideoDetail />} />
+        <Route path="/search/:query" element={<SearchResult />} />
         <Route path="/CreateChannel" element={<CreateChannel />} />
         <Route path="/UpdateChannel" element={<UpdateChannel />} />
         <Route path="/viewChannel" element={<ViewChannelPage />} />

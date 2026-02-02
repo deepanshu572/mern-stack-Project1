@@ -43,8 +43,8 @@ const Login = () => {
     }
   };
   return (
-    <div className="flex w-full font1   h-screen items-center justify-center">
-      <div className="left rounded-bl-2xl rounded-tl-2xl  overflow-hidden relative  w-[20rem] h-[31.8rem] border border-[#292E3A]  ">
+    <div className="flex w-full font1 h-screen items-center justify-center">
+      <div className="left hidden md:block rounded-bl-2xl rounded-tl-2xl  overflow-hidden relative  w-[20rem] h-[31.8rem] border border-[#292E3A]  ">
         <div className="img w-full h-full">
           <img
             className="w-full h-full object-cover"
@@ -53,7 +53,7 @@ const Login = () => {
           />
         </div>
       </div>
-      <div className="register rounded-br-2xl rounded-tr-2xl w-[20rem] flex flex-col justify-center h-[31.8rem]  border border-[#292E3A] bg-[#020211]  p-5 py-2">
+      <div className="register w-full h-full rounded-br-2xl rounded-tr-2xl md:w-[20rem] flex flex-col justify-center md:h-[31.8rem]  border border-[#292E3A] bg-[#020211]  p-5 py-2">
         {/* <FaArrowLeft className="w-4 h-4" /> */}
         <h3 className="text-xl mb-0.5 ">Login </h3>
         <p className="text-[10px] text-gray-500 pb-3">
@@ -61,7 +61,7 @@ const Login = () => {
         </p>
         <form onSubmit={handleLogin} className="form flex flex-col gap-2">
           <div className="inp">
-            <label className="text-[13px] text-[#e4e2e2de] " htmlFor="Email">
+            <label className="text-[13px] text-[#e4e2e2de]" htmlFor="Email">
               {" "}
               Email
             </label>
@@ -115,7 +115,7 @@ const Login = () => {
           </div>
 
           <div className=" mt-1 ">
-            <button className="btn w-full p-2  rounded-sm py-2 text-xs flex items-center justify-center">
+            <button className={`btn w-full p-2  rounded-sm py-2 text-xs flex items-center justify-center ${load ? "opacity-50 cursor-not-allowed" : ""}`} disabled={load} type="submit">
               {load ? <Loader/> : "Login"}
             </button>
           </div>

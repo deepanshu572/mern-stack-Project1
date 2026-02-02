@@ -6,7 +6,8 @@ import {
   getAllPlaylist,
   getAllPost,
   getLikedData,
-  getSavedData
+  getSavedData,
+  getSavedPlaylistData
   
 } from "../controllers/contentController.js";
 
@@ -18,5 +19,6 @@ contentRouter.post("/allPlaylist", getAllPlaylist);
 contentRouter.post("/allPost", getAllPost);
 contentRouter.get("/likeData", isAuth , getLikedData);
 contentRouter.get("/savedData", isAuth , getSavedData);
+contentRouter.get("/playlistData", isAuth , getSavedPlaylistData);
 
 export default contentRouter;

@@ -434,8 +434,8 @@ const VideoDetail = () => {
                                 <div className="comment_img w-7 h-7 shrink-0">
                                   <img
                                     className="w-full rounded-full h-full object-cover object-top"
-                                    src={videoData?.channel?.avatar}
-                                    alt=""
+                                    src={user?.image}
+                                    alt={user?.image}
                                   />
                                 </div>
                                 <div className="comment_input w-full ">
@@ -471,6 +471,9 @@ const VideoDetail = () => {
                             ""
                           )}
                           {item?.replies?.map((reply) => {
+                            console.log("==================")
+                            console.log(reply) 
+                            console.log("==================")
                             return (
                               <div className="reply_more pl-9 mt-4">
                                 <div className="comment_box_reply flex gap-2 ">
@@ -482,9 +485,9 @@ const VideoDetail = () => {
                                     />
                                   </div>
                                   <div className=" flex gap-1 items-center">
-                                    <h4 className="text-xs"> @deepanshu</h4>
+                                    <h4 className="text-xs"> @ {reply?.author?.username}</h4>
                                     <small className="text-[9px] text-[#858585]">
-                                      1 Days ago
+                                      {timeAgo(reply?.createdAt)}
                                     </small>
                                   </div>
                                 </div>

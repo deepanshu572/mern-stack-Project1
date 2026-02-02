@@ -9,11 +9,15 @@ import ChannelPlaylistCard from "../childComponent/ChannelCards/ChannelPlaylistC
 import { getAllChannel } from "../Hooks/getAllChannel";
 import VideoCard from "../childComponent/VideoCard";
 import { FaXmark } from "react-icons/fa6";
+import axios from "axios";
+import { serverUrl } from "../App";
 
 const ChannelDetailPage = () => {
   getAllChannel();
   const { id } = useParams();
   const channels = useSelector((state) => state.channels.AllChannels);
+  const users = useSelector((state) => state.usersData.userData);
+  const [user, setUser] = useState();
   const [channelDetail, setChannelDetail] = useState();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedName, setSelectedName] = useState("Home");
@@ -31,12 +35,33 @@ const ChannelDetailPage = () => {
       setChannelDetail(AllChannel);
       console.log(AllChannel);
     }
+    if (users?.length > 0 || users !== null) {
+      setUser(users);
+    }
   }, [id]);
 
   const handlePlaylistVideos = (vidoesData, title) => {
     console.log(vidoesData, title);
-    setPlaylistVideos({vidoesData, title});
+    setPlaylistVideos({ vidoesData, title });
     settoggle(true);
+  };
+
+  const handlePlaylist = async (playlistId) => {
+    try {
+      const { data } = await axios.put(
+        `${serverUrl}/api/toggles/playlist/${playlistId}/save`,
+        {},
+        { withCredentials: true },
+      );
+      setChannelDetail((prev) => ({
+        ...prev,
+        playlists: prev.playlists.map((item) =>
+          item._id === playlistId ? data : item,
+        ),
+      }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const renderContent = (data, name, renderItem) => {
@@ -58,8 +83,8 @@ const ChannelDetailPage = () => {
   return (
     <div className="flex">
       <SideNav />
-      <div className="channel_wrap  w-full p-4 px-0 md:mt-[5rem] relative  ">
-        <div className="channel_banner w-full h-[231px] overflow-hidden rounded-2xl mb-5 ">
+      <div className="channel_wrap  w-full p-4 px-2 md:mt-[5rem] relative  ">
+        <div className="channel_banner w-full h-[240px] overflow-hidden rounded-2xl mb-5 ">
           {channelDetail?.bannerImage ? (
             <img
               className="w-full h-full object-cover"
@@ -138,9 +163,14 @@ const ChannelDetailPage = () => {
         >
           <div className=" bg-black hide_scroll  p-5 rounded-xl overflow-hidden sm:w-1/2 h-1/2 overflow-y-auto">
             <div className="flex justify-between border-b  pb-2 mb-4 border-b-gray-700 ">
-              <h3 className=" text-sm">PlayList Videos - {playlistVideos?.title} </h3>
+              <h3 className=" text-sm">
+                PlayList Videos - {playlistVideos?.title}{" "}
+              </h3>
 
-              <FaXmark className="cursor-pointer" onClick={() => settoggle(false)} />
+              <FaXmark
+                className="cursor-pointer"
+                onClick={() => settoggle(false)}
+              />
             </div>
 
             <div className="flex items-center flex-wrap justify-center ">
@@ -163,7 +193,7 @@ const ChannelDetailPage = () => {
           </div>
         </div>
 
-        <div className="channel_video p-3 mt-3 flex gap-3 flex-wrap relative">
+        <div className="channel_video  p-3 mt-3 flex gap-3 flex-wrap relative">
           {selectedName === "Home" &&
             renderContent(channelDetail?.videos, "Home", (item, index) => (
               <ChannelVideoCard
@@ -187,19 +217,19 @@ const ChannelDetailPage = () => {
               channelDetail?.playlists,
               "Playlists",
               (item, index) => (
-                <div
-                  className=""
-                  onClick={() =>
-                    handlePlaylistVideos(item?.selectedVideos , item?.title)
-                  }
-                >
+                <div className="">
                   <ChannelPlaylistCard
                     data={item}
                     channel={channelDetail}
                     key={index}
+                    user={user}
+                    action1={() =>
+                      handlePlaylistVideos(item?.selectedVideos, item?.title)
+                    }
+                    action2={() => handlePlaylist(item?._id)}
                   />
                 </div>
-              )
+              ),
             )}
 
           {selectedName === "Community" &&
@@ -212,7 +242,7 @@ const ChannelDetailPage = () => {
                   channel={channelDetail}
                   key={index}
                 />
-              )
+              ),
             )}
 
           {/* <div className="flex text-center h-[20rem] w-full items-center justify-center flex-col">

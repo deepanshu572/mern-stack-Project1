@@ -30,7 +30,7 @@ const SideNav = () => {
     <div
       className={`nav_side w-full  transition-all duration-700 ease-in-out ${
         MobileMenu ? " lg:w-[4rem] sm:w-[4rem]" : " lg:w-[15rem] sm:w-[14rem]"
-      }    md:relative  shrink-0   `}
+      }    md:relative  shrink-0 z-[999]  `}
     >
       <div
         className={`overflow-hidden  sm:side_nav fixed  z-10 sm:pt-[80px] lg:pt-[79px]  ${

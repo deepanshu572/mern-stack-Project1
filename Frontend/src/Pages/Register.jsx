@@ -10,6 +10,7 @@ import { MdOutlineCloudUpload } from "react-icons/md";
 import { alertHandler } from "../components/customAlert";
 import { useDispatch } from "react-redux";
 import { getUserData } from "../redux/userSlice";
+import Loader from "../childComponent/Loader";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const Register = () => {
     if (backendImage == "") {
       alertHandler("please upload your image !");
       return;
+      
     }
     if (password !== confirmPasword) {
       alertHandler("passord doen't match !");
@@ -60,7 +62,7 @@ const Register = () => {
       
       dispatch(getUserData(result?.data));
       navigate("/");
-              setload(false);
+      setload(false);
 
     } catch (error) {
       alertHandler(error.response.data.message);
@@ -70,7 +72,7 @@ const Register = () => {
   };
   return (
     <div className="flex w-full font1 h-screen items-center justify-center">
-       <div className="left rounded-bl-2xl rounded-tl-2xl overflow-hidden relative  w-[20rem] h-[31.8rem] border border-[#292E3A]  ">
+       <div className="left hidden md:block rounded-bl-2xl rounded-tl-2xl overflow-hidden relative  w-[20rem] h-[31.8rem] border border-[#292E3A]  ">
         {/* <div className="bg_cover absolute top-0 left-0 bg-[#00000071] w-full h-full">
 
         </div> */}
@@ -79,7 +81,7 @@ const Register = () => {
         </div>
      
       </div>
-      <div className="register rounded-br-2xl rounded-tr-2xl w-[20rem] h-[31.8rem] border border-[#292E3A]  bg-[#020211]  p-5 py-2">
+      <div className="register w-full h-full flex md:block flex-col justify-center rounded-br-2xl rounded-tr-2xl md:w-[20rem] md:h-[31.8rem] border border-[#292E3A]  bg-[#020211]  p-5 py-2">
         <h3 className="text-xl mb-0.5 ">Create an account</h3>
         <p className="text-[10px] text-gray-500 pb-3">
           Enter details to create an account
@@ -242,9 +244,10 @@ const Register = () => {
             </label>
           </div>
           <div className=" mt-1 ">
-            <button className="btn w-full p-2 rounded-sm py-2 text-xs">
-             {load ? "loading...." : "Create Account"}
-            </button>
+            <button className={`btn w-full p-2  rounded-sm py-2 text-xs flex items-center justify-center ${load ? "opacity-50 cursor-not-allowed" : ""}`} disabled={load} type="submit">
+                          {load ? <Loader/> : "Create Account"}
+                        </button>
+         
           </div>
           <div className="sec mb-1">
             <p className="text-center text-[11px] ">
