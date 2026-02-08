@@ -9,6 +9,13 @@ import { MdGroupAdd } from "react-icons/md";
 import { PiVideo } from "react-icons/pi";
 import { LuListVideo } from "react-icons/lu";
 import { BiLike } from "react-icons/bi";
+import { alertHandler } from "../components/customAlert";
+import axios from "axios";
+import { serverUrl } from "../App";
+import { getUserData } from "../redux/userSlice";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../config/firebase";
+import { useDispatch, useSelector } from "react-redux";
 
 const Profile = () => {
     const linkData = [
@@ -28,35 +35,69 @@ const Profile = () => {
     route: "/likeData",
   },
     ];
-  const handlegoogleAuth = () => {};
-  const logoutHandler = () => {};
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.usersData.userData);
+ console.log(user, "user data in profile");
+   const handlegoogleAuth = async () => {
+     try {
+       const res = await signInWithPopup(auth, provider);
+       const { displayName, email, photoURL } = res.user;
+       let username = displayName;
+       let data = await axios.post(
+         serverUrl + "/api/auth/googleauth",
+         {
+           username,
+           email,
+           image: photoURL,
+         },
+         {
+           withCredentials: true,
+         },
+       );
+       dispatch(getUserData(data.data));
+       console.log(data, res, "google signin response");
+     } catch (error) {
+       console.log(error);
+     }
+   };
+     const logoutHandler = async () => {
+       try {
+         let result = await axios.get(serverUrl + "/api/auth/logout", {
+           withCredentials: true,
+         });
+         dispatch(getUserData(null));
+         alertHandler(result.data.message);
+       } catch (error) {
+         console.log(error);
+       }
+     };
+ 
   return (
     <div className="flex w-full">
       <SideNav />
       <div className="profile p-4 mt-[7rem] w-full">
         <div className="profile_top flex items-center mb-6 gap-2 border-b border-gray-800 w-full px-2 pb-3">
-          <div className="profile_img w-20 h-20 rounded-full flex items-center justify-center">
-            <HiUserCircle className="w-18 h-18" />
-            {/* <img className='w-full h-full object-cover' src="" alt="" /> */}
+        
+          <div className="profile_img w-20 h-20 rounded-full overflow-hidden flex items-center justify-center">
+          {
+            user == null ? ( <HiUserCircle className="w-18 h-18" />) : (
+              <img className='w-full h-full object-cover object-top' src={user?.image} alt="Profile" />
+
+            )
+          }
           </div>
           <div className="text">
-            <h4>Deepanshu coder</h4>
-            <p className="text-gray-600 text-sm">krdeepanshu@gmail.com</p>
-            {1 == 1 ? (
-              <Link to={"/CreateChannel"}>
-                {" "}
-                <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">
-                  Create channel
-                </p>
-              </Link>
-            ) : (
-              <Link to={"/viewChannel"}>
-                {" "}
-                <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">
-                  View channel
-                </p>
-              </Link>
-            )}
+            <h4>{user?.username || "Guest User"}</h4>
+            <p className="text-gray-600 text-sm">{user?.email || ""}</p>
+            
+           {user && (
+            <Link to={user?.channel ? "/viewChannel" : "/CreateChannel"}>
+              <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">
+                {user?.channel ? "View channel" : "Create channel"}
+              </p>
+            </Link>
+          )}
+
           </div>
         </div>
         <div className="profile_slide overflow-x-auto flex gap-2 detail_login border-b border-gray-800 pb-6  ">
@@ -87,7 +128,8 @@ const Profile = () => {
             </div>
             <p className="text-[13px]">Signin With other account</p>
           </Link>
-          {(1 == 1) == null ? (
+          
+          {user == null ? (
             ""
           ) : (
             <div

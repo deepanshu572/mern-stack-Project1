@@ -59,19 +59,19 @@ const UploadShorts = () => {
   return (
     <div className="flex gap-3">
       <SideNav />
-      <div className="create w-full p-4 md:mt-[5rem] ">
+      <div className="create w-full p-4 mt-[3rem] mb-[4rem] md:mb-0 md:mt-[5rem] ">
         <h3 className="text-3xl font-bold">Upload Short</h3>
         <p className="text-xs pt-1 border-b border-[#393939e4] pb-2 text-[#5e5e5e]">
           Choose a video to upload from your device
         </p>
         <form
           onSubmit={handleUploadShort}
-          className="form m-4 flex w-full  gap-3 items-center"
+          className="form md:m-4 m-0 flex w-full  gap-3 items-center flex-wrap"
         >
-          <div className="left_box">
+          <div className="left_box w-full">
             <label
               htmlFor="uploadShort"
-              className="upload_form bg-[#0b0b0b61] h-85 w-64  border border-dashed border-[#5e5e5e4d] rounded-lg p-8 mt-4 flex flex-col items-center justify-center cursor-pointer hover:bg-[#111111af] transition-all duration-300 ease-in-out"
+              className="upload_form bg-[#0b0b0b61] w-full h-85 md:w-64  border border-dashed border-[#5e5e5e4d] rounded-lg p-8 mt-4 flex flex-col items-center justify-center cursor-pointer hover:bg-[#111111af] transition-all duration-300 ease-in-out"
             >
               <input
                 type="file"
@@ -109,7 +109,7 @@ const UploadShorts = () => {
               ></video> */}
             </label>
           </div>
-          <div className="right_box w-1/2 flex flex-col gap-4 ">
+          <div className="right_box w-full md:w-1/2 flex flex-col gap-4 ">
             <div className="inp">
               <label
                 htmlFor="title"

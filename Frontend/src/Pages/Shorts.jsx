@@ -14,7 +14,7 @@ import { FaRegBookmark } from "react-icons/fa";
 import { serverUrl } from "../App";
 import axios from "axios";
 import { getShorts } from "../redux/contentSlice";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import { getAllContentData } from "../Hooks/getAllContentData";
 import { GoX } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
@@ -22,6 +22,7 @@ import { RiShareForwardLine } from "react-icons/ri";
 const Shorts = () => {
   getAllContentData();
   const dispatch = useDispatch();
+  const { id } = useParams();
   const shorts = useSelector((state) => state.content.shorts);
   const users = useSelector((state) => state.usersData.userData);
   const channels = useSelector((state) => state.usersData.channelData);
@@ -40,10 +41,20 @@ const Shorts = () => {
   const shortsRefs = useRef([]);
 
   useEffect(() => {
-    if (shorts || shorts?.length > 0) {
+    if (!id) {
+      if (shorts || shorts?.length > 0) {
+        const shuffledRelatedShorts = [...shorts].sort(
+          () => Math.random() - 0.5,
+        );
+        setShortsData(shuffledRelatedShorts);
+      }
+    } else {
+      const filtershort = shorts?.filter((item) => item?._id === id);
       const shuffledRelatedShorts = [...shorts].sort(() => Math.random() - 0.5);
-      setShortsData(shuffledRelatedShorts);
+      const finalShorts = [...filtershort, ...shuffledRelatedShorts];
+      setShortsData(finalShorts);
     }
+
     if (users || users?.length > 0) {
       setUser(users);
     }
@@ -76,7 +87,7 @@ const Shorts = () => {
       },
       {
         threshold: 0.7, // 70% visible = play
-      }
+      },
     );
 
     shortsRefs.current.forEach((video) => {
@@ -106,7 +117,7 @@ const Shorts = () => {
       const { data } = await axios.put(
         `${serverUrl}/api/toggles/short/${shortId}/likeToggle`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       const updatedShorts = shorts.map((item) => {
@@ -131,7 +142,7 @@ const Shorts = () => {
       const { data } = await axios.put(
         `${serverUrl}/api/toggles/short/${shortId}/DislikeToggle`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       const updatedShorts = shorts.map((item) => {
         if (item._id.toString() === shortId) {
@@ -155,7 +166,7 @@ const Shorts = () => {
       const { data } = await axios.put(
         `${serverUrl}/api/toggles/short/${shortId}/saveShort`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       const updatedShorts = shorts.map((item) => {
         if (item._id.toString() === shortId) {
@@ -179,7 +190,7 @@ const Shorts = () => {
       const { data, user } = await axios.post(
         `${serverUrl}/api/users/subscribe`,
         { channelId },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       const updatedShorts = shortsData.map((item) => {
@@ -207,11 +218,11 @@ const Shorts = () => {
       const { data } = await axios.post(
         `${serverUrl}/api/toggles/short/${shortId}/AddComment`,
         { message: newComment },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       console.log(data);
       setShortsData((prev) =>
-        prev.map((item) => (item?._id === shortId ? data?.short : item))
+        prev.map((item) => (item?._id === shortId ? data?.short : item)),
       );
       // setCommentData(data?.short?.comments);
       setNewComment("");
@@ -224,12 +235,12 @@ const Shorts = () => {
       const { data } = await axios.post(
         `${serverUrl}/api/toggles/short/${shortId}/AddReply`,
         { message: newReply, commentId },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       console.log(data?.short?.comments);
 
       setShortsData((prev) =>
-        prev.map((item) => (item?._id === shortId ? data?.short : item))
+        prev.map((item) => (item?._id === shortId ? data?.short : item)),
       );
 
       setNewReply("");
@@ -240,19 +251,16 @@ const Shorts = () => {
   useEffect(() => {
     console.log(shortsData);
   }, [shortsData]);
-
-  // console.log(shortsData);
-
   return (
     <div className="flex">
       <SideNav />
-      <div className=" hide_scroll w-full h-[85vh] overflow-y-scroll snap-y snap-mandatory p-4 md:mt-[5rem]">
+      <div className=" hide_scroll w-full p-0   h-[85vh] overflow-y-scroll snap-y snap-mandatory md:p-4 mt-[3rem] md:mt-[5rem]">
         {shortsData?.map((item, index) => {
           return (
-            <div className="min-h-full w-full flex md:items-center items-start justify-center snap-start relative pt-[40px] md:pt-[0px] mt-[3rem] ">
+            <div className="md:min-h-full w-full h-full flex md:items-center items-start justify-center snap-start relative  md:pt-[0px] mt-[3rem] ">
               <div
                 onClick={() => togglePlayPause(index)}
-                className="relative w-[420px] md:w-[250px] aspect-[9/16]  rounded-2xl overflow-hidden shadow-xl border border-gray-700 cursor-pointer"
+                className="relative w-full h-full md:w-[250px] aspect-[9/16]  md:rounded-2xl overflow-hidden md:shadow-xl md:border md:border-gray-700 cursor-pointer"
               >
                 <video
                   className="h-full w-full object-cover"

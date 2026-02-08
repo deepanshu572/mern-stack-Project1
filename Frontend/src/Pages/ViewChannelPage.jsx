@@ -57,7 +57,7 @@ const ViewChannelPage = () => {
             </div>
 
             <h3 className="font-bold">Create content on any device</h3>
-            <p className="text-xs text-[#5e5e5e]">
+            <p className="text-xs text-center text-[#5e5e5e]">
               Upload and record at home or on the go. Everything you make public
               will appear here.
             </p>

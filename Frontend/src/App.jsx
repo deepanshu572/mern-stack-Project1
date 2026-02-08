@@ -1,9 +1,9 @@
-import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Home from "./Pages/home";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
-import CustomAlert from "./components/customAlert";
+import CustomAlert, { alertHandler } from "./components/customAlert";
 import Header from "./components/Header";
 import "./app.css";
 import SideNav from "./components/SideNav";
@@ -26,11 +26,21 @@ import Shorts from "./Pages/Shorts";
 import Subscription from "./Pages/Subscription";
 import SavedLikedData from "./Pages/SavedLikedData";
 import SavedContentData from "./Pages/SavedContentData";
-import SavedPlaylistData from './Pages/SavedPlaylistData'
-import SearchResult from './Pages/SearchResult'
+import SavedPlaylistData from "./Pages/SavedPlaylistData";
+import SearchResult from "./Pages/SearchResult";
 import Profile from "./Pages/Profile";
+import { useSelector } from "react-redux";
 
 export const serverUrl = "http://localhost:8080";
+
+const ProtectRoute = ({ userData, children }) => {
+  console.log(userData);
+  if (userData == null) {
+    alertHandler("Please login to access this page");
+    return <Navigate to="/" />;
+  }
+  return children;
+};
 
 const App = () => {
   const location = useLocation();
@@ -46,6 +56,7 @@ const App = () => {
   getAllChannel();
   getAllContentData();
 
+  const {userData} = useSelector((state) => state.usersData);
   return (
     <>
       {!hideLayout2 && <Header />}
@@ -54,22 +65,79 @@ const App = () => {
       <CustomAlert />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/shorts" element={<Shorts />} />
-        <Route path="/Subscription" element={<Subscription />} />
-        <Route path="/likeData" element={<SavedLikedData />} />
-        <Route path="/savedData" element={<SavedContentData />} />
-        <Route path="/PlaylistData" element={<SavedPlaylistData />} />
+        <Route
+          path="/shorts"
+          element={
+            <ProtectRoute userData={userData}>
+              <Shorts />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/shorts/:id"
+          element={
+            <ProtectRoute userData={userData}>
+              <Shorts />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/Subscription"
+          element={
+            <ProtectRoute userData={userData}>
+              <Subscription />{" "}
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/likeData"
+          element={
+            <ProtectRoute userData={userData}>
+              <SavedLikedData />{" "}
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/savedData"
+          element={
+            <ProtectRoute userData={userData}>
+              <SavedContentData />{" "}
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path="/PlaylistData"
+          element={
+            <ProtectRoute userData={userData}>
+              <SavedPlaylistData />{" "}
+            </ProtectRoute>
+          }
+        />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/video/:id" element={<VideoDetail />} />
+        <Route
+          path="/video/:id"
+          element={
+            <ProtectRoute userData={userData}>
+              <VideoDetail />
+            </ProtectRoute>
+          }
+        />
         <Route path="/search/:query" element={<SearchResult />} />
         <Route path="/CreateChannel" element={<CreateChannel />} />
         <Route path="/UpdateChannel" element={<UpdateChannel />} />
         <Route path="/viewChannel" element={<ViewChannelPage />} />
         <Route path="/ChannelDetail/:id" element={<ChannelDetailPage />} />
-        <Route path="/create" element={<CreatePage />} />
+        <Route
+          path="/create"
+          element={
+            <ProtectRoute userData={userData}>
+              <CreatePage />{" "}
+            </ProtectRoute>
+          }
+        />
         <Route path="/create/video" element={<UploadVideo />} />
         <Route path="/create/shorts" element={<UploadShorts />} />
         <Route

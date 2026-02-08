@@ -25,6 +25,7 @@ const SideNav = () => {
       setuserChannel(user);
     }
   }, [user]);
+  console.log(userChannel, "user channel in sidenav");
 
   return (
     <div
@@ -70,7 +71,7 @@ const SideNav = () => {
                   MobileMenu={MobileMenu}
                   DataId={val.DataId}
                   somename={
-                    location.pathname === val.route ? "bg-[#161616]" : ""
+                    location.pathname === val.route ? "md:bg-[#161616]" : ""
                   }
                   action={() => navigate(val.route)}
                 />

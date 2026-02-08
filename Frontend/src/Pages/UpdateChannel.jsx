@@ -76,7 +76,7 @@ const UpdateChannel = () => {
   return (
     <div className="flex items-center justify-center h-screen w-full">
       {step === 1 && (
-        <div className="flex flex-col w-1/3 bg-[#11101096] p-4 rounded-md">
+        <div className="flex flex-col w-full md:w-1/3 md:bg-[#11101096] p-4 rounded-md">
           <h2>Customize Channel</h2>
           <p className="text-xs mb-2 text-[#5e5e5e]">
             update your profile picture, channel name.
@@ -148,7 +148,7 @@ const UpdateChannel = () => {
         </div>
       )}
       {step === 2 && (
-        <div className="flex flex-col w-1/3 bg-[#11101096] p-4 rounded-md">
+        <div className="flex flex-col  w-full md:w-1/3 md:bg-[#11101096] p-4 rounded-md">
           <h2>How you’ll appear</h2>
           <p className="text-xs mb-2 text-[#5e5e5e]">
             Choose a profile picture, channel name.
@@ -190,7 +190,7 @@ const UpdateChannel = () => {
         </div>
       )}
       {step === 3 && (
-        <div className="flex flex-col w-1/3 bg-[#11101096] p-4 rounded-md">
+        <div className="flex flex-col  w-full md:w-1/3 md:bg-[#11101096] p-4 rounded-md">
           <h2>How you’ll appear</h2>
           <p className="text-xs mb-2 text-[#5e5e5e]">
             Choose a banner, channel name.

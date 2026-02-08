@@ -1,11 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { serverUrl } from "../App";
+import axios from "axios";
 
-const VideoCard = ({ id, image, video, views, title, description , channel}) => {
+const VideoCard = ({
+  id,
+  image,
+  video,
+  views,
+  title,
+  description,
+  channel,
+}) => {
+  const handleViews = async (id) => {
+    try {
+      const { data } = await axios.put(
+          `${serverUrl}/api/toggles/video/${id}/AddViews`,
+          {},
+          { withCredentials: true }
+        );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+   const handleDisLikes = async (videoId) => {
+      try {
+        const { data } = await axios.put(
+          `${serverUrl}/api/toggles/video/${videoId}/DislikeToggle`,
+          {},
+          { withCredentials: true }
+        );
+  
+      
+      } catch (error) {
+        console.log(error);
+      }
+    };
   return (
     <>
       <Link
         to={`/video/${id}`}
+        onClick={() => handleViews(id)}
         className="card p-1 w-[25rem]   sm:w-[31vw] lg:w-[15rem]  "
       >
         <div className="card_video w-full h-[14rem] sm:w-full sm:h-[8rem]  overflow-hidden self-center rounded-[10px]">

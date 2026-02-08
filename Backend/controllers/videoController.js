@@ -90,7 +90,7 @@ export const handleAddComment = async (req, res) => {
     await video.populate([
       { path: "comments.author" },
       { path: "comments.replies.author" },
-    ])
+    ]);
 
     return res.status(200).json({ video });
   } catch (error) {
@@ -136,5 +136,25 @@ export const handleAddReply = async (req, res) => {
     return res.status(200).json({ video });
   } catch (error) {
     console.log(error);
+  }
+};
+export const handleAddViews = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    const userId = req.userId;
+    const video = await videos.findOne({_id : videoId});
+     if(!video){
+      return res.status(400).json({
+        message : "Video not found !"
+      })
+     }
+     video.views +=1;
+     await video.save();
+     return res.status(200).json({video});
+
+  } catch (err) {
+    return res.status(400).json({
+        message : "somthing wents wrong in handleAddViews fnc"
+      })
   }
 };

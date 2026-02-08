@@ -58,7 +58,7 @@ const UploadPlaylistVideos = () => {
   return (
     <div className="flex gap-3">
       <SideNav />
-      <div className="create w-full p-4 md:mt-[5rem] ">
+      <div className="create mt-[3rem] mb-[5rem] md:mb-0 w-full p-4 md:mt-[5rem] ">
         <h3 className="text-3xl font-bold">Create New Playlist</h3>
         <p className="text-xs pt-1 border-b border-[#393939e4] pb-2 text-[#5e5e5e]">
           Add videos to your new playlist
@@ -105,12 +105,12 @@ const UploadPlaylistVideos = () => {
           </div>
           <div className="select_vid">
             <h3>Select Videos</h3>
-            <div className="flex items-center justify-start flex-wrap">
+            <div className="flex items-center justify-start md:flex-wrap overflow-x-auto ">
               {channel?.videos?.map((item) => {
                 return (
                   <label
                     htmlFor={`videos${item?._id}`}
-                    className="box_select p-2 pt-8"
+                    className="box_select p-2 pt-8 shrink-0"
                   >
                     <input
                       type="checkbox"

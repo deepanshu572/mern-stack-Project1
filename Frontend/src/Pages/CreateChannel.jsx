@@ -68,7 +68,7 @@ const CreateChannel = () => {
   return (
     <div className="flex items-center justify-center h-screen w-full">
       {step === 1 && (
-        <div className="flex flex-col w-1/3 bg-[#11101096] p-4 rounded-md">
+        <div className="flex flex-col  w-full md:w-1/3 md:bg-[#11101096] p-4 rounded-md">
           <h2>How you’ll appear</h2>
           <p className="text-xs mb-2 text-[#5e5e5e]">
             Choose a profile picture, channel name.
@@ -140,7 +140,7 @@ const CreateChannel = () => {
         </div>
       )}
       {step === 2 && (
-        <div className="flex flex-col w-1/3 bg-[#11101096] p-4 rounded-md">
+        <div className="flex flex-col  w-full md:w-1/3 md:bg-[#11101096] p-4 rounded-md">
           <h2>How you’ll appear</h2>
           <p className="text-xs mb-2 text-[#5e5e5e]">
             Choose a profile picture, channel name.
@@ -182,7 +182,7 @@ const CreateChannel = () => {
         </div>
       )}
       {step === 3 && (
-        <div className="flex flex-col w-1/3 bg-[#11101096] p-4 rounded-md">
+        <div className="flex flex-col  w-full md:w-1/3 md:bg-[#11101096] p-4 rounded-md">
           <h2>How you’ll appear</h2>
           <p className="text-xs mb-2 text-[#5e5e5e]">
             Choose a banner, channel name.
@@ -257,7 +257,7 @@ const CreateChannel = () => {
                 Back
               </Link>
               <button className=" bg-[green] text-xs w-1/2 rounded-sm px-[8px] py-[8px]  cursor-pointer  transition-all duration-300 ease-in-out">
-                Create
+                {load ? <Loader /> : "Update"}
               </button>
             </div>
           </form>

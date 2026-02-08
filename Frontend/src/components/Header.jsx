@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoSearchOutline } from "react-icons/io5";
 import { RiVideoAddFill } from "react-icons/ri";
 import { FaPlus } from "react-icons/fa6";
+import { HiUserCircle } from "react-icons/hi2";
 
 import { SlMenu } from "react-icons/sl";
 import { MdGroupAdd } from "react-icons/md";
@@ -24,6 +25,7 @@ import { TbXboxX } from "react-icons/tb";
 
 const Header = () => {
   const user = useSelector((state) => state.usersData.userData);
+  
   const toggleFnc = useSelector((state) => state.toggle.toggle);
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(true);
@@ -82,6 +84,7 @@ const Header = () => {
       (event == "SerchButton" && searchQuery?.length > 0)
     ) {
       navigate(`/search/${searchQuery}`);
+      setTogglemic(false)
     }
     // navigate(`/search/${searchQuery}`);
   };
@@ -124,10 +127,9 @@ const Header = () => {
                     ${
                       1===1 ? " opacity-100" : " opacity-0 pointer-events-none"
                     } fixed inset-0 bg-[#00000032] flex justify-center items-center z-[1090] backdrop-blur-sm`}
-      >
+      onClick={()=>setTogglemic(false)} >
         <div className="flex items-center flex-col justify-between bg-black hide_scroll w-[85%] h-[35%] p-5 rounded-xl overflow-hidden sm:w-1/3 sm:h-1/2 overflow-y-auto">
         <div className="flex flex-col"> 
-          <TbXboxX/>
          <p className="text-center">Speak or type your query </p>
          
          <div
@@ -232,7 +234,9 @@ const Header = () => {
           {/* <div className="hidden sm:inline"> </div> */}
           <div className="profile w-10 h-10" onClick={handleProfile}>
             {user == null ? (
-              <div className="w-full h-full bg-gray-600 rounded-full"></div>
+              <div className="w-full h-full rounded-full">
+                 <HiUserCircle className="w-full h-full" />
+              </div>
             ) : (
               <img
                 className="w-full h-full object-cover rounded-full object-top"
@@ -244,7 +248,7 @@ const Header = () => {
           {visible ? (
             <div className="absolute top-14  rounded-sm right-5 bg-[#212121]">
               {user == null ? (
-                ""
+               ''
               ) : (
                 <div className="detail flex gap-2 p-3 border-b border-b-[#373737bd]">
                   <div className="detail_img w-10 h-10 ">

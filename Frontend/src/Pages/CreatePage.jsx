@@ -47,7 +47,7 @@ const CreatePage = () => {
   return (
     <div className="flex gap-3">
     <SideNav/>
-    <div className="create p-4   h-screen md:mt-[5rem]">
+    <div className="create p-4 mt-[3rem]  h-screen md:mt-[5rem]">
       <h3 className="text-3xl font-bold">Create</h3>
       <p className="text-xs pt-1 border-b border-[#393939e4] pb-2 text-[#5e5e5e]">
         Choose what type of content you want to create for your audience
@@ -63,12 +63,12 @@ const CreatePage = () => {
                 (path === val.path ? " border-[#9f9f9fb0]" : "")
               }
             >
-              <div className="uploads_img w-12 h-12 p-3.5 bg-[#5e5e5e1a] flex items-center justify-center rounded-full">
+              <div className="uploads_img md:w-12 md:h-12 w-15 h-15  p-3.5 bg-[#5e5e5e1a] flex items-center justify-center rounded-full">
                 {val.icon}
               </div>
               <div className="upload_text">
-                <h3 className="text-xl font-semibold">{val.title}</h3>
-                <p className="text-xs text-[#5e5e5e]">{val.desc}</p>
+                <h3 className="md:text-xl text-sm font-semibold">{val.title}</h3>
+                <p className="text-xs hidden md:block text-[#5e5e5e]">{val.desc}</p>
               </div>
             </div>
           );
@@ -85,8 +85,8 @@ const CreatePage = () => {
 
         {path !== null ? (
           <>
-            <h3 className="font-bold">Ready to create?</h3>
-            <p className="text-xs text-[#5e5e5e]">
+            <h3 className="font-bold text-center">Ready to create?</h3>
+            <p className="text-xs text-center text-[#5e5e5e]">
                click the create button to start creating content
             </p>
 
@@ -99,8 +99,8 @@ const CreatePage = () => {
           </>
         ) : (
           <>
-            <h3 className="font-bold">Create content on any device</h3>
-            <p className="text-xs text-[#5e5e5e]">
+            <h3 className="font-bold text-center">Create content on any device</h3>
+            <p className="text-xs text-center text-[#5e5e5e]">
               Upload and record at home or on the go. Everything you make public
               will appear here.
             </p>
