@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
-const RelatedVideoData = ({ data }) => {
+const RelatedVideoData = ({ data,action }) => {
   return (
     <Link
       className={`card flex items-center gap-0 sm:gap-[14px] px-[0] sm:p-[2px] sm:px-4 py-[5px] flex-col sm:flex-row `}
       to={`/video/${data?._id}`}
+       onClick={()=>action(data?._id)}
+
       data-discover="true"
     >
       <div className="card_video w-[95%] h-[200px] sm:w-[169px] sm:h-[95px] rounded-[8px] flex-shrink-0  overflow-hidden self-center">

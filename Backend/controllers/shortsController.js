@@ -88,10 +88,10 @@ export const handleAddComment = async (req, res) => {
 
     await short.save();
     await short.populate([
-      {path: "channel"},
+      { path: "channel" },
       { path: "comments.author" },
       { path: "comments.replies.author" },
-    ])
+    ]);
 
     return res.status(200).json({ short });
   } catch (error) {
@@ -130,7 +130,7 @@ export const handleAddReply = async (req, res) => {
     });
     await short.save();
     await short.populate([
-      {path: "channel"},
+      { path: "channel" },
       { path: "comments.author" },
       { path: "comments.replies.author" },
     ]);
@@ -138,5 +138,25 @@ export const handleAddReply = async (req, res) => {
     return res.status(200).json({ short });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const handleAddViews = async (req, res) => {
+  try {
+    const { shortId } = req.params;
+    const short = await shorts.findOne({ _id: shortId });
+    if (!short) {
+      return res
+        .status(400)
+        .json("shorts not found! in  shorts controller handleAddViews fnc");
+    }
+    // console.log(short)
+    short.views += 1;
+    await short.save();
+    return res.status(200).json({ short });
+  } catch (err) {
+    return res
+      .status(400)
+      .json("somthing wents wrong in  shorts controller handleAddViews fnc"+ err);
   }
 };

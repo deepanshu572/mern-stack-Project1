@@ -30,6 +30,7 @@ import SavedPlaylistData from "./Pages/SavedPlaylistData";
 import SearchResult from "./Pages/SearchResult";
 import Profile from "./Pages/Profile";
 import { useSelector } from "react-redux";
+import YtDashboard from "./Pages/YtDashboard";
 
 export const serverUrl = "http://localhost:8080";
 
@@ -48,6 +49,7 @@ const App = () => {
   const hideLayout2 =
     location.pathname === "/register" ||
     location.pathname === "/login" ||
+    location.pathname === "/dashboard" ||
     location.pathname === "/forgotpassword" ||
     location.pathname === "/CreateChannel";
 
@@ -145,6 +147,7 @@ const App = () => {
           element={<UploadCommunityPost />}
         />
         <Route path="/create/playlist" element={<UploadPlaylistVideos />} />
+        <Route path="/dashboard" element={<YtDashboard />} />
       </Routes>
     </>
   );

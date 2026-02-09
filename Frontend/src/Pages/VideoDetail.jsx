@@ -9,10 +9,10 @@ import { PiVideo } from "react-icons/pi";
 import { timeAgo } from "../Utils/timeConvertor";
 import { FaBookmark } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import RelatedVideoData from "../childComponent/VideoDetail/RelatedVideoData";
 import ChannelShortsCard from "../childComponent/ChannelCards/ChannelShortsCard";
-import { getVideos } from "../redux/contentSlice";
+import { getShorts, getVideos } from "../redux/contentSlice";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { getAllContentData } from "../Hooks/getAllContentData";
@@ -20,7 +20,6 @@ import { BiSolidLike } from "react-icons/bi";
 import { BiSolidDislike } from "react-icons/bi";
 
 const VideoDetail = () => {
-  getAllContentData();
   const videos = useSelector((state) => state.content.videos);
   const shorts = useSelector((state) => state.content.shorts);
   const users = useSelector((state) => state.usersData.userData);
@@ -37,6 +36,8 @@ const VideoDetail = () => {
   const [selectedCommentId, setSelectedCommentId] = useState([]);
   const { toggle, Settoggle } = useState(true);
   const { id } = useParams();
+
+      const dispatch = useDispatch();
 
   useEffect(() => {
     if (videos?.length > 0 || videos !== null) {
@@ -194,8 +195,46 @@ const VideoDetail = () => {
       console.log(err);
     }
   };
+  const handleVideoViews = async (id) => {
+    try {
+      const { data } = await axios.put(
+        `${serverUrl}/api/toggles/video/${id}/AddViews`,
+        {},
+        { withCredentials: true },
+      );
+       const updatedVideos = videos.map((item) =>
+      item._id === id
+        ? { ...item, views: data?.video?.views }
+        : item
+    );
+    console.log(updatedVideos)
+      dispatch(getVideos(updatedVideos));
+      setRelatedVideo(updatedVideos)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleShortViews = async (id) => {
+    try {
+      const { data } = await axios.put(
+        `${serverUrl}/api/toggles/short/${id}/AddViews`,
+        {},
+        { withCredentials: true },
+      );
+      console.log(data)
+       const updatedShorts = shorts.map((item) =>
+      item._id === id
+        ? { ...item, views: data?.short?.views }
+        : item
+    );
 
-  console.log(commentData);
+      dispatch(getShorts(updatedShorts));
+      setRelatedshorts(updatedShorts)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 
   return (
     <>
@@ -517,6 +556,7 @@ const VideoDetail = () => {
               {relatedshorts?.map((item, index) => {
                 return (
                   <ChannelShortsCard
+                    action={handleShortViews}
                     data={item}
                     key={index}
                     channel={item?.channel}
@@ -529,7 +569,7 @@ const VideoDetail = () => {
               <PiVideo className="fill-[#FF0033] w-6 h-8" /> Related Videos
             </h4>
             {relatedVideo?.map((item, index) => {
-              return <RelatedVideoData data={item} key={index} />;
+              return <RelatedVideoData data={item} action={handleVideoViews} key={index} />;
             })}
           </div>
         </div>
