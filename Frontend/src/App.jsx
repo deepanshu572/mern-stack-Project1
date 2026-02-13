@@ -31,6 +31,7 @@ import SearchResult from "./Pages/SearchResult";
 import Profile from "./Pages/Profile";
 import { useSelector } from "react-redux";
 import YtDashboard from "./Pages/YtDashboard";
+import ContentDashBoard from "./childComponent/ContentDashBoard";
 
 export const serverUrl = "http://localhost:8080";
 

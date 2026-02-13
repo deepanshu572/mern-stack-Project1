@@ -6,10 +6,12 @@ import { serverUrl } from "../App";
 import { alertHandler } from "../components/customAlert";
 import { useDispatch } from "react-redux";
 import { getChannelData, getUserData } from "../redux/userSlice";
+import Loader from "../childComponent/Loader";
 
 const CreateChannel = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [load, setload] = useState(false);
 
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState("");

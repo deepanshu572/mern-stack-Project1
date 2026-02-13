@@ -5,7 +5,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import { RiVideoAddFill } from "react-icons/ri";
 import { FaPlus } from "react-icons/fa6";
 import { HiUserCircle } from "react-icons/hi2";
-
+import studio from "../../public/img/studio.png";
 import { SlMenu } from "react-icons/sl";
 import { MdGroupAdd } from "react-icons/md";
 
@@ -25,7 +25,7 @@ import { TbXboxX } from "react-icons/tb";
 
 const Header = () => {
   const user = useSelector((state) => state.usersData.userData);
-  
+
   const toggleFnc = useSelector((state) => state.toggle.toggle);
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(true);
@@ -84,7 +84,7 @@ const Header = () => {
       (event == "SerchButton" && searchQuery?.length > 0)
     ) {
       navigate(`/search/${searchQuery}`);
-      setTogglemic(false)
+      setTogglemic(false);
     }
     // navigate(`/search/${searchQuery}`);
   };
@@ -125,41 +125,43 @@ const Header = () => {
         className={`${togglemic ? "block" : "hidden"}   transition-all duration-700 ease-in-out
                     z-10
                     ${
-                      1===1 ? " opacity-100" : " opacity-0 pointer-events-none"
+                      1 === 1
+                        ? " opacity-100"
+                        : " opacity-0 pointer-events-none"
                     } fixed inset-0 bg-[#00000032] flex justify-center items-center z-[1090] backdrop-blur-sm`}
-      onClick={()=>setTogglemic(false)} >
+        onClick={() => setTogglemic(false)}
+      >
         <div className="flex items-center flex-col justify-between bg-black hide_scroll w-[85%] h-[35%] p-5 rounded-xl overflow-hidden sm:w-1/3 sm:h-1/2 overflow-y-auto">
-        <div className="flex flex-col"> 
-         <p className="text-center">Speak or type your query </p>
-         
-         <div
-            className={` flex serch_wrap mt-4  items-center gap-3 sm:w-full border-1 border-[#242424] rounded-full overflow-hidden`}
-          >
-            <input
-              className={` ${
-                1===1 ? "bg-black text-[#fff]" : "text-black bg-[#fff]"
-              } text-[13px]  sm:block  border-0 outline-none  px-[17px] py-[4px] sm:w-full `}
-              type="text"
-              placeholder="Search"
-              onChange={(e) => setsearchQuery(e.target.value)}
-              value={searchQuery}
-              onKeyUp={() => SearchQueryHandler()}
-            />
-            <div className="serch bg-[#6f6f6f33] p-3 py-1.5 ">
-              <IoSearchOutline
-                className={`text-[20px] ${
-                  1===1 ? " text-[#fff]" : "text-black "
-                } `}
+          <div className="flex flex-col">
+            <p className="text-center">Speak or type your query </p>
+
+            <div
+              className={` flex serch_wrap mt-4  items-center gap-3 sm:w-full border-1 border-[#242424] rounded-full overflow-hidden`}
+            >
+              <input
+                className={` ${
+                  1 === 1 ? "bg-black text-[#fff]" : "text-black bg-[#fff]"
+                } text-[13px]  sm:block  border-0 outline-none  px-[17px] py-[4px] sm:w-full `}
+                type="text"
+                placeholder="Search"
+                onChange={(e) => setsearchQuery(e.target.value)}
+                value={searchQuery}
+                onKeyUp={() => SearchQueryHandler()}
               />
+              <div className="serch bg-[#6f6f6f33] p-3 py-1.5 ">
+                <IoSearchOutline
+                  className={`text-[20px] ${
+                    1 === 1 ? " text-[#fff]" : "text-black "
+                  } `}
+                />
+              </div>
             </div>
           </div>
+          <div
+            className={`p-6 sm:p-4 rounded-full shadow-xl w-20 h-20 sm:w-15 sm:h-15 transition-all duration-300 transform hover:scale-110 bg-orange-500 hover:bg-orange-600 shadow-orange-500/40`}
+          >
+            <FaMicrophone className="w-full h-full" />
           </div>
-        <div
-          className={`p-6 sm:p-4 rounded-full shadow-xl w-20 h-20 sm:w-15 sm:h-15 transition-all duration-300 transform hover:scale-110 bg-orange-500 hover:bg-orange-600 shadow-orange-500/40`}
-        >
-          <FaMicrophone className="w-full h-full" />
-        </div>
-
         </div>
       </div>
 
@@ -207,7 +209,10 @@ const Header = () => {
             </div>
             {/* <SearchBar key={SearchRelatedData?.results?.value} data={SearchRelatedData} /> */}
           </div>
-          <div className="serch  p-3 py-1.5 " onClick={()=>setTogglemic(true)}>
+          <div
+            className="serch  p-3 py-1.5 "
+            onClick={() => setTogglemic(true)}
+          >
             <IoSearchOutline
               className={`text-[20px] ${
                 toggle ? " text-[#fff]" : "text-black "
@@ -224,6 +229,7 @@ const Header = () => {
           </div>
         </div>
         <div className="top_nav_right hidden items-center justify-center gap-6 sm:flex">
+        {user?.channel && (
           <Link
             to={"/create"}
             className="video p-2 rounded-3xl  flex gap-1 items-center hover:bg-[#6f6f6f8a] bg-[#6f6f6f33] "
@@ -231,11 +237,12 @@ const Header = () => {
             <FaPlus className="w-3 h-3" />
             <p className="text-xs">Create</p>
           </Link>
+        )}
           {/* <div className="hidden sm:inline"> </div> */}
           <div className="profile w-10 h-10" onClick={handleProfile}>
             {user == null ? (
               <div className="w-full h-full rounded-full">
-                 <HiUserCircle className="w-full h-full" />
+                <HiUserCircle className="w-full h-full" />
               </div>
             ) : (
               <img
@@ -248,7 +255,7 @@ const Header = () => {
           {visible ? (
             <div className="absolute top-14  rounded-sm right-5 bg-[#212121]">
               {user == null ? (
-               ''
+                ""
               ) : (
                 <div className="detail flex gap-2 p-3 border-b border-b-[#373737bd]">
                   <div className="detail_img w-10 h-10 ">
@@ -261,7 +268,7 @@ const Header = () => {
                   <div className="content">
                     <h3 className="text-sm">{user?.username}</h3>
                     <p className="text-xs text-[#7a7a7a]">{user?.email}</p>
-                    {!user?.channel > 0 ? (
+                    {!user?.channel ? (
                       <Link to={"/CreateChannel"}>
                         {" "}
                         <p className="text-xs text-[#346eeb] hover:underline cursor-pointer">
@@ -311,6 +318,18 @@ const Header = () => {
                   </div>
                   <p className="text-[13px]">Signin With other account</p>
                 </Link>
+                {user?.channel  && (
+                  <Link
+                    to={"/dashboard"}
+                    className="btn_option  hover:bg-[#323131bd] p-7 pl-4 cursor-pointer py-1.5 flex items-center gap-2"
+                  >
+                    <div className="icon">
+                      <img src={studio} className="w-5 h-5" alt="" />
+                    </div>
+                    <p className="text-[13px]">YT Studio</p>
+                  </Link>
+                )}
+
                 {user == null ? (
                   ""
                 ) : (

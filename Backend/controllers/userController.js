@@ -30,7 +30,18 @@ export const getCurrentChannel = async (req, res) => {
         .status(404)
         .json({ message: "user doesn't have any channel ! " });
     }
-    const channel = await channels.findById(existChannel).populate("videos");
+    const channel = await channels
+      .findById(existChannel)
+      .populate("videos")
+      .populate("shorts")
+      .populate({
+        path: "playlists",
+        populate: {
+          path: "selectedVideos",
+          model: "video",
+        },
+      })
+      .populate("communityPosts");
 
     if (!channel) {
       return res.status(404).json({
@@ -80,7 +91,7 @@ export const CreateChannel = async (req, res) => {
         image: avatar,
         channel: channel._id,
       },
-      { new: true }
+      { new: true },
     );
 
     return res.status(200).json({ channel });
@@ -114,7 +125,7 @@ export const updateChannel = async (req, res) => {
         bannerImage,
         category,
       },
-      { new: true }
+      { new: true },
     );
     const user = await users.findByIdAndUpdate(
       userId,
@@ -122,7 +133,7 @@ export const updateChannel = async (req, res) => {
         username: name,
         image: avatar,
       },
-      { new: true }
+      { new: true },
     );
 
     // console.log(user);
@@ -176,22 +187,20 @@ export const getSubscriptionData = async (req, res) => {
     const user = await users
       .findById(req.userId)
       .select("-password")
-      
-       .populate({
+
+      .populate({
         path: "subscriptions",
         populate: [
           {
             path: "videos",
             populate: {
               path: "channel",
-             
             },
           },
           {
             path: "shorts",
             populate: {
               path: "channel",
-             
             },
           },
         ],
@@ -210,4 +219,3 @@ export const getSubscriptionData = async (req, res) => {
     });
   }
 };
-
