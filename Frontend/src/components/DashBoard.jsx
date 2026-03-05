@@ -11,10 +11,10 @@ const DashBoard = ({channel}) => {
      <div className="p-3">
           <div className="head">
             <p className="text-xs text-[#6b6b6b] ">Welcome to YtStudio</p>
-            <h2 className="text-2xl font-bold">Hii Deepanshu ✌</h2>
+            <h2 className="text-3xl font-bold">Hii Deepanshu ✌</h2>
           </div>
           <div className="box_flex flex gap-2 mt-4 flex-wrap ">
-            <div className="box cursor-pointer bg-[#0b0b0b61] shrink-0 flex items-center justify-between px-3  w-[43vw] md:w-[14rem] h-[8rem] rounded-md overflow-hidden relative">
+            <div className="box cursor-pointer border border-[#393939e4] bg-gradient-to-br from-black/90 via-white/10 to-black/90 shrink-0 flex items-center justify-between px-3  w-[43vw] md:w-[14rem] h-[8rem] rounded-md overflow-hidden relative">
               <div className="flex flex-col justify-center h-full ">
                 <h1 className="text-3xl font-bold">
                   {channel?.subscribers?.length}
@@ -25,7 +25,7 @@ const DashBoard = ({channel}) => {
                 <PiGooglePlayLogoFill className="w-full h-full" />
               </div>
             </div>
-            <div className="box cursor-pointer bg-[#0b0b0b61] shrink-0 flex items-center justify-between px-3 w-[43vw] md:w-[14rem] h-[8rem] rounded-md overflow-hidden relative">
+            <div className="box cursor-pointer border border-[#393939e4] bg-gradient-to-br from-black/90 via-white/10 to-black/90 shrink-0 flex items-center justify-between px-3 w-[43vw] md:w-[14rem] h-[8rem] rounded-md overflow-hidden relative">
               <div className="flex flex-col justify-center h-full">
                 <h1 className="text-3xl font-bold">
                   {channel?.subscribers?.length}
@@ -37,7 +37,7 @@ const DashBoard = ({channel}) => {
               </div>
             </div>
 
-            <div className="box cursor-pointer bg-[#0b0b0b61] shrink-0 flex items-center justify-between px-3 w-[43vw] md:w-[14rem] h-[8rem] rounded-md overflow-hidden relative">
+            <div className="box cursor-pointer border border-[#393939e4] bg-gradient-to-br from-black/90 via-white/10 to-black/90 shrink-0 flex items-center justify-between px-3 w-[43vw] md:w-[14rem] h-[8rem] rounded-md overflow-hidden relative">
               <div className="flex flex-col justify-center h-full ">
                 <h1 className="text-3xl font-bold">
                   {channel?.shorts?.length}
@@ -48,7 +48,7 @@ const DashBoard = ({channel}) => {
                 <SiYoutubeshorts className="w-full h-full" />
               </div>
             </div>
-            <div className="box cursor-pointer bg-[#0b0b0b61] shrink-0 flex items-center justify-between px-3 w-[43vw] md:w-[14rem] h-[8rem] rounded-md overflow-hidden relative">
+            <div className="box cursor-pointer border border-[#393939e4] bg-gradient-to-br from-black/90 via-white/10 to-black/90 shrink-0 flex items-center justify-between px-3 w-[43vw] md:w-[14rem] h-[8rem] rounded-md overflow-hidden relative">
               <div className="flex flex-col justify-center h-full">
                 <h1 className="text-3xl font-bold">
                   {channel?.videos?.length}

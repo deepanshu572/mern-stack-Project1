@@ -63,7 +63,10 @@ export const handleUpdatePlaylist = async (req, res) => {
         selectedVideos,
       },
       { new: true },
-    );
+    ).populate({
+      path: "selectedVideos",
+      model: "video",
+    });
   
 
     if (!playlist) {

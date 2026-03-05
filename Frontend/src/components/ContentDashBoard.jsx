@@ -5,11 +5,13 @@ import { Link } from "react-router";
 import ModelContent from "../childComponent/ModelContent";
 import { useSelector } from "react-redux";
 import { FaEye } from "react-icons/fa";
+
 const ContentDashBoard = () => {
   const [selectedContent, setSelectedContent] = useState("videos");
   const [modal, setModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const channelData = useSelector((state) => state.usersData.channelData);
+
   const [channel, setChannel] = useState(null);
   const [selectedItem, setSelectedItem] = useState({
     name: "",
@@ -50,14 +52,23 @@ const ContentDashBoard = () => {
         ),
       }));
     } else if (selectedItem.name === "shorts") {
+      alert("shorts Updated");
       setChannel((prev) => ({
         ...prev,
         shorts: prev.shorts.map((short) =>
           short._id === updateData?._id ? { ...short, ...updateData } : short,
         ),
       }));
-    } 
-    
+    } else if (selectedItem.name === "playlists") {
+      setChannel((prev) => ({
+        ...prev,
+        playlists: prev.playlists.map((playlist) =>
+          playlist._id === updateData?._id
+            ? { ...playlist, ...updateData }
+            : playlist,
+        ),
+      }));
+    }
   };
   const DeleteFnc = (DeletedData) => {
     if (selectedItem.name === "videos") {
@@ -73,12 +84,16 @@ const ContentDashBoard = () => {
     } else if (selectedItem.name === "playlists") {
       setChannel((prev) => ({
         ...prev,
-        playlists: prev.playlists.filter((playlist) => playlist._id !== DeletedData?._id),
+        playlists: prev.playlists.filter(
+          (playlist) => playlist._id !== DeletedData?._id,
+        ),
       }));
     } else if (selectedItem.name === "communityPosts") {
       setChannel((prev) => ({
         ...prev,
-        communityPosts: prev.communityPosts.filter((post) => post._id !== DeletedData?._id),
+        communityPosts: prev.communityPosts.filter(
+          (post) => post._id !== DeletedData?._id,
+        ),
       }));
     }
   };
@@ -89,7 +104,7 @@ const ContentDashBoard = () => {
       id: id,
       item,
       video,
-      channelId
+      channelId,
     });
     setModal(true);
   };
@@ -106,7 +121,14 @@ const ContentDashBoard = () => {
 
       <div className="p-2">
         {/* <ModelContent /> */}
-        <h3 className="mb-4 text-2xl font-bold">Your contents</h3>
+
+        <h2 className=" text-3xl font-bold">Your contents</h2>
+        <p class="text-xs mb-4 pt-1 border-b border-[#393939e4] pb-2 text-[#5e5e5e]">
+          Here you can manage your channel content, including videos, shorts,
+          playlists, and community posts. Click on the edit icon to update or
+          delete your content.
+        </p>
+
         <div className="flex_tab flex border-b border-b-[#393939] gap-5 w-full">
           {arr?.map((item, index) => {
             return (
@@ -224,9 +246,17 @@ const ContentDashBoard = () => {
                     {item?.selectedVideos?.length}
                   </h3>
                   <h3 className="p-1 px-4 text-[13px] w-[15rem]">
-                    <div onClick={() =>
-                        handleContentUpdate(item?._id, "playlists", item, channel?.videos, channel?._id)
-                      }>
+                    <div
+                      onClick={() =>
+                        handleContentUpdate(
+                          item?._id,
+                          "playlists",
+                          item,
+                          channel?.videos,
+                          channel?._id,
+                        )
+                      }
+                    >
                       <CiEdit className="w-5 h-5 text-green-500" />
                     </div>
                   </h3>
@@ -241,7 +271,7 @@ const ContentDashBoard = () => {
               <h3 className="p-1 px-4 text-[13px] w-[15rem]">Thumbnails</h3>
               <h3 className="p-1 px-4 text-[13px] w-[15rem]">Title</h3>
               <h3 className="p-1 px-4 text-[13px] w-[15rem]">Date</h3>
-              <h3 className="p-1 px-4 text-[13px] w-[15rem]">Delete</h3>
+              <h3 className="p-1 px-4 text-[13px] w-[15rem]">View</h3>
             </div>
             {channel?.communityPosts?.map((item) => {
               return (
@@ -260,14 +290,13 @@ const ContentDashBoard = () => {
                     {timeAgo(item?.createdAt)}
                   </h3>
                   <h3 className="p-1 px-4 text-[13px] w-[15rem]">
-                    <Link to={`/edit${item?._id}`}>
-                      {" "}
-                     
-                    </Link>
-                     <div onClick={() =>
-                      handleContentUpdate(item?._id, "communityPosts", item)
-                      }>
-                       <FaEye className="w-5 h-5 text-green-600" />
+                    <Link to={`/edit${item?._id}`}> </Link>
+                    <div
+                      onClick={() =>
+                        handleContentUpdate(item?._id, "communityPosts", item)
+                      }
+                    >
+                      <FaEye className="w-5 h-5 text-green-600" />
                     </div>
                   </h3>
                 </div>

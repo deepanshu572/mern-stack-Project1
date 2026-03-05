@@ -29,7 +29,9 @@ const ModelContent = ({ selectedItem, change, deleteFnc }) => {
     if (selectedItem?.item) {
       setChannelId(selectedItem?.channelId || "");
       setSelectedPlaylistVideo(selectedItem?.item?.selectedVideos || []);
-      setSelectedPlaylistId(selectedItem?.item?.selectedVideos?.map((video) => video._id) || []);
+      setSelectedPlaylistId(
+        selectedItem?.item?.selectedVideos?.map((video) => video._id) || [],
+      );
       setAllPlaylistVideos(selectedItem?.video || []);
       setTitle(selectedItem.item.title || "");
       setTags(selectedItem.item.tags || []);
@@ -118,7 +120,7 @@ const ModelContent = ({ selectedItem, change, deleteFnc }) => {
         },
       );
 
-      deleteFnc(data.deletedPost);
+      deleteFnc(data.comunity);
       setLoadDelete(false);
       setToggle(false);
     } catch (err) {
@@ -156,34 +158,32 @@ const ModelContent = ({ selectedItem, change, deleteFnc }) => {
       [type]: URL.createObjectURL(file),
     }));
   };
-const handleVideoSelect = (video) => {
-  setSelectedPlaylistVideo((prev) => {
-    let updated;
+  const handleVideoSelect = (video) => {
+    setSelectedPlaylistVideo((prev) => {
+      let updated;
 
-    if (prev.some((item) => item?._id === video._id)) {
-      updated = prev.filter((item) => item?._id !== video._id);
-    } else {
-      updated = [...prev, video];
-    }
+      if (prev.some((item) => item?._id === video._id)) {
+        updated = prev.filter((item) => item?._id !== video._id);
+      } else {
+        updated = [...prev, video];
+      }
 
-    setSelectedPlaylistId(updated.map((item) => item._id));
+      setSelectedPlaylistId(updated.map((item) => item._id));
 
-    return updated;
-  });
-};
-  console.log(selectedPlaylistId, selectedPlaylistVideo);
+      return updated;
+    });
+  };
 
   const handleSelectedVideoDelete = (videoId) => {
     setSelectedPlaylistVideo((prev) =>
       prev.filter((item) => item?._id !== videoId),
     );
-    setSelectedPlaylistId((prev) =>
-      prev.filter((item) => item !== videoId),
-    );
+    setSelectedPlaylistId((prev) => prev.filter((item) => item !== videoId));
     alert("Are you sure you want to remove this video from the playlist?");
   };
-  
+
   const handleUpdatePlaylist = async () => {
+    setLoadUpdate(true);
     try {
       const { data } = await axios.post(
         serverUrl + `/api/toggles/playlist/${id}/UpdatePlaylist`,
@@ -195,13 +195,34 @@ const handleVideoSelect = (video) => {
           selectedVideosData: selectedPlaylistVideo,
         },
         {
-          withCredentials: true,   
+          withCredentials: true,
         },
       );
+      setLoadUpdate(false);
+      setToggle(false);
+      change(data.playlist);
     } catch (err) {
       console.log(err);
     }
   };
+  const handleDeletePlaylist = async (playlistId) =>{
+     setLoadDelete(true);
+    try{
+      const {data} = await axios.put(serverUrl + `/api/toggles/playlist/${playlistId}/DeletePlaylist`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+        deleteFnc(data.playlist);
+      setLoadDelete(false);
+      setToggle(false);
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
   return (
     <>
       {selectedItem?.name === "videos" && (
@@ -441,7 +462,7 @@ const handleVideoSelect = (video) => {
             </p>
 
             <form
-               onSubmit={(e) => e.preventDefault()}
+              onSubmit={(e) => e.preventDefault()}
               className="form flex flex-col gap-3 w-full"
             >
               <div className="flex p-3 overflow-y-auto hide_scroll h-[50vh] w-full  flex-col">
