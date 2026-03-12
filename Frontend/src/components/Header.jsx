@@ -320,7 +320,7 @@ const Header = () => {
                 </Link>
                 {user?.channel  && (
                   <Link
-                    to={"/Ytstudio/dashboard"}
+                    to={"/Ytstudio"}
                     className="btn_option  hover:bg-[#323131bd] p-7 pl-4 cursor-pointer py-1.5 flex items-center gap-2"
                   >
                     <div className="icon">

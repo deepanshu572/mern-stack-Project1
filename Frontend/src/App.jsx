@@ -31,10 +31,10 @@ import SearchResult from "./Pages/SearchResult";
 import Profile from "./Pages/Profile";
 import { useSelector } from "react-redux";
 import YtDashboard from "./Pages/YtDashboard";
-import ContentDashBoard from "./components/ContentDashBoard";
 import YtContent from "./Pages/YtContent";
 import YtAnalytic from "./Pages/YtAnalytic";
 import YtRevenue from "./Pages/YtRevenue";
+import DashBoard from "./components/DashBoard";
 export const serverUrl = "http://localhost:8080";
 
 const ProtectRoute = ({ userData, children }) => {
@@ -52,7 +52,7 @@ const App = () => {
   const hideLayout2 =
     location.pathname === "/register" ||
     location.pathname === "/login" ||
-    location.pathname === "/Ytstudio/dashboard" ||
+    location.pathname === "/Ytstudio" ||
     location.pathname === "/Ytstudio/content" ||
     location.pathname === "/Ytstudio/analytic" ||
     location.pathname === "/Ytstudio/revenue" ||
@@ -64,7 +64,7 @@ const App = () => {
   getAllChannel();
   getAllContentData();
 
-  const {userData} = useSelector((state) => state.usersData);
+  const { userData } = useSelector((state) => state.usersData);
   return (
     <>
       {!hideLayout2 && <Header />}
@@ -153,10 +153,13 @@ const App = () => {
           element={<UploadCommunityPost />}
         />
         <Route path="/create/playlist" element={<UploadPlaylistVideos />} />
-        <Route path="/Ytstudio/dashboard" element={<YtDashboard />} />
-        <Route path="/Ytstudio/content" element={<YtContent />} />
-        <Route path="/Ytstudio/analytic" element={<YtAnalytic />} />
-        <Route path="/Ytstudio/revenue" element={<YtRevenue />} />
+
+        <Route path="/Ytstudio" element={<YtDashboard />}>
+        <Route path="/Ytstudio" element={<DashBoard/>}/>
+          <Route path="/Ytstudio/content" element={<YtContent />} />
+          <Route path="/Ytstudio/analytic" element={<YtAnalytic />} />
+          <Route path="/Ytstudio/revenue" element={<YtRevenue />} />
+        </Route>
       </Routes>
     </>
   );

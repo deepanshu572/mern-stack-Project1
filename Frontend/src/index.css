@@ -114,3 +114,7 @@ background: radial-gradient(circle, rgba(133, 0, 0, 1) 0%, rgba(199, 97, 97, 1) 
         transform: rotate(360deg);
     }
     } 
+
+    .scroll_hide::-webkit-scrollbar{
+  display :none;
+}

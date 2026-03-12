@@ -1,20 +1,22 @@
-import React from 'react'
-import SideNavDashBoard from '../components/SideNavDashBoard'
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import RevenueDashboard from '../components/RevenueDashboard';
 const YtRevenue = () => {
-              const channel = useSelector((state) => state.usersData.channelData);
-
+  const channelData = useSelector((state) => state.usersData.channelData);
+  const [channel, setChannel] = useState(null);
+  useEffect(() => {
+    if (channelData) {
+      setChannel(channelData);
+    }
+  }, [channelData]);
   return (
-        <div className="flex gap-1 mt-[0rem]  ">
-        <div className="left_Sec w-[17rem] ">
-          <SideNavDashBoard  />
-        </div>
-        <div className="right_sec w-[95%] my-2 mt-[3rem] m-auto  ">
-          <RevenueDashboard channel={channel}   />
-        </div>
-      </div>
-  )
-}
+    <div className="m-h-full h-screen w-full pt-[3rem] ">
+      <h2 className="text-3xl font-bold">Revenue Dashboard</h2>
+      <p class="text-xs pt-1 border-b border-[#393939e4] pb-2 text-[#5e5e5e]">
+        Here you can view the revenue of your channel, including video
+        performance, audience demographics, and revenue insights.
+      </p>
+    </div>
+  );
+};
 
-export default YtRevenue
+export default YtRevenue;

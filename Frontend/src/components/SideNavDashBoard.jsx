@@ -23,7 +23,7 @@ const SideNavDashBoard = () => {
     {
       name: "DashBoard",
       svg: <IoTimerSharp className="w-5 h-5" />,
-      path: "/Ytstudio/dashboard",
+      path: "/Ytstudio",
     },
     {
       name: "Content",
@@ -59,10 +59,10 @@ const SideNavDashBoard = () => {
     }
   return (
     <>
-    <div className={`h-screen w-[11rem] hidden md:block `}>
-    <div className="h-screen fixed w-[13rem] left-0 top-0 bg-black justify-between p-3  px-0  border-r border-r-gray-900 flex flex-col items-center ">
+    {/* <div className={`h-screen w-[11rem]  md:block `}> */}
+    <div className="h-screen hidden md:block max-sm:absolute  bottom-0 z-20  w-55 left-0 top-0 bg-black justify-between p-3  px-0  border-r border-r-gray-900 md:flex flex-col items-center ">
       <div className="flex w-full flex-col mt-0 gap-1  ">
-        <Link to={'/'} className="img_wrap flex items-center mb-4 px-2">
+        <Link to={'/'} className="img_wrap flex items-center mb-4 px-2 bg-black z-9">
         <img src={studio} className="w-10" alt="" />
         <h3>YtStudio</h3>
       </Link>
@@ -90,7 +90,7 @@ const SideNavDashBoard = () => {
                 alt=""
               />
             </div>
-            <div className="ml-2 flex flex-col">
+            <div className="ml-2 flex flex-col items-start">
               <h3 className="text-[13px]">{user?.username}</h3>
               <p className="text-[10px] text-[#6b6b6b]">@{user?.username}</p>
             </div>
@@ -99,9 +99,9 @@ const SideNavDashBoard = () => {
           <IoIosLogOut /></button>
         </button>
       </div>
+    {/* </div> */}
     </div>
-    </div>
-     <Link to={'/'} className="img_wrap md:hidden fixed top-0 left-0 w-full bg-black p-2 flex items-center mb-4 px-2">
+     <Link to={'/'} className="img_wrap z-10 md:hidden fixed top-0 left-0 w-full bg-black p-2 flex items-center mb-4 px-2">
         <img src={studio} className="w-10" alt="" />
         <h3>YtStudio</h3>
       </Link>
