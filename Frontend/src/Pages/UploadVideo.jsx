@@ -5,7 +5,7 @@ import SideNav from "../components/SideNav";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { useDispatch, useSelector } from "react-redux";
-import { alertHandler } from "../components/customAlert";
+import { alertHandler } from "../components/CustomAlert";
 import Loader from "../childComponent/Loader";
 import { useNavigate } from "react-router";
 
