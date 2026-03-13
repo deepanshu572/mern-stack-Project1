@@ -3,7 +3,7 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
-import CustomAlert, { alertHandler } from "./components/customAlert";
+import CustomAlert, { alertHandler } from "./components/CustomAlert";
 import Header from "./components/Header";
 import "./app.css";
 import SideNav from "./components/SideNav";
