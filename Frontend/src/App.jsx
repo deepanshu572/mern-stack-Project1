@@ -46,6 +46,7 @@ const ProtectRoute = ({ userData, children }) => {
 };
 
 const App = () => {
+  console.log(serverUrl);
   const location = useLocation();
   // const hideLayout1 = location.pathname === "/video/:id";
   const hideLayout2 =
