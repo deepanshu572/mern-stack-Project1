@@ -34,7 +34,7 @@ import YtContent from "./Pages/YtContent";
 import YtAnalytic from "./Pages/YtAnalytic";
 import YtRevenue from "./Pages/YtRevenue";
 import DashBoard from "./components/DashBoard";
-export const serverUrl = "http://localhost:8080";
+export const serverUrl = "https://yt-player-backend-bn4u.onrender.com";
 
 const ProtectRoute = ({ userData, children }) => {
   console.log(userData);
