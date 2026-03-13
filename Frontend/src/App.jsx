@@ -11,7 +11,7 @@ import VideoDetail from "./Pages/VideoDetail";
 import { getUser } from "./Hooks/getCurrentUser";
 import { getAllContentData } from "./Hooks/getAllContentData";
 import CreatePage from "./Pages/CreatePage";
-import UploadVideo from "./Pages/uploadVideo";
+import UploadVideo from "./Pages/UploadVideo";
 import UploadShorts from "./Pages/UploadShorts";
 import UploadCommunityPost from "./Pages/UploadCommunityPost";
 import UploadPlaylistVideos from "./Pages/UploadPlaylistVideos";
