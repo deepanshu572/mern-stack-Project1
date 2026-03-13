@@ -1,0 +1,53 @@
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+const VideoCard = ({
+  id,
+  image,
+  video,
+  views,
+  title,
+  description,
+  channel,
+  action,
+}) => {
+
+  const nav = useNavigate();
+  return (
+    <>
+      <div
+        onClick={() => {
+          action(id);
+          nav(`/video/${id}`);
+        }}
+        className="card p-1 w-[25rem]   sm:w-[31vw] lg:w-[15rem]  "
+      >
+        <div className="card_video w-full h-[14rem] sm:w-full sm:h-[8rem]  overflow-hidden self-center rounded-[10px]">
+          <img className="w-full h-full object-cover" src={image} alt="" />
+        </div>
+        <div className="flex gap-3 w-full sm:pt-[14px] h-[85px] sm:h-auto px-[12px] py-[13px] sm:p-2 ">
+          <div className="left flex-shrink-0">
+            <img
+              className="w-[35px] h-[35px] object-cover object-top rounded-full"
+              src={channel?.avatar}
+              alt=""
+            />
+          </div>
+          <div className="right sm:w-[85%] ">
+            <div className="card_heading text-[13px] sm:text-[11px] font-[500]">
+              {title}
+            </div>
+            <div className="card_desc text-[#727272] text-[10px]">
+              {channel?.name}
+            </div>
+            <div className="card_desc text-[#727272] text-[10px]">
+              {views} Views
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default VideoCard;
